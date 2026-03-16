@@ -6,7 +6,7 @@
     <title>FAEL - VIRTUAL ASSIST PRO</title>
     <style>
         :root {
-            --hacker: #00ff00; /* Verde Neon */
+            --hacker: #00ff00;
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.07);
         }
@@ -16,11 +16,12 @@
             color: #fff;
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
+            padding: 20px 0; /* Espaço para rolar */
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            align-items: flex-start; /* Alinha no topo para permitir rolar */
+            min-height: 100vh;
+            overflow-y: auto; /* HABILITA ROLAGEM */
         }
 
         /* --- LOGIN --- */
@@ -31,6 +32,7 @@
             background: #0a0a0a;
             border-radius: 20px;
             border: 2px solid #222;
+            margin-top: 50px;
         }
 
         .key-input {
@@ -42,7 +44,6 @@
             color: var(--hacker);
             text-align: center;
             border-radius: 8px;
-            font-family: monospace;
             outline: none;
         }
 
@@ -60,118 +61,111 @@
         /* --- MENU --- */
         #main-menu {
             display: none;
-            width: 350px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 25px;
+            width: 340px;
+            padding: 20px;
             background: #0d0d0d;
             border-radius: 24px;
             border: 1px solid #333;
+            margin-bottom: 50px; /* Espaço no fim */
         }
 
         .main-title {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         .main-title h1 {
             color: #fff;
-            font-size: 32px;
+            font-size: 20px; /* TÍTULO PEQUENO COMO PEDIDO */
             margin: 0;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px var(--hacker);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--hacker);
         }
 
         .category-title {
             color: var(--hacker);
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin: 20px 0 10px 5px;
+            margin: 15px 0 8px 5px;
             font-weight: 800;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .option-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: var(--glass);
-            padding: 14px 15px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 13px;
         }
 
         /* Switch */
-        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #333; transition: .3s; border-radius: 20px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 16px; width: 16px;
-            left: 4px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
+            position: absolute; content: ""; height: 14px; width: 14px;
+            left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
         }
         input:checked + .slider { background-color: var(--hacker); }
-        input:checked + .slider:before { transform: translateX(20px); }
+        input:checked + .slider:before { transform: translateX(18px); }
 
-        /* SEÇÃO BYPASS PEDIDA */
+        /* SEÇÃO BYPASS */
         .bypass-container {
             text-align: center;
-            background: rgba(0, 255, 0, 0.05);
-            padding: 20px;
-            border-radius: 15px;
+            background: rgba(0, 255, 0, 0.03);
+            padding: 15px;
+            border-radius: 12px;
             border: 1px dashed var(--hacker);
-            margin-top: 20px;
+            margin: 15px 0;
         }
 
         .bypass-text {
             color: var(--hacker);
             font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 12px;
+            font-size: 13px;
+            margin-bottom: 10px;
             display: block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .btn-bypass-action {
             background: transparent;
             color: var(--hacker);
             border: 1px solid var(--hacker);
-            padding: 10px 30px;
-            border-radius: 8px;
+            padding: 8px 25px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 12px;
             text-transform: uppercase;
-            transition: 0.3s;
-        }
-
-        .btn-bypass-action:active {
-            background: var(--hacker);
-            color: #000;
         }
 
         .btn-inject {
             background: var(--hacker);
             color: #000;
             border: none;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 10px;
             text-transform: uppercase;
         }
 
         #injection-screen {
             display: none;
             position: fixed;
+            top:0; left:0;
             width: 100%; height: 100%;
             background: #000;
             padding: 30px;
@@ -184,7 +178,7 @@
 
     <!-- LOGIN -->
     <div id="login-screen">
-        <h1 style="font-size: 22px; color: #fff;">FAEL <span style="color: var(--hacker);">VIP</span></h1>
+        <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">VIP</span></h2>
         <input type="text" class="key-input" placeholder="SUA CHAVE" id="keyInput">
         <button class="btn-login" onclick="validarKey()">ENTRAR</button>
     </div>
@@ -193,25 +187,26 @@
     <div id="main-menu">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
-            <div style="font-size: 10px; color: #666;">MODO SEGURO ATIVADO</div>
         </div>
         
-        <div class="category-title">Auxílios Ativos</div>
-        <div class="option-row">Otimizar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="option-row">Mira Estabilizada <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Redução de Recoil <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">High FPS Boost <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="category-title">Ajustes</div>
+        <div class="option-row">Sensibilidade 2.0 <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="option-row">Mira Fixa <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="option-row">No Recoil <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="option-row">Otimizar FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="option-row">Redução de Lag <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="option-row">Touch Rápido <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
 
-        <!-- SEÇÃO QUE VOCÊ PEDIU -->
+        <!-- SEÇÃO BYPASS -->
         <div class="bypass-container">
             <span class="bypass-text">Bypass anti-BAN anti-BLACKLIST</span>
-            <button class="btn-bypass-action" onclick="this.innerText='ATIVADO ✅'; this.style.borderColor='#fff'; this.style.color='#fff'">Bypass</button>
+            <button class="btn-bypass-action" onclick="this.innerText='ATIVADO ✅'; this.style.color='#fff';">Bypass</button>
         </div>
 
-        <button class="btn-inject" onclick="iniciarInjecao()">INJETAR SCRIPTS</button>
+        <button class="btn-inject" onclick="iniciarInjecao()">INJETAR</button>
     </div>
 
-    <!-- LOGS -->
+    <!-- TELA DE LOGS -->
     <div id="injection-screen">
         <div id="logs" style="color: var(--hacker); font-family: monospace; font-size: 13px; line-height: 1.8;"></div>
     </div>
@@ -222,23 +217,20 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-menu').style.display = 'block';
         } else {
-            alert("KEY INCORRETA!");
+            alert("CHAVE INCORRETA!");
         }
     }
 
     function iniciarInjecao() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('injection-screen').style.display = 'block';
-        
         const logs = [
-            "> [OK] Conectando ao Banco de Dados...",
-            "> [MOD] Aplicando Sensibilidade Dinâmica...",
-            "> [MOD] Reduzindo Recoil das Armas...",
-            "> [SAFE] Ativando Bypass Anti-Ban...",
-            "> [SAFE] Proteção Anti-Blacklist OK.",
-            "> [SUCCESS] Scripts Injetados com Sucesso!"
+            "> [OK] Iniciando...",
+            "> [MOD] Sensibilidade OK",
+            "> [MOD] Recoil Ajustado",
+            "> [SAFE] Bypass Ativo",
+            "> [SUCCESS] Finalizado!"
         ];
-
         let i = 0;
         const interval = setInterval(() => {
             if(i < logs.length) {
@@ -248,12 +240,9 @@
                 i++;
             } else {
                 clearInterval(interval);
-                setTimeout(() => {
-                    alert("SISTEMA ATIVADO COM SUCESSO!");
-                    location.reload(); 
-                }, 1000);
+                setTimeout(() => { alert("ATIVADO!"); location.reload(); }, 1000);
             }
-        }, 600);
+        }, 500);
     }
 </script>
 </body>
