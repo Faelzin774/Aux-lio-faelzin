@@ -6,7 +6,8 @@
     <title>FAEL - VIRTUAL ASSIST PRO</title>
     <style>
         :root {
-            --hacker: #00ff00;
+            --hacker: #00ff00; /* Verde */
+            --danger: #ff0000; /* Vermelho */
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
         }
@@ -21,7 +22,7 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
-            overflow-y: auto; /* Rolagem liberada */
+            overflow-y: auto;
         }
 
         /* --- LOGIN --- */
@@ -45,7 +46,6 @@
             text-align: center;
             border-radius: 8px;
             outline: none;
-            font-size: 16px;
         }
 
         .btn-login {
@@ -59,7 +59,7 @@
             width: 100%;
         }
 
-        /* --- MENU PRINCIPAL --- */
+        /* --- MENU --- */
         #main-menu {
             display: none;
             width: 90%;
@@ -86,7 +86,7 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin: 20px 0 8px 5px;
+            margin: 15px 0 8px 5px;
             font-weight: 800;
             border-left: 3px solid var(--hacker);
             padding-left: 8px;
@@ -103,7 +103,7 @@
             font-size: 13px;
         }
 
-        /* Switch */
+        /* Switch Verde */
         .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
@@ -117,18 +117,18 @@
         input:checked + .slider { background-color: var(--hacker); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BYPASS DINÂMICO */
+        /* BYPASS VERMELHO (PEDIDO) */
         .bypass-box {
-            background: rgba(0, 255, 0, 0.05);
-            border: 1px solid var(--hacker);
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px solid var(--danger);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
             margin: 20px 0;
         }
 
-        .bypass-text {
-            color: var(--hacker);
+        .bypass-box span {
+            color: var(--danger);
             font-weight: bold;
             font-size: 13px;
             display: block;
@@ -138,14 +138,14 @@
 
         .btn-bypass-action {
             background: transparent;
-            color: var(--hacker);
-            border: 1px solid var(--hacker);
+            color: var(--danger);
+            border: 1px solid var(--danger);
             padding: 10px 25px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            min-width: 160px;
+            min-width: 200px;
             transition: 0.3s;
             text-transform: uppercase;
         }
@@ -160,10 +160,9 @@
             width: 100%;
             text-transform: uppercase;
             margin-top: 10px;
-            font-size: 16px;
         }
 
-        /* --- TELA DE INJEÇÃO (7,5s) --- */
+        /* --- TELA DE INJEÇÃO --- */
         #injection-screen {
             display: none;
             position: fixed;
@@ -177,7 +176,6 @@
         .progress-container {
             width: 100%; height: 2px;
             background: #222; margin: 30px 0;
-            border-radius: 5px;
         }
 
         #progress-bar {
@@ -214,35 +212,31 @@
         <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
         <div class="option-row">DPI Dinâmica Virtual <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="option-row">Precisão de Cursor <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
         <div class="option-row">Ajuste de FOV Assist <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
 
         <div class="category-title">Auxílio de Combate</div>
         <div class="option-row">Redutor de Recoil <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Foco no Alvo (Smooth) <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Troca Rápida de Arma <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Fast Medkit Assist <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Macro de Agachar/Levantar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="option-row">Otimizar Disparo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
 
-        <div class="category-title">Otimização de Hardware</div>
+        <div class="category-title">Otimização do Sistema</div>
         <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Unlock 90 FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Limpeza de Cache Automática <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="option-row">Otimizar GPU para Jogo <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="option-row">Limpeza de Cache <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
 
-        <!-- SEÇÃO BYPASS -->
+        <!-- SEÇÃO BYPASS VERMELHA (PEDIDO) -->
         <div class="bypass-box">
-            <span class="bypass-text">Bypass anti-BAN anti-BLACKLIST</span>
+            <span>Bypass anti-BAN anti-BLACKLIST</span>
             <button class="btn-bypass-action" id="bypassBtn" onclick="ativarBypass()">Bypass</button>
         </div>
 
         <button class="btn-inject" onclick="iniciarInjecao()">INJETAR AUXÍLIOS</button>
     </div>
 
-    <!-- TELA DE INJEÇÃO (7,5 SEGUNDOS) -->
+    <!-- TELA DE INJEÇÃO -->
     <div id="injection-screen">
-        <div style="color: var(--hacker); font-family: monospace; font-size: 14px; margin-bottom: 10px;">> INICIANDO OTIMIZAÇÃO VIRTUAL...</div>
+        <div style="color: var(--hacker); font-family: monospace; font-size: 14px; margin-bottom: 10px;">> INICIANDO OTIMIZAÇÃO...</div>
         <div id="logs"></div>
         <div class="progress-container">
             <div id="progress-bar"></div>
@@ -259,25 +253,33 @@
         }
     }
 
-    // BYPASS COM TROCA DE TEXTO
+    // BYPASS EM VERMELHO - 10 SEGUNDOS (10000ms)
     function ativarBypass() {
         const btn = document.getElementById('bypassBtn');
-        const etapas = ["Conectando...", "Analisando...", "Ocultando ID...", "Limpando Logs...", "ATIVADO ✅"];
+        const mensagensBypass = [
+            "Injetando Bypass",
+            "Limpando logs",
+            "Ocultando o id",
+            "Desativando o Bypass da garena",
+            "Modificando os arquivos..",
+            "Bypass injetando👹"
+        ];
         let i = 0;
         
         btn.disabled = true;
+        // 10000ms / 6 mensagens = ~1660ms por troca
         const loop = setInterval(() => {
-            btn.innerText = etapas[i];
+            btn.innerText = mensagensBypass[i];
             i++;
-            if(i >= etapas.length) {
+            if(i >= mensagensBypass.length) {
                 clearInterval(loop);
                 btn.style.borderColor = "#fff";
                 btn.style.color = "#fff";
             }
-        }, 1200);
+        }, 1660);
     }
 
-    // INJEÇÃO DE 7,5 SEGUNDOS
+    // INJEÇÃO GERAL - 7,5 SEGUNDOS
     function iniciarInjecao() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('injection-screen').style.display = 'block';
@@ -285,34 +287,30 @@
         const logsContainer = document.getElementById('logs');
         const barra = document.getElementById('progress-bar');
         
-        const mensagens = [
-            "> [INFO] Analisando diretórios do jogo...",
-            "> [MOD] Ajustando sensibilidade de hardware...",
-            "> [MOD] Aplicando estabilizador de Recoil...",
-            "> [MOD] Otimizando curva de touch screen...",
-            "> [SAFE] Bypass Anti-Ban v6.0 Ativado...",
-            "> [SAFE] Proteção Anti-Blacklist OK...",
-            "> [SYS] Liberando recursos de memória RAM...",
-            "> [SYS] Encriptando arquivos de log...",
-            "> [SUCCESS] Auxílios injetados com sucesso!",
-            "> [READY] Otimização concluída."
+        const mensagensInject = [
+            "> [INFO] Analisando arquivos...",
+            "> [MOD] Aplicando Sensibilidade...",
+            "> [MOD] Estabilizando Recoil...",
+            "> [SAFE] Bypass Ativo...",
+            "> [SYS] RAM Otimizada...",
+            "> [SUCCESS] Finalizado!"
         ];
 
         let msgIndex = 0;
-        const tempoTotal = 7500; // 7,5 segundos
-        const intervaloMsg = tempoTotal / mensagens.length;
+        const tempoTotal = 7500;
+        const intervaloMsg = tempoTotal / mensagensInject.length;
 
         const timer = setInterval(() => {
-            if (msgIndex < mensagens.length) {
+            if (msgIndex < mensagensInject.length) {
                 const p = document.createElement('div');
-                p.textContent = mensagens[msgIndex];
+                p.textContent = mensagensInject[msgIndex];
                 logsContainer.appendChild(p);
                 msgIndex++;
-                barra.style.width = (msgIndex / mensagens.length) * 100 + "%";
+                barra.style.width = (msgIndex / mensagensInject.length) * 100 + "%";
             } else {
                 clearInterval(timer);
                 setTimeout(() => {
-                    alert("AUXÍLIO ATIVADO! TUDO PRONTO.");
+                    alert("SISTEMA ATIVADO!");
                     location.reload();
                 }, 800);
             }
