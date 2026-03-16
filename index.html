@@ -6,8 +6,8 @@
     <title>FAEL - VIRTUAL ASSIST PRO</title>
     <style>
         :root {
-            --hacker: #00ff00; /* Verde */
-            --danger: #ff0000; /* Vermelho */
+            --hacker: #00ff00;
+            --danger: #ff0000;
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
         }
@@ -161,7 +161,7 @@
             margin-top: 10px;
         }
 
-        /* --- TELAS DE LOGS (ESTILO HACKER) --- */
+        /* --- TELAS DE LOGS --- */
         .log-overlay {
             display: none;
             position: fixed;
@@ -194,18 +194,14 @@
 </head>
 <body>
 
-    <!-- LOGIN -->
     <div id="login-screen">
         <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">VIP</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
         <button class="btn-login" onclick="validarKey()">LOGAR</button>
     </div>
 
-    <!-- MENU PRINCIPAL -->
     <div id="main-menu">
-        <div class="main-title">
-            <h1>FAEL ASSIST</h1>
-        </div>
+        <div class="main-title"><h1>FAEL ASSIST</h1></div>
         
         <div class="category-title">Auxílio de Mira</div>
         <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -221,34 +217,26 @@
         <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
 
-        <!-- SEÇÃO BYPASS VERMELHA -->
         <div class="bypass-box">
             <span>Bypass anti-BAN anti-BLACKLIST</span>
             <button class="btn-bypass-action" id="bypassBtn" onclick="abrirHackerBypass()">Bypass</button>
         </div>
 
-        <button class="btn-inject" onclick="iniciarInjecao()">INJETAR AUXÍLIOS</button>
+        <button class="btn-inject" id="btnInjectMain" onclick="iniciarInjecao()">INJETAR AUXÍLIOS</button>
     </div>
 
-    <!-- TELA DE LOGS DO BYPASS (10 SEGUNDOS) -->
     <div id="bypass-screen" class="log-overlay">
         <div style="color: var(--danger); font-weight: bold; margin-bottom: 20px;">[!] INICIANDO PROTOCOLO BYPASS...</div>
         <div id="bypass-logs" class="log-text"></div>
-        <div class="progress-bar-container">
-            <div id="bypass-bar" class="progress-fill" style="background: var(--danger); box-shadow: 0 0 10px var(--danger);"></div>
-        </div>
+        <div class="progress-bar-container"><div id="bypass-bar" class="progress-fill" style="background: var(--danger);"></div></div>
     </div>
 
-    <!-- TELA DE LOGS DA INJEÇÃO (7,5 SEGUNDOS) -->
     <div id="injection-screen" class="log-overlay">
         <div style="color: var(--hacker); font-weight: bold; margin-bottom: 20px;">[+] INJETANDO SCRIPTS VIRTUAIS...</div>
         <div id="inject-logs" class="log-text"></div>
-        <div class="progress-bar-container">
-            <div id="inject-bar" class="progress-fill"></div>
-        </div>
+        <div class="progress-bar-container"><div id="inject-bar" class="progress-fill"></div></div>
     </div>
-
-<script>
+    <script>
     function validarKey() {
         if(document.getElementById('keyInput').value === "FAEL-VIP-2026") {
             document.getElementById('login-screen').style.display = 'none';
@@ -258,11 +246,9 @@
         }
     }
 
-    // FUNÇÃO BYPASS HACKER (10 SEGUNDOS)
     function abrirHackerBypass() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('bypass-screen').style.display = 'block';
-        
         const logsArea = document.getElementById('bypass-logs');
         const barra = document.getElementById('bypass-bar');
         
@@ -277,7 +263,7 @@
         ];
 
         let i = 0;
-        const totalTempo = 10000; // 10 segundos
+        const totalTempo = 10000;
         const intervalo = totalTempo / frasesBypass.length;
 
         const loop = setInterval(() => {
@@ -300,11 +286,9 @@
         }, intervalo);
     }
 
-    // FUNÇÃO INJEÇÃO (7,5 SEGUNDOS)
     function iniciarInjecao() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('injection-screen').style.display = 'block';
-        
         const logsArea = document.getElementById('inject-logs');
         const barra = document.getElementById('inject-bar');
         
@@ -317,7 +301,7 @@
         ];
 
         let j = 0;
-        const totalTempo = 7500; // 7,5 segundos
+        const totalTempo = 7500;
         const intervalo = totalTempo / frasesInject.length;
 
         const loop = setInterval(() => {
@@ -330,8 +314,12 @@
             } else {
                 clearInterval(loop);
                 setTimeout(() => {
-                    alert("AUXÍLIO INJETADO COM SUCESSO!");
-                    location.reload();
+                    document.getElementById('injection-screen').style.display = 'none';
+                    document.getElementById('main-menu').style.display = 'block';
+                    const btn = document.getElementById('btnInjectMain');
+                    btn.innerText = "INJETADO ✅";
+                    btn.style.background = "#fff";
+                    btn.disabled = true; 
                 }, 1000);
             }
         }, intervalo);
