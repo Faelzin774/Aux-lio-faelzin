@@ -73,7 +73,7 @@
 
         .main-title h1 {
             color: #fff;
-            font-size: 18px; /* Título pequeno */
+            font-size: 18px;
             text-align: center;
             margin: 0 0 15px 0;
             text-transform: uppercase;
@@ -103,7 +103,6 @@
             font-size: 13px;
         }
 
-        /* Switch Verde */
         .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
@@ -117,7 +116,7 @@
         input:checked + .slider { background-color: var(--hacker); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BYPASS VERMELHO (PEDIDO) */
+        /* BYPASS VERMELHO */
         .bypass-box {
             background: rgba(255, 0, 0, 0.05);
             border: 1px solid var(--danger);
@@ -162,8 +161,8 @@
             margin-top: 10px;
         }
 
-        /* --- TELA DE INJEÇÃO --- */
-        #injection-screen {
+        /* --- TELAS DE LOGS (ESTILO HACKER) --- */
+        .log-overlay {
             display: none;
             position: fixed;
             top:0; left:0; width: 100%; height: 100%;
@@ -171,24 +170,25 @@
             z-index: 9999;
             padding: 40px 20px;
             box-sizing: border-box;
+            font-family: 'Courier New', monospace;
         }
 
-        .progress-container {
+        .log-text {
+            color: var(--hacker);
+            font-size: 13px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .progress-bar-container {
             width: 100%; height: 2px;
-            background: #222; margin: 30px 0;
+            background: #111; margin-top: 20px;
         }
 
-        #progress-bar {
+        .progress-fill {
             width: 0%; height: 100%;
             background: var(--hacker);
-            box-shadow: 0 0 15px var(--hacker);
-        }
-
-        #logs {
-            color: #fff;
-            font-family: monospace;
-            font-size: 12px;
-            line-height: 2;
+            box-shadow: 0 0 10px var(--hacker);
         }
     </style>
 </head>
@@ -211,35 +211,40 @@
         <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">DPI Dinâmica Virtual <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Ajuste de FOV Assist <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
 
         <div class="category-title">Auxílio de Combate</div>
         <div class="option-row">Redutor de Recoil <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Foco no Alvo (Smooth) <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Otimizar Disparo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
 
-        <div class="category-title">Otimização do Sistema</div>
+        <div class="category-title">Otimização</div>
         <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="option-row">Unlock 90 FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="option-row">Limpeza de Cache <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
 
-        <!-- SEÇÃO BYPASS VERMELHA (PEDIDO) -->
+        <!-- SEÇÃO BYPASS VERMELHA -->
         <div class="bypass-box">
             <span>Bypass anti-BAN anti-BLACKLIST</span>
-            <button class="btn-bypass-action" id="bypassBtn" onclick="ativarBypass()">Bypass</button>
+            <button class="btn-bypass-action" id="bypassBtn" onclick="abrirHackerBypass()">Bypass</button>
         </div>
 
         <button class="btn-inject" onclick="iniciarInjecao()">INJETAR AUXÍLIOS</button>
     </div>
 
-    <!-- TELA DE INJEÇÃO -->
-    <div id="injection-screen">
-        <div style="color: var(--hacker); font-family: monospace; font-size: 14px; margin-bottom: 10px;">> INICIANDO OTIMIZAÇÃO...</div>
-        <div id="logs"></div>
-        <div class="progress-container">
-            <div id="progress-bar"></div>
+    <!-- TELA DE LOGS DO BYPASS (10 SEGUNDOS) -->
+    <div id="bypass-screen" class="log-overlay">
+        <div style="color: var(--danger); font-weight: bold; margin-bottom: 20px;">[!] INICIANDO PROTOCOLO BYPASS...</div>
+        <div id="bypass-logs" class="log-text"></div>
+        <div class="progress-bar-container">
+            <div id="bypass-bar" class="progress-fill" style="background: var(--danger); box-shadow: 0 0 10px var(--danger);"></div>
+        </div>
+    </div>
+
+    <!-- TELA DE LOGS DA INJEÇÃO (7,5 SEGUNDOS) -->
+    <div id="injection-screen" class="log-overlay">
+        <div style="color: var(--hacker); font-weight: bold; margin-bottom: 20px;">[+] INJETANDO SCRIPTS VIRTUAIS...</div>
+        <div id="inject-logs" class="log-text"></div>
+        <div class="progress-bar-container">
+            <div id="inject-bar" class="progress-fill"></div>
         </div>
     </div>
 
@@ -253,68 +258,83 @@
         }
     }
 
-    // BYPASS EM VERMELHO - 10 SEGUNDOS (10000ms)
-    function ativarBypass() {
-        const btn = document.getElementById('bypassBtn');
-        const mensagensBypass = [
-            "Injetando Bypass",
-            "Limpando logs",
-            "Ocultando o id",
-            "Desativando o Bypass da garena",
-            "Modificando os arquivos..",
-            "Bypass injetando👹"
-        ];
-        let i = 0;
+    // FUNÇÃO BYPASS HACKER (10 SEGUNDOS)
+    function abrirHackerBypass() {
+        document.getElementById('main-menu').style.display = 'none';
+        document.getElementById('bypass-screen').style.display = 'block';
         
-        btn.disabled = true;
-        // 10000ms / 6 mensagens = ~1660ms por troca
+        const logsArea = document.getElementById('bypass-logs');
+        const barra = document.getElementById('bypass-bar');
+        
+        const frasesBypass = [
+            "> Conectando ao kernel do sistema...",
+            "> Injetando Bypass",
+            "> Limpando logs",
+            "> Ocultando o id",
+            "> Desativando o Bypass da garena",
+            "> Modificando os arquivos..",
+            "> Bypass injetando👹"
+        ];
+
+        let i = 0;
+        const totalTempo = 10000; // 10 segundos
+        const intervalo = totalTempo / frasesBypass.length;
+
         const loop = setInterval(() => {
-            btn.innerText = mensagensBypass[i];
-            i++;
-            if(i >= mensagensBypass.length) {
+            if (i < frasesBypass.length) {
+                const linha = document.createElement('div');
+                linha.textContent = frasesBypass[i];
+                linha.style.color = i === frasesBypass.length - 1 ? "var(--danger)" : "var(--hacker)";
+                logsArea.appendChild(linha);
+                i++;
+                barra.style.width = (i / frasesBypass.length) * 100 + "%";
+            } else {
                 clearInterval(loop);
-                btn.style.borderColor = "#fff";
-                btn.style.color = "#fff";
+                setTimeout(() => {
+                    document.getElementById('bypass-screen').style.display = 'none';
+                    document.getElementById('main-menu').style.display = 'block';
+                    document.getElementById('bypassBtn').innerText = "ATIVADO ✅";
+                    document.getElementById('bypassBtn').disabled = true;
+                }, 1000);
             }
-        }, 1660);
+        }, intervalo);
     }
 
-    // INJEÇÃO GERAL - 7,5 SEGUNDOS
+    // FUNÇÃO INJEÇÃO (7,5 SEGUNDOS)
     function iniciarInjecao() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('injection-screen').style.display = 'block';
         
-        const logsContainer = document.getElementById('logs');
-        const barra = document.getElementById('progress-bar');
+        const logsArea = document.getElementById('inject-logs');
+        const barra = document.getElementById('inject-bar');
         
-        const mensagensInject = [
-            "> [INFO] Analisando arquivos...",
-            "> [MOD] Aplicando Sensibilidade...",
-            "> [MOD] Estabilizando Recoil...",
-            "> [SAFE] Bypass Ativo...",
-            "> [SYS] RAM Otimizada...",
-            "> [SUCCESS] Finalizado!"
+        const frasesInject = [
+            "> [INFO] Buscando pacotes...",
+            "> [MOD] Sensibilidade ajustada.",
+            "> [MOD] Recoil estabilizado.",
+            "> [SYS] FPS Desbloqueado.",
+            "> [OK] Scripts aplicados."
         ];
 
-        let msgIndex = 0;
-        const tempoTotal = 7500;
-        const intervaloMsg = tempoTotal / mensagensInject.length;
+        let j = 0;
+        const totalTempo = 7500; // 7,5 segundos
+        const intervalo = totalTempo / frasesInject.length;
 
-        const timer = setInterval(() => {
-            if (msgIndex < mensagensInject.length) {
-                const p = document.createElement('div');
-                p.textContent = mensagensInject[msgIndex];
-                logsContainer.appendChild(p);
-                msgIndex++;
-                barra.style.width = (msgIndex / mensagensInject.length) * 100 + "%";
+        const loop = setInterval(() => {
+            if (j < frasesInject.length) {
+                const linha = document.createElement('div');
+                linha.textContent = frasesInject[j];
+                logsArea.appendChild(linha);
+                j++;
+                barra.style.width = (j / frasesInject.length) * 100 + "%";
             } else {
-                clearInterval(timer);
+                clearInterval(loop);
                 setTimeout(() => {
-                    alert("SISTEMA ATIVADO!");
+                    alert("AUXÍLIO INJETADO COM SUCESSO!");
                     location.reload();
-                }, 800);
+                }, 1000);
             }
-        }, intervaloMsg);
+        }, intervalo);
     }
 </script>
 </body>
