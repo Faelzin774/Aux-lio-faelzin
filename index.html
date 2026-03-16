@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRTUAL ASSIST VIP - FAEL</title>
+    <style>
+        :root {
+            --hacker: #00ff00;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --neon-blue: #00f2ff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- TELA DE LOGIN --- */
+        #login-screen {
+            width: 320px;
+            text-align: center;
+            padding: 40px;
+            background: #0a0a0a;
+            border-radius: 20px;
+            border: 1px solid #222;
+            box-shadow: 0 10px 50px rgba(0,0,0,1);
+        }
+
+        .key-input {
+            width: 90%;
+            padding: 15px;
+            margin: 25px 0;
+            background: #000;
+            border: 1px solid #333;
+            color: var(--hacker);
+            text-align: center;
+            border-radius: 8px;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--hacker);
+            border: 1px solid var(--hacker);
+            padding: 12px 40px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+        }
+
+        /* --- MENU PRINCIPAL --- */
+        #main-menu {
+            display: none;
+            width: 340px;
+            padding: 30px;
+            background: linear-gradient(145deg, #0d0d0d, #161616);
+            border-radius: 24px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .option-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--glass);
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Switch */
+        .switch { position: relative; display: inline-block; width: 42px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #222; transition: .4s; border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px;
+            left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--hacker); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .btn-inject {
+            background: var(--hacker);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: 900;
+            font-size: 17px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+        }
+
+        #injection-screen {
+            display: none;
+            position: fixed;
+            width: 100%; height: 100%;
+            background: #000;
+            z-index: 1000;
+            padding: 40px;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        .progress-bar { width: 100%; height: 2px; background: #222; margin-top: 50px; }
+        #fill { height: 100%; width: 0%; background: var(--hacker); box-shadow: 0 0 10px var(--hacker); transition: 0.2s; }
+
+        #active-panel {
+            display: none;
+            position: fixed;
+            top: 20px; right: 20px;
+            width: 210px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(15px);
+            border-left: 4px solid var(--hacker);
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            z-index: 9999;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn { from { transform: translateX(350px); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="login-screen">
+        <h2 style="letter-spacing: 3px; font-size: 14px; color: #888;">FAEL ACCESS SYSTEM</h2>
+        <input type="text" class="key-input" placeholder="DIGITE A KEY VIP" id="keyInput">
+        <button class="btn-login" onclick="validarKey()">VALIDAR CONEXÃO</button>
+    </div>
+
+    <!-- MENU -->
+    <div id="main-menu">
+        <h1 style="font-size: 20px; margin-bottom: 30px; letter-spacing: 2px;">ASSISTANT <span style="color: var(--hacker);">PRO V4</span></h1>
+        
+        <div class="option-row">
+            Bypass Anti-Cheat (Garena)
+            <label class="switch"><input type="checkbox" id="bypass"><span class="slider"></span></label>
+        </div>
+
+        <div class="option-row">
+            Otimizar Auxílio de Mira
+            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="option-row">
+            Ajuste de DPI Estática
+            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <div class="option-row">
+            Smooth Tracking (Suave)
+            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+
+        <button class="btn-inject" onclick="iniciarInjecao()">Injetar Funções</button>
+    </div>
+
+    <!-- TELA DE LOGS -->
+    <div id="injection-screen">
+        <div id="logs" style="color: var(--hacker); font-size: 13px; line-height: 1.6;"></div>
+        <div class="progress-bar"><div id="fill"></div></div>
+    </div>
+
+    <!-- PAINEL FINAL -->
+    <div id="active-panel">
+        <div style="font-size: 11px; color: var(--hacker); font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">● SYSTEM ACTIVE</div>
+        <div style="font-size: 13px; margin-bottom: 6px;">Auxílio: <span style="float: right; color: var(--hacker);">ON</span></div>
+        <div style="font-size: 13px;">Bypass: <span style="float: right; color: var(--hacker);">SECURE</span></div>
+    </div>
+
+<script>
+    function validarKey() {
+        const keyObtida = document.getElementById('keyInput').value;
+        const keyCorreta = "FAEL-VIP-2026";
+
+        if(keyObtida === keyCorreta) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-menu').style.display = 'block';
+        } else {
+            alert("KEY INCORRETA! ACESSO NEGADO.");
+        }
+    }
+
+    function iniciarInjecao() {
+        document.getElementById('main-menu').style.display = 'none';
+        document.getElementById('injection-screen').style.display = 'block';
+        
+        const logsTerminal = [
+            "> [INIT] Iniciando conexão com servidor VIP...",
+            "> [AUTH] Chave FAEL-VIP-2026 validada com sucesso.",
+            "> [SYS] Localizando pacotes do Free Fire...",
+            "> [KERN] Injetando Bypass em tempo real...",
+            "> [MEM] Modificando offsets de sensibilidade...",
+            "> [MOD] Aplicando Auxílio de Mira Suave...",
+            "> [SEC] Limpando rastros de injeção...",
+            "> [SUCCESS] Funções aplicadas perfeitamente!"
+        ];
+
+        let contador = 0;
+        const terminal = document.getElementById('logs');
+        const barra = document.getElementById('fill');
+
+        const tempoLog = setInterval(() => {
+            if(contador < logsTerminal.length) {
+                const linha = document.createElement('div');
+                linha.textContent = logsTerminal[contador];
+                terminal.appendChild(linha);
+                window.scrollTo(0, document.body.scrollHeight);
+                barra.style.width = ((contador + 1) * (100 / logsTerminal.length)) + "%";
+                contador++;
+            } else {
+                clearInterval(tempoLog);
+                setTimeout(() => {
+                    document.getElementById('injection-screen').style.display = 'none';
+                    document.getElementById('active-panel').style.display = 'block';
+                }, 1000);
+            }
+        }, 700);
+    }
+</script>
+</body>
+</html>
