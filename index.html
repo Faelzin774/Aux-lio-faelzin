@@ -10,6 +10,7 @@
             --danger: #ff0000;
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
+            --rage: #ff4444;
         }
 
         body {
@@ -190,6 +191,27 @@
             background: var(--hacker);
             box-shadow: 0 0 10px var(--hacker);
         }
+
+        /* --- RAGE SECTION STYLES --- */
+        .rage-desc {
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 4px;
+            display: block;
+            line-height: 1.2;
+        }
+        .option-row-rage {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 15px;
+            border-left: 2px solid var(--danger);
+        }
+        .rage-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -203,6 +225,34 @@
     <div id="main-menu">
         <div class="main-title"><h1>FAEL ASSIST</h1></div>
         
+        <!-- SEÇÃO RAGE (SÓ APARECE COM A KEY dono456) -->
+        <div id="rage-menu" style="display: none; margin-bottom: 20px; border: 1px solid var(--danger); border-radius: 15px; padding: 10px; background: rgba(255,0,0,0.05);">
+            <div class="category-title" style="color: var(--rage); border-left-color: var(--rage);">MOD MENU RAGE</div>
+            
+            <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+
+            <div class="category-title" style="color: #fff; background: var(--danger); padding: 2px 8px; border: none; display: inline-block;">MAIS RAGE</div>
+            
+            <div class="option-row option-row-rage">
+                <div class="rage-header">
+                    <span style="color: var(--danger); font-weight: bold;">Matar no avião ⚠️</span>
+                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
+                </div>
+                <span class="rage-desc">ativa quando estiver no avião antes do botão de pular esteja pronto pra pular, se tiver disponível a função nao funciona.</span>
+            </div>
+
+            <div class="option-row option-row-rage" style="margin-top: 8px;">
+                <div class="rage-header">
+                    <span style="color: var(--danger); font-weight: bold;">Aimkill</span>
+                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
+                </div>
+                <span class="rage-desc">matar todos do mapa trocando de arma sem parar.</span>
+            </div>
+        </div>
+
         <div class="category-title">Auxílio de Mira</div>
         <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -236,11 +286,19 @@
         <div id="inject-logs" class="log-text"></div>
         <div class="progress-bar-container"><div id="inject-bar" class="progress-fill"></div></div>
     </div>
+
     <script>
     function validarKey() {
-        if(document.getElementById('keyInput').value === "FAEL-VIP-2026") {
+        const inputKey = document.getElementById('keyInput').value;
+        
+        if(inputKey === "FAEL-VIP-2026" || inputKey === "dono456") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-menu').style.display = 'block';
+            
+            // Se for a key do dono, libera o menu Rage
+            if(inputKey === "dono456") {
+                document.getElementById('rage-menu').style.display = 'block';
+            }
         } else {
             alert("KEY INVÁLIDA!");
         }
