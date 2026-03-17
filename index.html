@@ -1,360 +1,216 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FAEL - VIRTUAL ASSIST PRO</title>
+    <title>Faelzin Store • Multi-Painel</title>
     <style>
-        :root {
-            --hacker: #00ff00;
-            --danger: #ff0000;
-            --bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --rage: #ff4444;
-        }
+        /* --- ESTILOS GERAIS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Courier New', monospace; }
+        body { min-height: 100vh; background: #0a0c10; display: flex; justify-content: center; align-items: center; padding: 15px; color: #fff; }
 
-        body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
-
-        /* --- LOGIN --- */
-        #login-screen {
-            width: 280px;
-            text-align: center;
-            padding: 30px;
-            background: #0a0a0a;
-            border-radius: 20px;
-            border: 2px solid #222;
-            margin-top: 40px;
-        }
-
-        .key-input {
-            width: 90%;
-            padding: 12px;
-            margin: 20px 0;
-            background: #000;
-            border: 1px solid var(--hacker);
-            color: var(--hacker);
-            text-align: center;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        .btn-login {
-            background: var(--hacker);
-            color: #000;
-            border: none;
-            padding: 12px;
-            cursor: pointer;
-            font-weight: 900;
-            border-radius: 5px;
+        /* --- TELA DE LOGIN (ESTILO DO PRIMEIRO ARQUIVO) --- */
+        .key-screen {
+            background: #1a212c;
+            border-radius: 40px;
+            padding: 35px 30px;
+            max-width: 400px;
             width: 100%;
-        }
-
-        /* --- MENU PRINCIPAL --- */
-        #main-container {
-            display: none;
-            width: 90%;
-            max-width: 360px;
-            padding: 20px;
-            background: #0d0d0d;
-            border-radius: 20px;
-            border: 1px solid #333;
-            margin-bottom: 40px;
-        }
-
-        .main-title h1 {
-            color: #fff;
-            font-size: 18px;
             text-align: center;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--hacker);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.9);
+            border: 2px solid #ffaa33;
+        }
+        .key-screen h1 {
+            font-size: 2.5rem; font-weight: 800;
+            background: linear-gradient(135deg, #ffd966, #ffaa33);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .key-screen input {
+            width: 100%; background: #0e131c; border: 2px solid #ffaa33;
+            padding: 18px 20px; border-radius: 60px; color: white;
+            font-size: 1.2rem; text-align: center; letter-spacing: 3px;
+            outline: none; margin-bottom: 20px;
+        }
+        .key-screen button {
+            width: 100%; background: linear-gradient(145deg, #ffaa33, #ff8800);
+            border: none; padding: 18px; border-radius: 60px;
+            font-weight: 700; font-size: 1.3rem; color: #0a0c10; cursor: pointer;
         }
 
-        .category-title {
-            color: var(--hacker);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 15px 0 8px 5px;
-            font-weight: 800;
-            border-left: 3px solid var(--hacker);
-            padding-left: 8px;
-        }
+        /* --- PAINEL 1: VIP (ESTILO LARANJA) --- */
+        .panel-vip { display: none; background: #1a212c; border-radius: 40px; padding: 25px; max-width: 480px; width: 100%; border: 2px solid #ffaa33; }
+        .tab { flex: 1; text-align: center; padding: 12px; border-radius: 30px; background: rgba(0,0,0,0.3); cursor: pointer; }
+        .tab.active { background: #ffaa33; color: #000; }
+        .section { background: rgba(255,255,255,0.05); border-radius: 30px; padding: 20px; margin-bottom: 20px; border: 1px solid #ffaa33; }
+        .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 15px 0; max-height: 200px; overflow-y: auto; }
+        .model-item { background: rgba(0,0,0,0.3); border: 1px solid #ffaa33; border-radius: 10px; padding: 8px; text-align: center; font-size: 0.8rem; cursor: pointer; }
+        .model-item.selected { background: #ffaa33; color: #000; }
 
-        .option-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-            background: var(--glass);
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 13px;
-        }
+        /* --- PAINEL 2: RAGE (ESTILO VERDE INDEX) --- */
+        #main-rage { display: none; width: 95%; max-width: 380px; padding: 20px; background: #0d0d0d; border-radius: 20px; border: 1px solid #333; }
+        .rage-hacker-text { color: #00ff00; text-shadow: 0 0 10px #00ff00; text-align: center; font-weight: 900; letter-spacing: 2px; }
+        .category-title { color: #00ff00; font-size: 11px; text-transform: uppercase; margin: 15px 0 8px 5px; border-left: 3px solid #00ff00; padding-left: 8px; }
+        .option-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 10px; font-size: 13px; }
+        .bypass-box { background: rgba(255, 0, 0, 0.1); border: 1px solid #ff0000; border-radius: 15px; padding: 15px; text-align: center; margin: 15px 0; }
+        .btn-rage-inject { background: #00ff00; color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 900; width: 100%; margin-top: 10px; cursor: pointer;}
 
-        /* SWITCHES */
-        .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
+        /* --- SWITCHES (PADRÃO) --- */
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #333; transition: .3s; border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 14px; width: 14px;
-            left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--hacker); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .3s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: #ffaa33; }
+        .rage-check:checked + .slider { background-color: #00ff00; }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        /* BYPASS E BOTAO INJETAR */
-        .bypass-box {
-            background: rgba(255, 0, 0, 0.05);
-            border: 1px solid var(--danger);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .btn-bypass-action {
-            background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            text-transform: uppercase;
-        }
-        .btn-inject {
-            background: var(--hacker);
-            color: #000;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-weight: 900;
-            width: 100%;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        /* ESTILOS ESPECÍFICOS RAGE */
-        .rage-desc {
-            font-size: 10px;
-            color: #bbb;
-            display: block;
-            margin-top: 5px;
-            line-height: 1.3;
-        }
-        .option-row-rage {
-            flex-direction: column;
-            align-items: flex-start;
-            border-left: 3px solid var(--danger);
-            background: rgba(255, 0, 0, 0.12);
-        }
-        .weapon-input {
-            width: 90%;
-            background: #000;
-            border: 1px solid #444;
-            color: var(--danger);
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            outline: none;
-            font-weight: bold;
-        }
-
-        /* LOGS */
-        .log-overlay {
-            display: none;
-            position: fixed;
-            top:0; left:0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 9999;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            font-family: 'Courier New', monospace;
-        }
-        .log-text { color: var(--hacker); font-size: 13px; line-height: 1.8; white-space: pre-wrap; }
-        .progress-bar-container { width: 100%; height: 2px; background: #111; margin-top: 20px; }
-        .progress-fill { width: 0%; height: 100%; background: var(--hacker); }
+        /* --- OVERLAYS DE LOGS --- */
+        .log-overlay { display: none; position: fixed; top:0; left:0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 40px 20px; font-family: 'Courier New', monospace; }
+        .log-text { color: #00ff00; font-size: 13px; line-height: 1.8; white-space: pre-wrap; }
+        .progress-bar-container { width: 100%; height: 4px; background: #111; margin-top: 20px; }
+        .progress-fill { width: 0%; height: 100%; background: #00ff00; box-shadow: 0 0 10px #00ff00; transition: width 0.3s; }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
-    <div id="login-screen">
-        <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">VIP</span></h2>
-        <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
-        <button class="btn-login" onclick="validarKey()">LOGAR</button>
+    <!-- TELA DE LOGIN UNIFICADA -->
+    <div class="key-screen" id="loginScreen">
+        <h1>FAELZIN STORE</h1>
+        <p style="color: #fff; margin-bottom: 20px;">DIGITE SUA CHAVE DE ACESSO</p>
+        <input type="text" id="masterKey" placeholder="INSIRA A KEY" maxlength="20">
+        <button onclick="validarAcesso()">ENTRAR NO SISTEMA</button>
+        <div id="statusMsg" style="margin-top: 15px; color: #ff4444; font-weight: bold;"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL DO MENU -->
-    <div id="main-container">
+    <!-- PAINEL 1: VIP (ARQUIVO TEXTO.TXT) -->
+    <div class="panel-vip" id="panelVip">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <h2 style="color: #ffaa33;">FAELZIN VIP</h2>
+            <span style="background: rgba(255,170,51,0.2); padding: 5px 15px; border-radius: 20px;">v2.0</span>
+        </div>
         
-        <!-- PAINEL AUXÍLIO (Key: FAEL-VIP-2026) -->
-        <div id="panel-standard" style="display: none;">
-            <div class="main-title"><h1>FAEL ASSIST</h1></div>
-            <div class="category-title">Auxílio de Mira</div>
-            <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            
-            <div class="category-title">Otimização</div>
-            <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="section">
+            <p style="color: #ffaa33; font-weight: bold; margin-bottom: 10px;">📱 GERADOR DE SENSIBILIDADE</p>
+            <div class="model-grid" id="celList">
+                <div class="model-item" onclick="selectModel(this)">Samsung</div>
+                <div class="model-item" onclick="selectModel(this)">Motorola</div>
+                <div class="model-item" onclick="selectModel(this)">Apple</div>
+                <div class="model-item" onclick="selectModel(this)">Xiaomi</div>
+                <div class="model-item" onclick="selectModel(this)">Realme</div>
+                <div class="model-item" onclick="selectModel(this)">POCO</div>
+            </div>
+            <button id="genBtn" style="width: 100%; padding: 12px; background: #ffaa33; border: none; border-radius: 10px; font-weight: bold; display: none;" onclick="gerarSensibilidade()">GERAR AGORA</button>
+            <div id="resSens" style="margin-top: 15px; padding: 15px; background: #000; color: #00ff00; border-radius: 10px; display: none; font-family: monospace;"></div>
         </div>
 
-        <!-- PAINEL RAGE (Key: dono456) -->
-        <div id="panel-rage" style="display: none;">
-            <div class="main-title"><h1 style="color: var(--danger); text-shadow: 0 0 10px var(--danger);">MOD MENU RAGE</h1></div>
-            
-            <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            
-            <div class="option-row">
-                <div>
-                    <span>Deus (God Mode)</span>
-                    <small style="display: block; font-size: 9px; color: #aaa;">Não toma dano de nenhum inimigo</small>
-                </div>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
+        <button style="width:100%; padding: 15px; border-radius: 15px; background: #1a212c; color: #fff; border: 1px solid #ffaa33; font-weight: bold;" onclick="location.reload()">SAIR DO PAINEL</button>
+    </div>
 
-            <div class="category-title" style="color: #fff; margin-top: 20px;">PUXAR ARMA</div>
-            <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #444;">
-                <span style="font-size: 11px; font-weight: bold; color: var(--hacker);">PUXA QUALQUER ARMA DO JOGO SÓ DIGITAR O NOME AQUI EM BAIXO</span>
-                <input type="text" class="weapon-input" placeholder="Digite o nome da arma...">
-            </div>
+    <!-- PAINEL 2: RAGE (ARQUIVO INDEX.HTML) -->
+    <div id="main-rage">
+        <h1 class="rage-hacker-text">FAEL ASSIST RAGE</h1>
+        <p style="text-align: center; font-size: 10px; color: #666; margin-bottom: 10px;">MODO EXTREMO ATIVADO</p>
+        
+        <div class="category-title">Auxílio de Mira</div>
+        <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked class="rage-check"><span class="slider"></span></label></div>
+        <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked class="rage-check"><span class="slider"></span></label></div>
+        
+        <div class="category-title">Auxílio de Combate</div>
+        <div class="option-row">Redutor de Recoil <label class="switch"><input type="checkbox" checked class="rage-check"><span class="slider"></span></label></div>
+        <div class="option-row">Silent Aim (Risk) <label class="switch"><input type="checkbox" class="rage-check"><span class="slider"></span></label></div>
 
-            <div class="category-title" style="color: var(--danger); border-left-color: var(--danger);">MAIS RAGE</div>
-            
-            <div class="option-row option-row-rage">
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span style="color: var(--danger); font-weight: bold;">Matar no avião ⚠️</span>
-                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
-                </div>
-                <span class="rage-desc">ativa quando estiver no avião antes do botão de pular esteja pronto pra pular, se tiver disponível a função nao funciona.</span>
-            </div>
-
-            <div class="option-row option-row-rage" style="margin-top: 8px;">
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span style="color: var(--danger); font-weight: bold;">Aimkill</span>
-                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
-                </div>
-                <span class="rage-desc">aimkill matar todos do mapa trocando de arma sem parar.</span>
-            </div>
-        </div>
-
-        <!-- BOTÕES COMUNS -->
         <div class="bypass-box">
-            <span style="color: var(--danger); font-weight: bold; font-size: 12px; display: block; margin-bottom: 10px;">ANTI-BAN BYPASS</span>
-            <button class="btn-bypass-action" id="bypassBtn" onclick="abrirHackerBypass()">ATIVAR SEGURANÇA</button>
+            <p style="color: #ff0000; font-size: 11px; margin-bottom: 8px; font-weight: bold;">PROTEÇÃO ANTI-BAN</p>
+            <button style="background: transparent; border: 1px solid #f00; color: #f00; padding: 8px; border-radius: 5px; cursor: pointer; width: 80%;" onclick="executarLog('bypass')">ATIVAR BYPASS</button>
         </div>
 
-        <button class="btn-inject" id="btnInjectMain" onclick="iniciarInjecao()">INJETAR FUNÇÕES</button>
+        <button class="btn-rage-inject" onclick="executarLog('inject')">INJETAR RAGE MODE</button>
     </div>
 
-    <!-- TELAS DE LOADING -->
-    <div id="bypass-screen" class="log-overlay">
-        <div style="color: var(--danger); font-weight: bold; margin-bottom: 20px;">[!] INICIANDO PROTOCOLO BYPASS...</div>
-        <div id="bypass-logs" class="log-text"></div>
-        <div class="progress-bar-container"><div id="bypass-bar" class="progress-fill" style="background: var(--danger);"></div></div>
-    </div>
-
-    <div id="injection-screen" class="log-overlay">
-        <div style="color: var(--hacker); font-weight: bold; margin-bottom: 20px;">[+] INJETANDO SCRIPTS...</div>
-        <div id="inject-logs" class="log-text"></div>
-        <div class="progress-bar-container"><div id="inject-bar" class="progress-fill"></div></div>
+    <!-- TELAS DE LOGS (DO INDEX.HTML) -->
+    <div id="logScreen" class="log-overlay">
+        <div id="logTitle" style="font-weight: bold; margin-bottom: 20px;"></div>
+        <div id="logContainer" class="log-text"></div>
+        <div class="progress-bar-container"><div id="logBar" class="progress-fill"></div></div>
     </div>
 
     <script>
-    function validarKey() {
-        const key = document.getElementById('keyInput').value;
-        const mainContainer = document.getElementById('main-container');
-        const panelStandard = document.getElementById('panel-standard');
-        const panelRage = document.getElementById('panel-rage');
+        function validarAcesso() {
+            const key = document.getElementById('masterKey').value;
+            const status = document.getElementById('statusMsg');
 
-        if(key === "FAEL-VIP-2026") {
-            document.getElementById('login-screen').style.display = 'none';
-            mainContainer.style.display = 'block';
-            panelStandard.style.display = 'block'; // Mostra apenas auxílio
-            panelRage.style.display = 'none';
-        } 
-        else if(key === "dono456") {
-            document.getElementById('login-screen').style.display = 'none';
-            mainContainer.style.display = 'block';
-            panelStandard.style.display = 'none'; // Esconde auxílio
-            panelRage.style.display = 'block';    // Mostra apenas RAGE
-        } 
-        else {
-            alert("KEY INVÁLIDA!");
+            if (key === "FAEL-VIP-2026") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('panelVip').style.display = 'block';
+            } 
+            else if (key === "dono456") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('main-rage').style.display = 'block';
+                document.body.style.background = "#050505";
+            } 
+            else {
+                status.innerText = "❌ KEY INVÁLIDA!";
+                setTimeout(() => status.innerText = "", 2000);
+            }
         }
-    }
 
-    function abrirHackerBypass() {
-        document.getElementById('main-container').style.display = 'none';
-        document.getElementById('bypass-screen').style.display = 'block';
-        const logsArea = document.getElementById('bypass-logs');
-        const barra = document.getElementById('bypass-bar');
-        const frases = ["> Kernel Connect...", "> Injetando Bypass", "> Limpando Logs", "> Ocultando ID", "> Bypass Ativo! 👹"];
-        let i = 0;
-        const loop = setInterval(() => {
-            if (i < frases.length) {
-                const linha = document.createElement('div');
-                linha.textContent = frases[i];
-                logsArea.appendChild(linha);
-                i++;
-                barra.style.width = (i / frases.length) * 100 + "%";
-            } else {
-                clearInterval(loop);
-                setTimeout(() => {
-                    document.getElementById('bypass-screen').style.display = 'none';
-                    document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('bypassBtn').innerText = "ATIVADO ✅";
-                }, 1000);
-            }
-        }, 1500);
-    }
+        // --- FUNÇÕES PAINEL VIP ---
+        let modelSelected = "";
+        function selectModel(el) {
+            document.querySelectorAll('.model-item').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+            modelSelected = el.innerText;
+            document.getElementById('genBtn').style.display = 'block';
+        }
 
-    function iniciarInjecao() {
-        document.getElementById('main-container').style.display = 'none';
-        document.getElementById('injection-screen').style.display = 'block';
-        const logsArea = document.getElementById('inject-logs');
-        const barra = document.getElementById('inject-bar');
-        const frases = ["> Buscando pacotes...", "> Ajustando sensibilidade...", "> Scripts aplicados!"];
-        let j = 0;
-        const loop = setInterval(() => {
-            if (j < frases.length) {
-                const linha = document.createElement('div');
-                linha.textContent = frases[j];
-                logsArea.appendChild(linha);
-                j++;
-                barra.style.width = (j / frases.length) * 100 + "%";
-            } else {
-                clearInterval(loop);
-                setTimeout(() => {
-                    document.getElementById('injection-screen').style.display = 'none';
-                    document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('btnInjectMain').innerText = "INJETADO COM SUCESSO ✅";
-                }, 1000);
-            }
-        }, 1500);
-    }
+        function gerarSensibilidade() {
+            const btn = document.getElementById('genBtn');
+            const res = document.getElementById('resSens');
+            btn.innerText = "PROCESSANDO...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const s = () => Math.floor(Math.random() * 90) + 105;
+                res.innerHTML = `✅ CONFIG PARA: ${modelSelected}<br>GENERAL: ${s()}<br>RED DOT: ${s()}<br>MIRA 2X: ${s()}<br>MIRA 4X: ${s()}<br>DPI: ${Math.floor(Math.random()*400)+400}`;
+                res.style.display = 'block';
+                btn.innerText = "GERAR AGORA";
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        // --- FUNÇÕES PAINEL RAGE ---
+        function executarLog(tipo) {
+            const screen = document.getElementById('logScreen');
+            const container = document.getElementById('logContainer');
+            const bar = document.getElementById('logBar');
+            const title = document.getElementById('logTitle');
+            
+            screen.style.display = 'block';
+            container.innerHTML = "";
+            bar.style.width = "0%";
+
+            let frases = tipo === 'bypass' ? 
+                ["> Acessando Kernel...", "> Limpando Histórico...", "> Ocultando ID Hardware...", "> Bypass Injetado!"] :
+                ["> Buscando Offsets...", "> Aplicando Silent Aim...", "> Reduzindo Espalhamento...", "> Injeção Concluída!"];
+
+            title.innerText = tipo === 'bypass' ? "[!] EXECUTANDO BYPASS..." : "[+] INJETANDO SCRIPTS...";
+            title.style.color = tipo === 'bypass' ? "#ff0000" : "#00ff00";
+            bar.style.background = tipo === 'bypass' ? "#ff0000" : "#00ff00";
+
+            let i = 0;
+            const loop = setInterval(() => {
+                if (i < frases.length) {
+                    const div = document.createElement('div');
+                    div.innerText = frases[i];
+                    container.appendChild(div);
+                    i++;
+                    bar.style.width = (i / frases.length) * 100 + "%";
+                } else {
+                    clearInterval(loop);
+                    setTimeout(() => screen.style.display = 'none', 1000);
+                }
+            }, 800);
+        }
     </script>
 </body>
 </html>
