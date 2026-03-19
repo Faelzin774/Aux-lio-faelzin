@@ -11,6 +11,7 @@
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
             --rage: #ff4444;
+            --sensi: #00ffff;
         }
 
         body {
@@ -24,7 +25,6 @@
             align-items: flex-start;
             min-height: 100vh;
             overflow-y: auto;
-            position: relative;
         }
 
         /* --- LOGIN --- */
@@ -178,9 +178,9 @@
             font-weight: bold;
         }
 
-        /* BOTÃO AUXILIAR ATIVAR */
-        .btn-auxiliar {
-            background: linear-gradient(45deg, var(--hacker), #00aa00);
+        /* BOTÃO SENSIBILIDADE */
+        .btn-sensi {
+            background: linear-gradient(45deg, var(--sensi), #0088ff);
             color: #000;
             border: none;
             padding: 15px;
@@ -188,100 +188,170 @@
             font-weight: 900;
             width: 100%;
             text-transform: uppercase;
-            margin: 15px 0 10px 0;
+            margin: 15px 0;
             cursor: pointer;
             font-size: 16px;
             letter-spacing: 2px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .btn-auxiliar:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
 
-        .btn-auxiliar.ativo {
-            background: linear-gradient(45deg, #ff4444, #ff0000);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-
-        /* ELEMENTO FLUTUANTE */
-        .floating-element {
+        /* MODAL SENSIBILIDADE */
+        .modal-sensi {
+            display: none;
             position: fixed;
-            top: 100px;
-            left: 20px;
-            width: 120px;
-            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
-            border: 2px solid var(--hacker);
-            border-radius: 15px;
-            padding: 12px;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            cursor: move;
-            user-select: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
             z-index: 10000;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-            backdrop-filter: blur(5px);
-            transition: border-color 0.3s;
-            touch-action: none; /* Previne scroll durante o arrasto em mobile */
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .floating-element.dragging {
-            opacity: 0.9;
-            transform: scale(1.02);
-            border-color: var(--hacker);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        .modal-content {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid var(--sensi);
         }
 
-        .floating-header {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: var(--hacker);
-            font-size: 11px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        .floating-content {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .floating-item {
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 4px 8px;
-            border-radius: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
         }
 
-        .floating-item span:first-child {
+        .modal-header h2 {
+            color: var(--sensi);
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .close-modal {
+            color: #666;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid var(--sensi);
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 5px;
+        }
+
+        .brand-item {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .brand-item:hover {
+            border-color: var(--sensi);
+            background: #1a1a1a;
+        }
+
+        .brand-item.selected {
+            border-color: var(--sensi);
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .sensi-config {
+            background: #111;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .sensi-title {
+            color: var(--sensi);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sensi-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .sensi-row span:first-child {
             color: #aaa;
+            font-size: 12px;
         }
 
-        .floating-item span:last-child {
-            color: var(--hacker);
+        .sensi-row span:last-child {
+            color: var(--sensi);
             font-weight: bold;
         }
 
-        .floating-close {
-            position: absolute;
-            top: 2px;
-            right: 5px;
-            color: #666;
-            font-size: 14px;
-            cursor: pointer;
-            padding: 2px 5px;
-            z-index: 10001;
+        .dpi-value {
+            font-size: 18px;
+            color: var(--sensi);
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #000;
+            border-radius: 8px;
+            border: 1px solid var(--sensi);
         }
 
-        .floating-close:hover {
-            color: var(--danger);
+        .btn-apply-sensi {
+            background: var(--sensi);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .btn-generate-dpi {
+            background: transparent;
+            color: var(--sensi);
+            border: 1px solid var(--sensi);
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
+            cursor: pointer;
         }
 
         /* LOGS */
@@ -367,8 +437,8 @@
             </div>
         </div>
 
-        <!-- BOTÃO AUXILIAR ATIVAR -->
-        <button class="btn-auxiliar" id="btnAtivarFloat" onclick="toggleFloatingElement()">ATIVAR</button>
+        <!-- BOTÃO SENSIBILIDADE -->
+        <button class="btn-sensi" onclick="abrirSensiModal()">🎯 SENSIBILIDADE FF</button>
 
         <!-- BOTÕES COMUNS -->
         <div class="bypass-box">
@@ -377,6 +447,56 @@
         </div>
 
         <button class="btn-inject" id="btnInjectMain" onclick="iniciarInjecao()">INJETAR FUNÇÕES</button>
+    </div>
+
+    <!-- MODAL SENSIBILIDADE -->
+    <div id="sensiModal" class="modal-sensi">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>SENSIBILIDADE FF</h2>
+                <span class="close-modal" onclick="fecharSensiModal()">&times;</span>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="🔍 Pesquisar marca do celular..." id="searchBrand" onkeyup="filtrarMarcas()">
+            
+            <div class="brands-grid" id="brandsGrid">
+                <!-- Marcas serão inseridas aqui pelo JavaScript -->
+            </div>
+
+            <div class="sensi-config">
+                <div class="sensi-title">CONFIGURAÇÕES GERADAS</div>
+                <div class="sensi-row">
+                    <span>GERAL</span>
+                    <span id="sensi-geral">0</span>
+                </div>
+                <div class="sensi-row">
+                    <span>PONTO VERMELHO</span>
+                    <span id="sensi-reddot">0</span>
+                </div>
+                <div class="sensi-row">
+                    <span>MIRA 2X</span>
+                    <span id="sensi-2x">0</span>
+                </div>
+                <div class="sensi-row">
+                    <span>MIRA 4X</span>
+                    <span id="sensi-4x">0</span>
+                </div>
+                <div class="sensi-row">
+                    <span>MIRA AWM</span>
+                    <span id="sensi-awm">0</span>
+                </div>
+                <div class="sensi-row">
+                    <span>OLHADINHA</span>
+                    <span id="sensi-olhadinha">0</span>
+                </div>
+                <div class="dpi-value" id="dpiValue">
+                    DPI: 0
+                </div>
+                
+                <button class="btn-generate-dpi" onclick="gerarNovaSensi()">🔄 GERAR NOVOS VALORES</button>
+                <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
+            </div>
+        </div>
     </div>
 
     <!-- TELAS DE LOADING -->
@@ -393,14 +513,21 @@
     </div>
 
     <script>
-    let floatingElement = null;
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
+    // Lista completa de marcas
+    const marcas = [
+        "Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", 
+        "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", 
+        "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", 
+        "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", 
+        "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo", 
+        "Multi", "Gradiente", "Micromax", "Lava", "Karbonn", "Xolo", "Reliance LYF", "Jio", 
+        "Intex", "Fairphone", "Wiko", "Archos", "MobiWire", "Gigaset", "Medion", "Philips", 
+        "Sharp", "Fujitsu", "Kyocera", "Panasonic", "HTC", "Acer", "Advan", "Polytron", 
+        "Evercoss", "VSmart", "Energizer", "Punkt", "Mudita", "Light Phone", "BQ", "Wileyfox", 
+        "General Mobile", "Casper", "Reeder", "Vestel", "Walton", "Symphony", "Icemobile"
+    ];
+
+    let marcaSelecionada = null;
 
     function validarKey() {
         const key = document.getElementById('keyInput').value;
@@ -411,14 +538,14 @@
         if(key === "FAEL-VIP-2026") {
             document.getElementById('login-screen').style.display = 'none';
             mainContainer.style.display = 'block';
-            panelStandard.style.display = 'block'; // Mostra apenas auxílio
+            panelStandard.style.display = 'block';
             panelRage.style.display = 'none';
         } 
         else if(key === "dono456") {
             document.getElementById('login-screen').style.display = 'none';
             mainContainer.style.display = 'block';
-            panelStandard.style.display = 'none'; // Esconde auxílio
-            panelRage.style.display = 'block';    // Mostra apenas RAGE
+            panelStandard.style.display = 'none';
+            panelRage.style.display = 'block';
         } 
         else {
             alert("KEY INVÁLIDA!");
@@ -475,116 +602,90 @@
         }, 1500);
     }
 
-    function toggleFloatingElement() {
-        const btn = document.getElementById('btnAtivarFloat');
-        
-        if (!floatingElement) {
-            // Criar elemento flutuante
-            floatingElement = document.createElement('div');
-            floatingElement.className = 'floating-element';
-            floatingElement.innerHTML = `
-                <div class="floating-close" onclick="fecharFloatingElement(event)">✕</div>
-                <div class="floating-header">FAEL ASSIST</div>
-                <div class="floating-content">
-                    <div class="floating-item">
-                        <span>Status</span>
-                        <span>✓ Ativo</span>
-                    </div>
-                    <div class="floating-item">
-                        <span>Modo</span>
-                        <span>Hacker</span>
-                    </div>
-                    <div class="floating-item">
-                        <span>Delay</span>
-                        <span>0ms</span>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(floatingElement);
-            
-            // Adicionar eventos de arrasto
-            floatingElement.addEventListener('mousedown', dragStart);
-            floatingElement.addEventListener('touchstart', dragStart);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', drag);
-            document.addEventListener('mouseup', dragEnd);
-            document.addEventListener('touchend', dragEnd);
-            
-            btn.classList.add('ativo');
-            btn.textContent = 'DESATIVAR';
-        } else {
-            // Remover elemento flutuante
-            fecharFloatingElement();
+    function abrirSensiModal() {
+        document.getElementById('sensiModal').style.display = 'block';
+        carregarMarcas();
+        if (!marcaSelecionada) {
+            gerarNovaSensi();
         }
     }
 
-    function fecharFloatingElement(event) {
-        if (event) {
-            event.stopPropagation();
-        }
-        
-        if (floatingElement) {
-            // Remover eventos
-            floatingElement.removeEventListener('mousedown', dragStart);
-            floatingElement.removeEventListener('touchstart', dragStart);
-            document.removeEventListener('mousemove', drag);
-            document.removeEventListener('touchmove', drag);
-            document.removeEventListener('mouseup', dragEnd);
-            document.removeEventListener('touchend', dragEnd);
-            
-            floatingElement.remove();
-            floatingElement = null;
-            
-            const btn = document.getElementById('btnAtivarFloat');
-            btn.classList.remove('ativo');
-            btn.textContent = 'ATIVAR';
-        }
+    function fecharSensiModal() {
+        document.getElementById('sensiModal').style.display = 'none';
     }
 
-    function dragStart(e) {
-        if (e.type === "touchstart") {
-            initialX = e.touches[0].clientX - xOffset;
-            initialY = e.touches[0].clientY - yOffset;
-        } else {
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-        }
-
-        if (e.target === floatingElement || e.target.parentNode === floatingElement) {
-            isDragging = true;
-            floatingElement.classList.add('dragging');
-        }
+    function carregarMarcas() {
+        const grid = document.getElementById('brandsGrid');
+        grid.innerHTML = '';
+        marcas.sort().forEach(marca => {
+            const div = document.createElement('div');
+            div.className = 'brand-item';
+            div.textContent = marca;
+            div.onclick = () => selecionarMarca(marca, div);
+            grid.appendChild(div);
+        });
     }
 
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault();
-
-            if (e.type === "touchmove") {
-                currentX = e.touches[0].clientX - initialX;
-                currentY = e.touches[0].clientY - initialY;
+    function filtrarMarcas() {
+        const search = document.getElementById('searchBrand').value.toLowerCase();
+        const items = document.querySelectorAll('.brand-item');
+        items.forEach(item => {
+            const marca = item.textContent.toLowerCase();
+            if (marca.includes(search)) {
+                item.style.display = 'block';
             } else {
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
+                item.style.display = 'none';
             }
-
-            xOffset = currentX;
-            yOffset = currentY;
-
-            setTranslate(currentX, currentY, floatingElement);
-        }
+        });
     }
 
-    function dragEnd(e) {
-        isDragging = false;
-        if (floatingElement) {
-            floatingElement.classList.remove('dragging');
-        }
+    function selecionarMarca(marca, elemento) {
+        document.querySelectorAll('.brand-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        elemento.classList.add('selected');
+        marcaSelecionada = marca;
+        gerarNovaSensi();
     }
 
-    function setTranslate(xPos, yPos, el) {
-        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+    function gerarNovaSensi() {
+        // Gerar valores aleatórios dentro das faixas especificadas
+        const geral = Math.floor(Math.random() * 60) + 140; // 140-200
+        const reddot = Math.floor(Math.random() * 60) + 140;
+        const mira2x = Math.floor(Math.random() * 60) + 140;
+        const mira4x = Math.floor(Math.random() * 60) + 140;
+        const miraAWM = Math.floor(Math.random() * 60) + 140;
+        const olhadinha = Math.floor(Math.random() * 60) + 140;
+        const dpi = Math.floor(Math.random() * 440) + 450; // 450-890
+
+        document.getElementById('sensi-geral').textContent = geral;
+        document.getElementById('sensi-reddot').textContent = reddot;
+        document.getElementById('sensi-2x').textContent = mira2x;
+        document.getElementById('sensi-4x').textContent = mira4x;
+        document.getElementById('sensi-awm').textContent = miraAWM;
+        document.getElementById('sensi-olhadinha').textContent = olhadinha;
+        document.getElementById('dpiValue').textContent = `DPI: ${dpi}`;
+    }
+
+    function aplicarSensi() {
+        if (!marcaSelecionada) {
+            alert('Selecione uma marca de celular primeiro!');
+            return;
+        }
+
+        const geral = document.getElementById('sensi-geral').textContent;
+        const dpi = document.getElementById('dpiValue').textContent;
+        
+        alert(`✅ Configurações aplicadas para ${marcaSelecionada}!\n\n` +
+              `Geral: ${geral}\n` +
+              `Ponto Vermelho: ${document.getElementById('sensi-reddot').textContent}\n` +
+              `Mira 2x: ${document.getElementById('sensi-2x').textContent}\n` +
+              `Mira 4x: ${document.getElementById('sensi-4x').textContent}\n` +
+              `Mira AWM: ${document.getElementById('sensi-awm').textContent}\n` +
+              `Olhadinha: ${document.getElementById('sensi-olhadinha').textContent}\n` +
+              `${dpi}`);
+        
+        fecharSensiModal();
     }
     </script>
 </body>
