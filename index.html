@@ -12,6 +12,8 @@
             --glass: rgba(255, 255, 255, 0.05);
             --rage: #ff4444;
             --sensi: #00ff00;
+            --bypass: #ffaa00;
+            --inject: #0066ff;
         }
 
         body {
@@ -146,37 +148,66 @@
         input:checked + .slider { background-color: var(--hacker); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BYPASS E BOTAO INJETAR */
-        .bypass-box {
-            background: rgba(255, 0, 0, 0.05);
-            border: 1px solid var(--danger);
+        /* BYPASS E BOTAO INJETAR - NOVOS ESTILOS */
+        .process-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
             margin: 20px 0;
         }
-        .btn-bypass-action {
+
+        .btn-process {
             background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 10px 25px;
+            border: 2px solid;
+            padding: 15px 25px;
             border-radius: 8px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
             text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-inject {
-            background: var(--hacker);
-            color: #000;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-weight: 900;
-            width: 100%;
-            text-transform: uppercase;
+
+        .btn-process::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-process:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-bypass {
+            color: var(--bypass);
+            border-color: var(--bypass);
+        }
+
+        .btn-bypass:hover {
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .btn-inject-custom {
+            color: var(--inject);
+            border-color: var(--inject);
             margin-top: 10px;
+        }
+
+        .btn-inject-custom:hover {
+            background: rgba(0, 102, 255, 0.1);
         }
 
         /* ESTILOS ESPECÍFICOS RAGE */
@@ -411,8 +442,8 @@
             color: #000;
         }
 
-        /* LOGS */
-        .log-overlay {
+        /* TELAS DE PROCESSO */
+        .process-overlay {
             display: none;
             position: fixed;
             top:0; left:0; width: 100%; height: 100%;
@@ -422,9 +453,44 @@
             box-sizing: border-box;
             font-family: 'Courier New', monospace;
         }
-        .log-text { color: var(--hacker); font-size: 13px; line-height: 1.8; white-space: pre-wrap; }
-        .progress-bar-container { width: 100%; height: 2px; background: #111; margin-top: 20px; }
-        .progress-fill { width: 0%; height: 100%; background: var(--hacker); }
+
+        .process-text {
+            color: var(--hacker);
+            font-size: 14px;
+            line-height: 2;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        .process-bar-container {
+            width: 100%;
+            height: 4px;
+            background: #111;
+            margin-top: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .process-fill {
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .fill-bypass {
+            background: var(--bypass);
+        }
+
+        .fill-inject {
+            background: var(--inject);
+        }
+
+        .process-status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -450,10 +516,16 @@
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Previsão de Tiro <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Correção de Recuo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="option-row">Ajuste de Sensibilidade Dinâmica <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Compensador Automático <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             
             <div class="category-title">Otimização</div>
             <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="option-row">Redução de Lag <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         </div>
 
         <!-- PAINEL RAGE (Key: dono456) -->
@@ -498,13 +570,11 @@
             </div>
         </div>
 
-        <!-- BOTÕES COMUNS -->
-        <div class="bypass-box">
-            <span style="color: var(--danger); font-weight: bold; font-size: 12px; display: block; margin-bottom: 10px;">ANTI-BAN BYPASS</span>
-            <button class="btn-bypass-action" id="bypassBtn" onclick="abrirHackerBypass()">ATIVAR SEGURANÇA</button>
+        <!-- NOVOS BOTÕES DE PROCESSO -->
+        <div class="process-box">
+            <button class="btn-process btn-bypass" id="bypassBtn" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
+            <button class="btn-process btn-inject-custom" id="injectBtn" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
         </div>
-
-        <button class="btn-inject" id="btnInjectMain" onclick="iniciarInjecao()">INJETAR FUNÇÕES</button>
     </div>
 
     <!-- MODAL SENSIBILIDADE -->
@@ -569,17 +639,23 @@
         </div>
     </div>
 
-    <!-- TELAS DE LOADING -->
-    <div id="bypass-screen" class="log-overlay">
-        <div style="color: var(--danger); font-weight: bold; margin-bottom: 20px;">[!] INICIANDO PROTOCOLO BYPASS...</div>
-        <div id="bypass-logs" class="log-text"></div>
-        <div class="progress-bar-container"><div id="bypass-bar" class="progress-fill" style="background: var(--danger);"></div></div>
+    <!-- TELAS DE PROCESSO -->
+    <div id="bypass-process" class="process-overlay">
+        <div style="color: var(--bypass); font-weight: bold; margin-bottom: 20px;">[ BYPASS SYSTEM ]</div>
+        <div id="bypass-logs" class="process-text"></div>
+        <div class="process-bar-container">
+            <div id="bypass-bar" class="process-fill fill-bypass"></div>
+        </div>
+        <div id="bypass-status" class="process-status">Inicializando...</div>
     </div>
 
-    <div id="injection-screen" class="log-overlay">
-        <div style="color: var(--hacker); font-weight: bold; margin-bottom: 20px;">[+] INJETANDO SCRIPTS...</div>
-        <div id="inject-logs" class="log-text"></div>
-        <div class="progress-bar-container"><div id="inject-bar" class="progress-fill"></div></div>
+    <div id="inject-process" class="process-overlay">
+        <div style="color: var(--inject); font-weight: bold; margin-bottom: 20px;">[ INJECT ENGINE ]</div>
+        <div id="inject-logs" class="process-text"></div>
+        <div class="process-bar-container">
+            <div id="inject-bar" class="process-fill fill-inject"></div>
+        </div>
+        <div id="inject-status" class="process-status">Inicializando...</div>
     </div>
 
     <script>
@@ -624,54 +700,112 @@
         }
     }
 
-    function abrirHackerBypass() {
+    function iniciarProcessoBypass() {
         document.getElementById('main-container').style.display = 'none';
-        document.getElementById('bypass-screen').style.display = 'block';
+        document.getElementById('bypass-process').style.display = 'block';
+        
         const logsArea = document.getElementById('bypass-logs');
         const barra = document.getElementById('bypass-bar');
-        const frases = ["> Kernel Connect...", "> Injetando Bypass", "> Limpando Logs", "> Ocultando ID", "> Bypass Ativo! 👹"];
+        const status = document.getElementById('bypass-status');
+        
+        logsArea.innerHTML = '';
+        barra.style.width = '0%';
+        
+        const frases = [
+            "> Iniciando bypass system...",
+            "> Conectando ao kernel...",
+            "> Desativando proteções...",
+            "> Ocultando processos...",
+            "> Limpando registros...",
+            "> Bypass concluído com sucesso!"
+        ];
+        
         let i = 0;
+        const totalFrases = frases.length;
+        
         const loop = setInterval(() => {
-            if (i < frases.length) {
+            if (i < totalFrases) {
                 const linha = document.createElement('div');
                 linha.textContent = frases[i];
+                linha.style.opacity = '0';
+                linha.style.transition = 'opacity 0.5s';
                 logsArea.appendChild(linha);
+                
+                setTimeout(() => {
+                    linha.style.opacity = '1';
+                }, 50);
+                
+                const progresso = ((i + 1) / totalFrases) * 100;
+                barra.style.width = progresso + '%';
+                status.textContent = `Processando... ${Math.round(progresso)}%`;
+                
                 i++;
-                barra.style.width = (i / frases.length) * 100 + "%";
             } else {
                 clearInterval(loop);
+                status.textContent = '✓ Bypass ativado com sucesso!';
+                
                 setTimeout(() => {
-                    document.getElementById('bypass-screen').style.display = 'none';
+                    document.getElementById('bypass-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('bypassBtn').innerText = "ATIVADO ✅";
-                }, 1000);
+                    document.getElementById('bypassBtn').style.background = 'rgba(255, 170, 0, 0.2)';
+                    document.getElementById('bypassBtn').textContent = '✓ BYPASS ATIVO';
+                }, 2000);
             }
-        }, 1500);
+        }, 1000);
     }
 
-    function iniciarInjecao() {
+    function iniciarProcessoInject() {
         document.getElementById('main-container').style.display = 'none';
-        document.getElementById('injection-screen').style.display = 'block';
+        document.getElementById('inject-process').style.display = 'block';
+        
         const logsArea = document.getElementById('inject-logs');
         const barra = document.getElementById('inject-bar');
-        const frases = ["> Buscando pacotes...", "> Ajustando sensibilidade...", "> Scripts aplicados!"];
-        let j = 0;
+        const status = document.getElementById('inject-status');
+        
+        logsArea.innerHTML = '';
+        barra.style.width = '0%';
+        
+        const frases = [
+            "> Inicializando inject engine...",
+            "> Carregando módulos...",
+            "> Alocando memória...",
+            "> Injetando scripts...",
+            "> Verificando integridade...",
+            "> Injeção concluída!"
+        ];
+        
+        let i = 0;
+        const totalFrases = frases.length;
+        
         const loop = setInterval(() => {
-            if (j < frases.length) {
+            if (i < totalFrases) {
                 const linha = document.createElement('div');
-                linha.textContent = frases[j];
+                linha.textContent = frases[i];
+                linha.style.opacity = '0';
+                linha.style.transition = 'opacity 0.5s';
                 logsArea.appendChild(linha);
-                j++;
-                barra.style.width = (j / frases.length) * 100 + "%";
+                
+                setTimeout(() => {
+                    linha.style.opacity = '1';
+                }, 50);
+                
+                const progresso = ((i + 1) / totalFrases) * 100;
+                barra.style.width = progresso + '%';
+                status.textContent = `Processando... ${Math.round(progresso)}%`;
+                
+                i++;
             } else {
                 clearInterval(loop);
+                status.textContent = '✓ Injeção concluída com sucesso!';
+                
                 setTimeout(() => {
-                    document.getElementById('injection-screen').style.display = 'none';
+                    document.getElementById('inject-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('btnInjectMain').innerText = "INJETADO COM SUCESSO ✅";
-                }, 1000);
+                    document.getElementById('injectBtn').style.background = 'rgba(0, 102, 255, 0.2)';
+                    document.getElementById('injectBtn').textContent = '✓ INJECT ATIVO';
+                }, 2000);
             }
-        }, 1500);
+        }, 1000);
     }
 
     function abrirSensiModal() {
