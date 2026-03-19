@@ -11,7 +11,7 @@
             --bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
             --rage: #ff4444;
-            --sensi: #00ffff;
+            --sensi: #00ff00;
         }
 
         body {
@@ -73,14 +73,41 @@
             margin-bottom: 40px;
         }
 
+        .main-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
         .main-title h1 {
             color: #fff;
             font-size: 18px;
-            text-align: center;
-            margin: 0 0 15px 0;
+            margin: 0;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 0 10px var(--hacker);
+        }
+
+        .sensi-header-btn {
+            background: transparent;
+            color: var(--sensi);
+            border: 2px solid var(--sensi);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .sensi-header-btn:hover {
+            background: var(--sensi);
+            color: #000;
         }
 
         .category-title {
@@ -178,23 +205,6 @@
             font-weight: bold;
         }
 
-        /* BOTÃO SENSIBILIDADE */
-        .btn-sensi {
-            background: linear-gradient(45deg, var(--sensi), #0088ff);
-            color: #000;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: 900;
-            width: 100%;
-            text-transform: uppercase;
-            margin: 15px 0;
-            cursor: pointer;
-            font-size: 16px;
-            letter-spacing: 2px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
         /* MODAL SENSIBILIDADE */
         .modal-sensi {
             display: none;
@@ -244,6 +254,13 @@
             color: var(--danger);
         }
 
+        .back-modal {
+            color: var(--sensi);
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
         .search-box {
             width: 100%;
             padding: 12px;
@@ -259,7 +276,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
             margin-bottom: 20px;
             padding: 5px;
@@ -283,8 +300,8 @@
 
         .brand-item.selected {
             border-color: var(--sensi);
-            background: rgba(0, 255, 255, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         .sensi-config {
@@ -299,6 +316,51 @@
             font-size: 14px;
             margin-bottom: 10px;
             text-transform: uppercase;
+            text-align: center;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #000;
+            border-radius: 10px;
+            border: 1px solid var(--sensi);
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--sensi);
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px var(--sensi);
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .btn-generate-sensi {
+            background: var(--sensi);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            width: 100%;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .btn-generate-sensi:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
         }
 
         .sensi-row {
@@ -332,26 +394,21 @@
         }
 
         .btn-apply-sensi {
-            background: var(--sensi);
-            color: #000;
-            border: none;
+            background: transparent;
+            color: var(--sensi);
+            border: 2px solid var(--sensi);
             padding: 15px;
             border-radius: 8px;
             font-weight: bold;
             width: 100%;
             margin-top: 15px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .btn-generate-dpi {
-            background: transparent;
-            color: var(--sensi);
-            border: 1px solid var(--sensi);
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            margin: 10px 0;
-            cursor: pointer;
+        .btn-apply-sensi:hover {
+            background: var(--sensi);
+            color: #000;
         }
 
         /* LOGS */
@@ -382,9 +439,13 @@
     <!-- CONTAINER PRINCIPAL DO MENU -->
     <div id="main-container">
         
+        <div class="main-title">
+            <h1>FAEL ASSIST</h1>
+            <button class="sensi-header-btn" onclick="abrirSensiModal()">SENSIBILIDADE</button>
+        </div>
+        
         <!-- PAINEL AUXÍLIO (Key: FAEL-VIP-2026) -->
         <div id="panel-standard" style="display: none;">
-            <div class="main-title"><h1>FAEL ASSIST</h1></div>
             <div class="category-title">Auxílio de Mira</div>
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -437,9 +498,6 @@
             </div>
         </div>
 
-        <!-- BOTÃO SENSIBILIDADE -->
-        <button class="btn-sensi" onclick="abrirSensiModal()">🎯 SENSIBILIDADE FF</button>
-
         <!-- BOTÕES COMUNS -->
         <div class="bypass-box">
             <span style="color: var(--danger); font-weight: bold; font-size: 12px; display: block; margin-bottom: 10px;">ANTI-BAN BYPASS</span>
@@ -453,7 +511,10 @@
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>SENSIBILIDADE FF</h2>
+                <div style="display: flex; align-items: center;">
+                    <span class="back-modal" onclick="fecharSensiModal()">←</span>
+                    <h2>SENSIBILIDADE</h2>
+                </div>
                 <span class="close-modal" onclick="fecharSensiModal()">&times;</span>
             </div>
             
@@ -464,37 +525,46 @@
             </div>
 
             <div class="sensi-config">
-                <div class="sensi-title">CONFIGURAÇÕES GERADAS</div>
-                <div class="sensi-row">
-                    <span>GERAL</span>
-                    <span id="sensi-geral">0</span>
-                </div>
-                <div class="sensi-row">
-                    <span>PONTO VERMELHO</span>
-                    <span id="sensi-reddot">0</span>
-                </div>
-                <div class="sensi-row">
-                    <span>MIRA 2X</span>
-                    <span id="sensi-2x">0</span>
-                </div>
-                <div class="sensi-row">
-                    <span>MIRA 4X</span>
-                    <span id="sensi-4x">0</span>
-                </div>
-                <div class="sensi-row">
-                    <span>MIRA AWM</span>
-                    <span id="sensi-awm">0</span>
-                </div>
-                <div class="sensi-row">
-                    <span>OLHADINHA</span>
-                    <span id="sensi-olhadinha">0</span>
-                </div>
-                <div class="dpi-value" id="dpiValue">
-                    DPI: 0
-                </div>
+                <div class="sensi-title">CONFIGURAÇÕES</div>
                 
-                <button class="btn-generate-dpi" onclick="gerarNovaSensi()">🔄 GERAR NOVOS VALORES</button>
-                <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
+                <div class="timer-container">
+                    <div class="timer-display" id="timerDisplay">10.0</div>
+                    <div class="timer-label">segundos para gerar</div>
+                </div>
+
+                <button class="btn-generate-sensi" id="btnGenerateSensi" onclick="iniciarTimerGeracao()">GERAR SENSI</button>
+
+                <div id="sensiValues" style="display: none;">
+                    <div class="sensi-row">
+                        <span>GERAL</span>
+                        <span id="sensi-geral">0</span>
+                    </div>
+                    <div class="sensi-row">
+                        <span>PONTO VERMELHO</span>
+                        <span id="sensi-reddot">0</span>
+                    </div>
+                    <div class="sensi-row">
+                        <span>MIRA 2X</span>
+                        <span id="sensi-2x">0</span>
+                    </div>
+                    <div class="sensi-row">
+                        <span>MIRA 4X</span>
+                        <span id="sensi-4x">0</span>
+                    </div>
+                    <div class="sensi-row">
+                        <span>MIRA AWM</span>
+                        <span id="sensi-awm">0</span>
+                    </div>
+                    <div class="sensi-row">
+                        <span>OLHADINHA</span>
+                        <span id="sensi-olhadinha">0</span>
+                    </div>
+                    <div class="dpi-value" id="dpiValue">
+                        DPI: 0
+                    </div>
+                    
+                    <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
+                </div>
             </div>
         </div>
     </div>
@@ -528,6 +598,8 @@
     ];
 
     let marcaSelecionada = null;
+    let timerInterval = null;
+    let tempoRestante = 10;
 
     function validarKey() {
         const key = document.getElementById('keyInput').value;
@@ -605,13 +677,15 @@
     function abrirSensiModal() {
         document.getElementById('sensiModal').style.display = 'block';
         carregarMarcas();
-        if (!marcaSelecionada) {
-            gerarNovaSensi();
-        }
+        resetarTimer();
+        document.getElementById('sensiValues').style.display = 'none';
     }
 
     function fecharSensiModal() {
         document.getElementById('sensiModal').style.display = 'none';
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
     }
 
     function carregarMarcas() {
@@ -645,18 +719,48 @@
         });
         elemento.classList.add('selected');
         marcaSelecionada = marca;
-        gerarNovaSensi();
     }
 
-    function gerarNovaSensi() {
-        // Gerar valores aleatórios dentro das faixas especificadas
-        const geral = Math.floor(Math.random() * 60) + 140; // 140-200
+    function resetarTimer() {
+        tempoRestante = 10;
+        document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
+        document.getElementById('btnGenerateSensi').disabled = false;
+        document.getElementById('btnGenerateSensi').textContent = 'GERAR SENSI';
+        document.getElementById('sensiValues').style.display = 'none';
+    }
+
+    function iniciarTimerGeracao() {
+        if (!marcaSelecionada) {
+            alert('Selecione uma marca de celular primeiro!');
+            return;
+        }
+
+        const btn = document.getElementById('btnGenerateSensi');
+        btn.disabled = true;
+        
+        timerInterval = setInterval(() => {
+            tempoRestante = Math.max(0, tempoRestante - 0.1);
+            document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
+            
+            if (tempoRestante <= 0) {
+                clearInterval(timerInterval);
+                gerarSensi();
+                document.getElementById('sensiValues').style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'GERAR NOVAMENTE';
+                tempoRestante = 10;
+            }
+        }, 100);
+    }
+
+    function gerarSensi() {
+        const geral = Math.floor(Math.random() * 60) + 140;
         const reddot = Math.floor(Math.random() * 60) + 140;
         const mira2x = Math.floor(Math.random() * 60) + 140;
         const mira4x = Math.floor(Math.random() * 60) + 140;
         const miraAWM = Math.floor(Math.random() * 60) + 140;
         const olhadinha = Math.floor(Math.random() * 60) + 140;
-        const dpi = Math.floor(Math.random() * 440) + 450; // 450-890
+        const dpi = Math.floor(Math.random() * 440) + 450;
 
         document.getElementById('sensi-geral').textContent = geral;
         document.getElementById('sensi-reddot').textContent = reddot;
@@ -673,17 +777,14 @@
             return;
         }
 
-        const geral = document.getElementById('sensi-geral').textContent;
-        const dpi = document.getElementById('dpiValue').textContent;
-        
         alert(`✅ Configurações aplicadas para ${marcaSelecionada}!\n\n` +
-              `Geral: ${geral}\n` +
+              `Geral: ${document.getElementById('sensi-geral').textContent}\n` +
               `Ponto Vermelho: ${document.getElementById('sensi-reddot').textContent}\n` +
               `Mira 2x: ${document.getElementById('sensi-2x').textContent}\n` +
               `Mira 4x: ${document.getElementById('sensi-4x').textContent}\n` +
               `Mira AWM: ${document.getElementById('sensi-awm').textContent}\n` +
               `Olhadinha: ${document.getElementById('sensi-olhadinha').textContent}\n` +
-              `${dpi}`);
+              `${document.getElementById('dpiValue').textContent}`);
         
         fecharSensiModal();
     }
