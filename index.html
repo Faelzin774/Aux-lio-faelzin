@@ -24,6 +24,7 @@
             align-items: flex-start;
             min-height: 100vh;
             overflow-y: auto;
+            position: relative;
         }
 
         /* --- LOGIN --- */
@@ -177,6 +178,112 @@
             font-weight: bold;
         }
 
+        /* BOTÃO AUXILIAR ATIVAR */
+        .btn-auxiliar {
+            background: linear-gradient(45deg, var(--hacker), #00aa00);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 900;
+            width: 100%;
+            text-transform: uppercase;
+            margin: 15px 0 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .btn-auxiliar:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        .btn-auxiliar.ativo {
+            background: linear-gradient(45deg, #ff4444, #ff0000);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        /* ELEMENTO FLUTUANTE */
+        .floating-element {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            width: 120px;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            border: 2px solid var(--hacker);
+            border-radius: 15px;
+            padding: 12px;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            cursor: move;
+            user-select: none;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            backdrop-filter: blur(5px);
+            transition: border-color 0.3s;
+            touch-action: none; /* Previne scroll durante o arrasto em mobile */
+        }
+
+        .floating-element.dragging {
+            opacity: 0.9;
+            transform: scale(1.02);
+            border-color: var(--hacker);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        .floating-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--hacker);
+            font-size: 11px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .floating-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .floating-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 5px;
+        }
+
+        .floating-item span:first-child {
+            color: #aaa;
+        }
+
+        .floating-item span:last-child {
+            color: var(--hacker);
+            font-weight: bold;
+        }
+
+        .floating-close {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 5px;
+            z-index: 10001;
+        }
+
+        .floating-close:hover {
+            color: var(--danger);
+        }
+
         /* LOGS */
         .log-overlay {
             display: none;
@@ -260,6 +367,9 @@
             </div>
         </div>
 
+        <!-- BOTÃO AUXILIAR ATIVAR -->
+        <button class="btn-auxiliar" id="btnAtivarFloat" onclick="toggleFloatingElement()">ATIVAR</button>
+
         <!-- BOTÕES COMUNS -->
         <div class="bypass-box">
             <span style="color: var(--danger); font-weight: bold; font-size: 12px; display: block; margin-bottom: 10px;">ANTI-BAN BYPASS</span>
@@ -283,6 +393,15 @@
     </div>
 
     <script>
+    let floatingElement = null;
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
     function validarKey() {
         const key = document.getElementById('keyInput').value;
         const mainContainer = document.getElementById('main-container');
@@ -354,6 +473,118 @@
                 }, 1000);
             }
         }, 1500);
+    }
+
+    function toggleFloatingElement() {
+        const btn = document.getElementById('btnAtivarFloat');
+        
+        if (!floatingElement) {
+            // Criar elemento flutuante
+            floatingElement = document.createElement('div');
+            floatingElement.className = 'floating-element';
+            floatingElement.innerHTML = `
+                <div class="floating-close" onclick="fecharFloatingElement(event)">✕</div>
+                <div class="floating-header">FAEL ASSIST</div>
+                <div class="floating-content">
+                    <div class="floating-item">
+                        <span>Status</span>
+                        <span>✓ Ativo</span>
+                    </div>
+                    <div class="floating-item">
+                        <span>Modo</span>
+                        <span>Hacker</span>
+                    </div>
+                    <div class="floating-item">
+                        <span>Delay</span>
+                        <span>0ms</span>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(floatingElement);
+            
+            // Adicionar eventos de arrasto
+            floatingElement.addEventListener('mousedown', dragStart);
+            floatingElement.addEventListener('touchstart', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+            
+            btn.classList.add('ativo');
+            btn.textContent = 'DESATIVAR';
+        } else {
+            // Remover elemento flutuante
+            fecharFloatingElement();
+        }
+    }
+
+    function fecharFloatingElement(event) {
+        if (event) {
+            event.stopPropagation();
+        }
+        
+        if (floatingElement) {
+            // Remover eventos
+            floatingElement.removeEventListener('mousedown', dragStart);
+            floatingElement.removeEventListener('touchstart', dragStart);
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchend', dragEnd);
+            
+            floatingElement.remove();
+            floatingElement = null;
+            
+            const btn = document.getElementById('btnAtivarFloat');
+            btn.classList.remove('ativo');
+            btn.textContent = 'ATIVAR';
+        }
+    }
+
+    function dragStart(e) {
+        if (e.type === "touchstart") {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+        } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+        }
+
+        if (e.target === floatingElement || e.target.parentNode === floatingElement) {
+            isDragging = true;
+            floatingElement.classList.add('dragging');
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+
+            if (e.type === "touchmove") {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            setTranslate(currentX, currentY, floatingElement);
+        }
+    }
+
+    function dragEnd(e) {
+        isDragging = false;
+        if (floatingElement) {
+            floatingElement.classList.remove('dragging');
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
     }
     </script>
 </body>
