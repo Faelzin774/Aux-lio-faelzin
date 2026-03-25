@@ -399,12 +399,6 @@
             text-align: center;
         }
 
-        .info-title {
-            color: var(--bypass);
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
         .info-field {
             background: #111;
             border-radius: 10px;
@@ -499,6 +493,7 @@
             font-family: monospace;
             font-size: 12px;
             color: #ffaa00;
+            word-break: break-all;
         }
 
         .btn-admin-action {
@@ -514,6 +509,7 @@
         .btn-generate { color: #00ff00; border-color: #00ff00; }
         .btn-delete { color: #ff0000; border-color: #ff0000; }
         .btn-reset { color: #ffaa00; border-color: #ffaa00; }
+        .btn-refresh { color: #0066ff; border-color: #0066ff; }
 
         .keys-list {
             max-height: 400px;
@@ -755,6 +751,7 @@
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ GERAR VIP</button>
                 <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 GERAR RAGE</button>
+                <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
             </div>
             <div style="margin-bottom: 15px;">
                 <input type="password" id="githubToken" class="key-input" placeholder="🔑 COLE SEU TOKEN DO GITHUB" style="width: 100%; font-size: 11px;">
@@ -820,7 +817,8 @@
     // ========== FUNÇÕES DO GITHUB GIST ==========
     async function carregarKeysDoGist(forcarRecarga = false) {
         try {
-            const url = GIST_RAW_URL + (forcarRecarga ? "?t=" + Date.now() : "");
+            // Sempre forçar recarga com timestamp
+            const url = GIST_RAW_URL + "?t=" + Date.now();
             const response = await fetch(url);
             if (!response.ok) throw new Error('Erro');
             const data = await response.json();
@@ -831,6 +829,7 @@
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
         } catch (error) {
+            console.error('Erro ao carregar:', error);
             document.getElementById('statusOnline').innerHTML = '🔴 Offline - Usando cache';
             document.getElementById('statusOnline').style.color = '#ffaa00';
             const local = localStorage.getItem('fael_keys_backup');
@@ -891,9 +890,19 @@
             localStorage.setItem('github_token', token);
             document.getElementById('githubToken').value = '';
             showToast('✅ Token salvo com sucesso!');
+            // Testar se o token funciona
+            carregarKeysDoGist(true);
         } else {
             showToast('❌ Token inválido!', true);
         }
+    }
+    
+    async function recarregarKeys() {
+        showToast('🔄 Recarregando keys do Gist...');
+        await carregarKeysDoGist(true);
+        atualizarStats();
+        renderizarKeysList();
+        showToast('✅ Keys recarregadas!');
     }
 
     // ========== FUNÇÕES DE LOGIN ==========
@@ -909,13 +918,13 @@
         msgDiv.textContent = 'Verificando...';
         msgDiv.style.color = '#ffaa00';
         
-        // Forçar recarregar do Gist
+        // FORÇAR recarregar do Gist - SEMPRE pegar a versão mais recente
         await carregarKeysDoGist(true);
         
         const keyData = keysDatabase[key];
         
         if (!keyData) {
-            msgDiv.textContent = '❌ KEY INVÁLIDA!';
+            msgDiv.textContent = '❌ KEY INVÁLIDA! Verifique se foi gerada corretamente.';
             msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
@@ -1021,6 +1030,11 @@
         let keys = Object.values(keysDatabase);
         if (filtroAtual) keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
         
+        if (keys.length === 0) {
+            container.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Nenhuma key encontrada</div>';
+            return;
+        }
+        
         container.innerHTML = keys.map(key => {
             let statusClass = key.status === 'ativa' ? 'active' : '';
             if (key.usado && key.tipo !== 'ADMIN') statusClass = 'used';
@@ -1032,7 +1046,7 @@
                         Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong> | 
                         Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'} | 
                         Uso: ${key.usado ? '❌ Usada' : '✓ Disponível'}
-                        ${key.usado ? `<br>📱 Usado em: ${new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
+                        ${key.usado ? `<br>📱 Usado em: ${key.usadoPor || new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
                         <br>📅 Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
                     </div>
                     ${key.tipo !== 'ADMIN' ? `
@@ -1066,6 +1080,8 @@
             atualizarStats();
             renderizarKeysList();
             showToast(`✅ Key ${tipo} gerada: ${codigo}`);
+            // Mostrar a key gerada em destaque
+            alert(`🔑 KEY GERADA COM SUCESSO!\n\n${codigo}\n\n📅 Expira em: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}\n\n⚠️ GUARDE ESTA KEY PARA ENVIAR AO USUÁRIO!`);
         } else {
             showToast(`⚠️ Key gerada mas NÃO salva! Configure o token.`, true);
         }
@@ -1080,7 +1096,7 @@
                 await salvarKeysNoGist();
                 atualizarStats();
                 renderizarKeysList();
-                showToast(`🔄 Key ${codigo} resetada!`);
+                showToast(`🔄 Key ${codigo} resetada! Agora pode ser usada novamente.`);
             }
         }
     }
@@ -1295,7 +1311,7 @@
     }
     
     // Inicializar
-    carregarKeysDoGist();
+    carregarKeysDoGist(true);
     </script>
 </body>
 </html>
