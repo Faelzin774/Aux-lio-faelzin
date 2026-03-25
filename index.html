@@ -610,6 +610,7 @@
 </head>
 <body>
 
+    <!-- TELA DE LOGIN -->
     <div id="login-screen">
         <h2>FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
@@ -617,6 +618,7 @@
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
+    <!-- PAINEL PRINCIPAL -->
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
@@ -626,6 +628,7 @@
             </div>
         </div>
         
+        <!-- PAINEL VIP -->
         <div id="panel-standard">
             <div class="category-title">Auxílio de Mira</div>
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -643,6 +646,7 @@
             <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         </div>
 
+        <!-- PAINEL RAGE -->
         <div id="panel-rage" style="display: none;">
             <div class="main-title"><h1 style="color: var(--danger);">MOD MENU RAGE</h1></div>
             <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
@@ -675,6 +679,7 @@
         </div>
     </div>
 
+    <!-- MODAL SENSIBILIDADE -->
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
             <div class="modal-header">
@@ -704,6 +709,7 @@
         </div>
     </div>
 
+    <!-- MODAL INFO -->
     <div id="infoModal" class="modal-info">
         <div class="modal-content" style="border-color: var(--bypass);">
             <div class="modal-header">
@@ -739,6 +745,7 @@
         </div>
     </div>
 
+    <!-- PAINEL ADMIN -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
@@ -748,7 +755,7 @@
                 <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
                 <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
                 <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ GERAR VIP</button>
                 <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 GERAR RAGE</button>
                 <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
@@ -763,6 +770,7 @@
         </div>
     </div>
 
+    <!-- PROCESSOS -->
     <div id="bypass-process" class="process-overlay">
         <div style="color: var(--bypass);">[ BYPASS SYSTEM ]</div>
         <div id="bypass-logs" class="process-text"></div>
@@ -815,9 +823,8 @@
     }
 
     // ========== FUNÇÕES DO GITHUB GIST ==========
-    async function carregarKeysDoGist(forcarRecarga = false) {
+    async function carregarKeysDoGist() {
         try {
-            // Sempre forçar recarga com timestamp
             const url = GIST_RAW_URL + "?t=" + Date.now();
             const response = await fetch(url);
             if (!response.ok) throw new Error('Erro');
@@ -825,12 +832,10 @@
             keysDatabase = data;
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
-            // Salvar backup local
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
         } catch (error) {
-            console.error('Erro ao carregar:', error);
-            document.getElementById('statusOnline').innerHTML = '🔴 Offline - Usando cache';
+            document.getElementById('statusOnline').innerHTML = '🔴 Offline - Cache';
             document.getElementById('statusOnline').style.color = '#ffaa00';
             const local = localStorage.getItem('fael_keys_backup');
             if (local) {
@@ -843,19 +848,17 @@
 
     async function salvarKeysNoGist() {
         if (!githubToken) {
-            showToast('⚠️ Configure seu TOKEN do GitHub primeiro!', true);
+            showToast('⚠️ Configure o TOKEN do GitHub!', true);
             return false;
         }
         try {
-            // Primeiro pegar o SHA atual
             const getResponse = await fetch(GIST_API_URL, {
                 headers: { 'Authorization': `token ${githubToken}` }
             });
             const gistData = await getResponse.json();
             const fileSha = gistData.files['fael_keys.json']?.sha;
             
-            // Atualizar o gist
-            const updateResponse = await fetch(GIST_API_URL, {
+            await fetch(GIST_API_URL, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `token ${githubToken}`,
@@ -871,14 +874,11 @@
                 })
             });
             
-            if (!updateResponse.ok) throw new Error('Erro ao salvar');
-            
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
-            showToast('✅ Keys salvas no Gist!');
+            showToast('✅ Keys salvas!');
             return true;
         } catch (error) {
-            console.error('Erro:', error);
-            showToast('❌ Erro ao salvar no Gist! Verifique o token.', true);
+            showToast('❌ Erro ao salvar! Verifique o token.', true);
             return false;
         }
     }
@@ -889,20 +889,18 @@
             githubToken = token;
             localStorage.setItem('github_token', token);
             document.getElementById('githubToken').value = '';
-            showToast('✅ Token salvo com sucesso!');
-            // Testar se o token funciona
-            carregarKeysDoGist(true);
+            showToast('✅ Token salvo!');
         } else {
             showToast('❌ Token inválido!', true);
         }
     }
     
     async function recarregarKeys() {
-        showToast('🔄 Recarregando keys do Gist...');
-        await carregarKeysDoGist(true);
+        showToast('🔄 Recarregando...');
+        await carregarKeysDoGist();
         atualizarStats();
         renderizarKeysList();
-        showToast('✅ Keys recarregadas!');
+        showToast(`✅ ${Object.keys(keysDatabase).length} keys carregadas`);
     }
 
     // ========== FUNÇÕES DE LOGIN ==========
@@ -918,13 +916,12 @@
         msgDiv.textContent = 'Verificando...';
         msgDiv.style.color = '#ffaa00';
         
-        // FORÇAR recarregar do Gist - SEMPRE pegar a versão mais recente
-        await carregarKeysDoGist(true);
+        await carregarKeysDoGist();
         
         const keyData = keysDatabase[key];
         
         if (!keyData) {
-            msgDiv.textContent = '❌ KEY INVÁLIDA! Verifique se foi gerada corretamente.';
+            msgDiv.textContent = '❌ KEY INVÁLIDA!';
             msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
@@ -955,25 +952,14 @@
             return;
         }
         
-        // Salvar key atual para info
         keyAtual = key;
         keyDataAtual = keyData;
         
-        // Se não for ADMIN e não foi usada ainda, marcar como usada e salvar no Gist
         if (keyData.tipo !== 'ADMIN' && !keyData.usado) {
             keyData.usado = true;
-            keyData.usadoPor = navigator.userAgent + " | " + new Date().toLocaleString();
+            keyData.usadoPor = navigator.userAgent;
             keyData.usadoEm = new Date().toISOString();
-            
-            // Salvar no Gist imediatamente
-            const salvou = await salvarKeysNoGist();
-            if (!salvou) {
-                msgDiv.textContent = '⚠️ Erro ao validar key. Tente novamente!';
-                msgDiv.style.color = '#ffaa00';
-                btn.disabled = false;
-                btn.innerHTML = 'LOGAR';
-                return;
-            }
+            await salvarKeysNoGist();
         }
         
         document.getElementById('login-screen').style.display = 'none';
@@ -981,8 +967,7 @@
         if (keyData.tipo === 'ADMIN') {
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('admin-container').style.display = 'block';
-            // Recarregar lista de keys
-            await carregarKeysDoGist(true);
+            await carregarKeysDoGist();
             atualizarStats();
             renderizarKeysList();
             if (githubToken) {
@@ -1046,13 +1031,13 @@
                         Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong> | 
                         Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'} | 
                         Uso: ${key.usado ? '❌ Usada' : '✓ Disponível'}
-                        ${key.usado ? `<br>📱 Usado em: ${key.usadoPor || new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
+                        ${key.usado ? `<br>📱 Usado em: ${new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
                         <br>📅 Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
                     </div>
                     ${key.tipo !== 'ADMIN' ? `
                         <div style="margin-top: 8px;">
                             <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
-                            ${key.usado ? `<button class="btn-admin-action btn-reset" onclick="resetarKey('${key.codigo}')">🔄 RESETAR USO</button>` : ''}
+                            ${key.usado ? `<button class="btn-admin-action btn-reset" onclick="resetarKey('${key.codigo}')">🔄 RESETAR</button>` : ''}
                             <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
                         </div>
                     ` : '<div style="margin-top: 8px; color: #ffaa00;">⚡ KEY MASTER ADMIN</div>'}
@@ -1077,26 +1062,26 @@
         
         const salvou = await salvarKeysNoGist();
         if (salvou) {
+            await carregarKeysDoGist();
             atualizarStats();
             renderizarKeysList();
-            showToast(`✅ Key ${tipo} gerada: ${codigo}`);
-            // Mostrar a key gerada em destaque
-            alert(`🔑 KEY GERADA COM SUCESSO!\n\n${codigo}\n\n📅 Expira em: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}\n\n⚠️ GUARDE ESTA KEY PARA ENVIAR AO USUÁRIO!`);
+            alert(`✅ KEY GERADA COM SUCESSO!\n\n🔑 ${codigo}\n\n📅 Expira em: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}\n\n⚠️ Envie esta key para o usuário!`);
         } else {
             showToast(`⚠️ Key gerada mas NÃO salva! Configure o token.`, true);
         }
     }
     
     async function resetarKey(codigo) {
-        if (confirm(`Resetar uso da key ${codigo}? Isso vai permitir que ela seja usada novamente.`)) {
+        if (confirm(`Resetar uso da key ${codigo}?`)) {
             if (keysDatabase[codigo]) {
                 keysDatabase[codigo].usado = false;
                 keysDatabase[codigo].usadoPor = null;
                 keysDatabase[codigo].usadoEm = null;
                 await salvarKeysNoGist();
+                await carregarKeysDoGist();
                 atualizarStats();
                 renderizarKeysList();
-                showToast(`🔄 Key ${codigo} resetada! Agora pode ser usada novamente.`);
+                showToast(`🔄 Key ${codigo} resetada!`);
             }
         }
     }
@@ -1105,6 +1090,7 @@
         if (confirm(`Excluir key ${codigo} permanentemente?`)) {
             delete keysDatabase[codigo];
             await salvarKeysNoGist();
+            await carregarKeysDoGist();
             atualizarStats();
             renderizarKeysList();
             showToast(`🗑️ Key excluída!`);
@@ -1311,7 +1297,7 @@
     }
     
     // Inicializar
-    carregarKeysDoGist(true);
+    carregarKeysDoGist();
     </script>
 </body>
 </html>
