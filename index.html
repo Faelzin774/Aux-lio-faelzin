@@ -198,7 +198,7 @@
             border-left: 3px solid var(--danger);
             background: rgba(255, 0, 0, 0.12);
         }
-        
+        
         .weapon-input {
             width: 90%;
             background: #000;
@@ -591,7 +591,7 @@
             70% { opacity: 1; }
             100% { opacity: 0; transform: translateX(100px); display: none; }
         }
-        
+        
         .loading {
             display: inline-block;
             width: 16px;
@@ -602,7 +602,7 @@
             animation: spin 0.8s linear infinite;
             margin-right: 8px;
         }
-        
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -610,7 +610,6 @@
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen">
         <h2>FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
@@ -618,7 +617,6 @@
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
-    <!-- PAINEL PRINCIPAL -->
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
@@ -627,8 +625,7 @@
                 <button class="sensi-header-btn" onclick="abrirSensiModal()">🎯 SENSI</button>
             </div>
         </div>
-        
-        <!-- PAINEL VIP -->
+        
         <div id="panel-standard">
             <div class="category-title">Auxílio de Mira</div>
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -638,7 +635,7 @@
             <div class="option-row">Correção de Recuo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Ajuste de Sensibilidade Dinâmica <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Compensador Automático <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            
+            
             <div class="category-title">Otimização</div>
             <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
@@ -646,7 +643,6 @@
             <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         </div>
 
-        <!-- PAINEL RAGE -->
         <div id="panel-rage" style="display: none;">
             <div class="main-title"><h1 style="color: var(--danger);">MOD MENU RAGE</h1></div>
             <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
@@ -679,7 +675,6 @@
         </div>
     </div>
 
-    <!-- MODAL SENSIBILIDADE -->
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
             <div class="modal-header">
@@ -709,7 +704,6 @@
         </div>
     </div>
 
-    <!-- MODAL INFO -->
     <div id="infoModal" class="modal-info">
         <div class="modal-content" style="border-color: var(--bypass);">
             <div class="modal-header">
@@ -745,7 +739,6 @@
         </div>
     </div>
 
-    <!-- PAINEL ADMIN -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
@@ -760,17 +753,12 @@
                 <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 GERAR RAGE</button>
                 <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
             </div>
-            <div style="margin-bottom: 15px;">
-                <input type="password" id="githubToken" class="key-input" placeholder="🔑 COLE SEU TOKEN DO GITHUB" style="width: 100%; font-size: 11px;">
-                <button onclick="salvarToken()" class="btn-admin-action btn-generate" style="margin-top: 5px;">💾 SALVAR TOKEN</button>
-            </div>
             <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
             <div id="keysList" class="keys-list"></div>
             <button class="btn-back" onclick="voltarParaLogin()">← VOLTAR</button>
         </div>
     </div>
 
-    <!-- PROCESSOS -->
     <div id="bypass-process" class="process-overlay">
         <div style="color: var(--bypass);">[ BYPASS SYSTEM ]</div>
         <div id="bypass-logs" class="process-text"></div>
@@ -788,28 +776,26 @@
     <div class="status-online" id="statusOnline">🟢 Carregando...</div>
 
     <script>
+    // ==================== CONFIGURAÇÕES JSONBIN ====================
+    const BIN_ID = "69c46b0caa77b81da91cf54d";
+    const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
+    const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    
     // ==================== LISTA DE MARCAS ====================
     const marcas = [
-        "Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", 
-        "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", 
-        "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", 
-        "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", 
+        "Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", 
+        "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", 
+        "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", 
+        "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", 
         "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"
     ];
 
     let marcaSelecionada = null;
     let timerInterval = null;
     let tempoRestante = 10;
-
-    // ==================== CONFIGURAÇÃO DO GIST ====================
-    const GIST_ID = "bbf26f4ad077bd75732e3cc60307b5e3";
-    const GIST_USER = "Faelzin774";
-    const GIST_RAW_URL = `https://gist.githubusercontent.com/${GIST_USER}/${GIST_ID}/raw/fael_keys.json`;
-    const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
-    
+    
     let keysDatabase = {};
     let filtroAtual = '';
-    let githubToken = localStorage.getItem('github_token') || '';
     let keyAtual = null;
     let keyDataAtual = null;
 
@@ -822,21 +808,30 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // ========== FUNÇÕES DO GITHUB GIST ==========
-    async function carregarKeysDoGist() {
+    // ========== FUNÇÕES JSONBIN ==========
+    async function carregarKeys() {
         try {
-            const url = GIST_RAW_URL + "?t=" + Date.now();
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Erro');
+            const response = await fetch(JSONBIN_URL, {
+                headers: {
+                    'X-Master-Key': API_KEY
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erro ao carregar');
+            
             const data = await response.json();
-            keysDatabase = data;
-            document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
+            keysDatabase = data.record;
+            
+            document.getElementById('statusOnline').innerHTML = '🟢 Conectado ao JSONBin';
             document.getElementById('statusOnline').style.color = '#00ff00';
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
+            
         } catch (error) {
-            document.getElementById('statusOnline').innerHTML = '🔴 Offline - Cache';
+            console.error('Erro:', error);
+            document.getElementById('statusOnline').innerHTML = '🔴 Offline - Usando cache';
             document.getElementById('statusOnline').style.color = '#ffaa00';
+            
             const local = localStorage.getItem('fael_keys_backup');
             if (local) {
                 keysDatabase = JSON.parse(local);
@@ -846,58 +841,33 @@
         }
     }
 
-    async function salvarKeysNoGist() {
-        if (!githubToken) {
-            showToast('⚠️ Configure o TOKEN do GitHub!', true);
-            return false;
-        }
+    async function salvarKeys() {
         try {
-            const getResponse = await fetch(GIST_API_URL, {
-                headers: { 'Authorization': `token ${githubToken}` }
-            });
-            const gistData = await getResponse.json();
-            const fileSha = gistData.files['fael_keys.json']?.sha;
-            
-            await fetch(GIST_API_URL, {
-                method: 'PATCH',
+            const response = await fetch(JSONBIN_URL, {
+                method: 'PUT',
                 headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
                 },
-                body: JSON.stringify({
-                    files: {
-                        'fael_keys.json': {
-                            content: JSON.stringify(keysDatabase, null, 2),
-                            sha: fileSha
-                        }
-                    }
-                })
+                body: JSON.stringify(keysDatabase)
             });
-            
+            
+            if (!response.ok) throw new Error('Erro ao salvar');
+            
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
-            showToast('✅ Keys salvas!');
+            showToast('✅ Keys salvas com sucesso!');
             return true;
+            
         } catch (error) {
-            showToast('❌ Erro ao salvar! Verifique o token.', true);
+            console.error('Erro:', error);
+            showToast('❌ Erro ao salvar keys!', true);
             return false;
         }
     }
 
-    function salvarToken() {
-        const token = document.getElementById('githubToken').value;
-        if (token && token.length > 10) {
-            githubToken = token;
-            localStorage.setItem('github_token', token);
-            document.getElementById('githubToken').value = '';
-            showToast('✅ Token salvo!');
-        } else {
-            showToast('❌ Token inválido!', true);
-        }
-    }
-    
     async function recarregarKeys() {
-        showToast('🔄 Recarregando...');
-        await carregarKeysDoGist();
+        showToast('🔄 Recarregando keys...');
+        await carregarKeys();
         atualizarStats();
         renderizarKeysList();
         showToast(`✅ ${Object.keys(keysDatabase).length} keys carregadas`);
@@ -908,18 +878,18 @@
         const key = document.getElementById('keyInput').value;
         const msgDiv = document.getElementById('loginMsg');
         const btn = document.getElementById('loginBtn');
-        
+        
         if (!key) { msgDiv.textContent = 'Digite uma key!'; return; }
-        
+        
         btn.disabled = true;
         btn.innerHTML = '<span class="loading"></span> VERIFICANDO...';
         msgDiv.textContent = 'Verificando...';
         msgDiv.style.color = '#ffaa00';
-        
-        await carregarKeysDoGist();
-        
+        
+        await carregarKeys();
+        
         const keyData = keysDatabase[key];
-        
+        
         if (!keyData) {
             msgDiv.textContent = '❌ KEY INVÁLIDA!';
             msgDiv.style.color = '#ff4444';
@@ -927,7 +897,7 @@
             btn.innerHTML = 'LOGAR';
             return;
         }
-        
+        
         if (keyData.status !== 'ativa') {
             msgDiv.textContent = '❌ KEY DESATIVADA!';
             msgDiv.style.color = '#ff4444';
@@ -935,7 +905,7 @@
             btn.innerHTML = 'LOGAR';
             return;
         }
-        
+        
         if (keyData.usado && keyData.tipo !== 'ADMIN') {
             msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
             msgDiv.style.color = '#ff4444';
@@ -943,7 +913,7 @@
             btn.innerHTML = 'LOGAR';
             return;
         }
-        
+        
         if (new Date(keyData.expiraEm) < new Date()) {
             msgDiv.textContent = '❌ KEY EXPIRADA!';
             msgDiv.style.color = '#ff4444';
@@ -951,32 +921,29 @@
             btn.innerHTML = 'LOGAR';
             return;
         }
-        
+        
         keyAtual = key;
         keyDataAtual = keyData;
-        
+        
         if (keyData.tipo !== 'ADMIN' && !keyData.usado) {
             keyData.usado = true;
             keyData.usadoPor = navigator.userAgent;
             keyData.usadoEm = new Date().toISOString();
-            await salvarKeysNoGist();
+            await salvarKeys();
         }
-        
+        
         document.getElementById('login-screen').style.display = 'none';
-        
+        
         if (keyData.tipo === 'ADMIN') {
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('admin-container').style.display = 'block';
-            await carregarKeysDoGist();
+            await carregarKeys();
             atualizarStats();
             renderizarKeysList();
-            if (githubToken) {
-                document.getElementById('githubToken').placeholder = '✅ Token configurado';
-            }
         } else {
             document.getElementById('main-container').style.display = 'block';
             document.getElementById('admin-container').style.display = 'none';
-            
+            
             if (keyData.tipo === 'VIP') {
                 document.getElementById('panel-standard').style.display = 'block';
                 document.getElementById('panel-rage').style.display = 'none';
@@ -985,12 +952,12 @@
                 document.getElementById('panel-rage').style.display = 'block';
             }
         }
-        
+        
         btn.disabled = false;
         btn.innerHTML = 'LOGAR';
         msgDiv.textContent = '';
     }
-    
+    
     function voltarParaLogin() {
         document.getElementById('login-screen').style.display = 'block';
         document.getElementById('main-container').style.display = 'none';
@@ -1014,22 +981,22 @@
         const container = document.getElementById('keysList');
         let keys = Object.values(keysDatabase);
         if (filtroAtual) keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
-        
+        
         if (keys.length === 0) {
             container.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Nenhuma key encontrada</div>';
             return;
         }
-        
+        
         container.innerHTML = keys.map(key => {
             let statusClass = key.status === 'ativa' ? 'active' : '';
             if (key.usado && key.tipo !== 'ADMIN') statusClass = 'used';
-            
+            
             return `
                 <div class="key-card ${statusClass}">
                     <div class="key-code">🔑 ${key.codigo}</div>
                     <div style="font-size: 11px; margin-top: 5px;">
-                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong> | 
-                        Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'} | 
+                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong> | 
+                        Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'} | 
                         Uso: ${key.usado ? '❌ Usada' : '✓ Disponível'}
                         ${key.usado ? `<br>📱 Usado em: ${new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
                         <br>📅 Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
@@ -1045,11 +1012,11 @@
             `;
         }).join('');
     }
-    
+    
     async function gerarNovaKey(tipo) {
         const random = Math.random().toString(36).substring(2, 10).toUpperCase();
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
-        
+        
         keysDatabase[codigo] = {
             codigo: codigo,
             tipo: tipo,
@@ -1059,49 +1026,49 @@
             criadaEm: new Date().toISOString(),
             expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         };
-        
-        const salvou = await salvarKeysNoGist();
+        
+        const salvou = await salvarKeys();
         if (salvou) {
-            await carregarKeysDoGist();
+            await carregarKeys();
             atualizarStats();
             renderizarKeysList();
             alert(`✅ KEY GERADA COM SUCESSO!\n\n🔑 ${codigo}\n\n📅 Expira em: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}\n\n⚠️ Envie esta key para o usuário!`);
         } else {
-            showToast(`⚠️ Key gerada mas NÃO salva! Configure o token.`, true);
+            showToast(`⚠️ Key gerada mas NÃO salva!`, true);
         }
     }
-    
+    
     async function resetarKey(codigo) {
         if (confirm(`Resetar uso da key ${codigo}?`)) {
             if (keysDatabase[codigo]) {
                 keysDatabase[codigo].usado = false;
                 keysDatabase[codigo].usadoPor = null;
                 keysDatabase[codigo].usadoEm = null;
-                await salvarKeysNoGist();
-                await carregarKeysDoGist();
+                await salvarKeys();
+                await carregarKeys();
                 atualizarStats();
                 renderizarKeysList();
                 showToast(`🔄 Key ${codigo} resetada!`);
             }
         }
     }
-    
+    
     async function excluirKey(codigo) {
         if (confirm(`Excluir key ${codigo} permanentemente?`)) {
             delete keysDatabase[codigo];
-            await salvarKeysNoGist();
-            await carregarKeysDoGist();
+            await salvarKeys();
+            await carregarKeys();
             atualizarStats();
             renderizarKeysList();
             showToast(`🗑️ Key excluída!`);
         }
     }
-    
+    
     function copiarKey(codigo) {
         navigator.clipboard.writeText(codigo);
         showToast(`📋 Key copiada: ${codigo}`);
     }
-    
+    
     function filtrarKeys() {
         filtroAtual = document.getElementById('searchKey').value;
         renderizarKeysList();
@@ -1113,24 +1080,24 @@
             showToast('Nenhuma key ativa no momento', true);
             return;
         }
-        
+        
         document.getElementById('infoKeyCode').textContent = keyAtual;
         document.getElementById('infoTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
-        
+        
         const dataAtivacao = keyDataAtual.usadoEm ? new Date(keyDataAtual.usadoEm) : new Date();
         document.getElementById('infoDataAtivacao').textContent = dataAtivacao.toLocaleString('pt-BR');
-        
+        
         const dataExpiracao = new Date(keyDataAtual.expiraEm);
         document.getElementById('infoDataExpiracao').textContent = dataExpiracao.toLocaleDateString('pt-BR');
-        
+        
         const diasRestantes = Math.ceil((dataExpiracao - new Date()) / (1000 * 60 * 60 * 24));
         document.getElementById('infoDiasRestantes').textContent = diasRestantes > 0 ? `${diasRestantes} dias` : 'EXPIRADA';
-        
+        
         document.getElementById('infoDispositivo').textContent = keyDataAtual.usadoPor || 'Não registrado';
-        
+        
         document.getElementById('infoModal').style.display = 'block';
     }
-    
+    
     function fecharInfoModal() {
         document.getElementById('infoModal').style.display = 'none';
     }
@@ -1151,14 +1118,14 @@
             grid.appendChild(div);
         });
     }
-    
+    
     function filtrarMarcas() {
         const search = document.getElementById('searchBrand').value.toLowerCase();
         document.querySelectorAll('.brand-item').forEach(item => {
             item.style.display = item.textContent.toLowerCase().includes(search) ? 'block' : 'none';
         });
     }
-    
+    
     function resetarTimer() {
         tempoRestante = 10;
         document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
@@ -1166,22 +1133,22 @@
         document.getElementById('btnGenerateSensi').textContent = 'GERAR SENSI';
         document.getElementById('sensiValues').style.display = 'none';
     }
-    
+    
     function iniciarTimerGeracao() {
         if (!marcaSelecionada) {
             showToast('Selecione uma marca de celular!', true);
             return;
         }
-        
+        
         const btn = document.getElementById('btnGenerateSensi');
         btn.disabled = true;
-        
+        
         if (timerInterval) clearInterval(timerInterval);
-        
+        
         timerInterval = setInterval(() => {
             tempoRestante = Math.max(0, tempoRestante - 0.1);
             document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
-            
+            
             if (tempoRestante <= 0) {
                 clearInterval(timerInterval);
                 gerarSensi();
@@ -1192,7 +1159,7 @@
             }
         }, 100);
     }
-    
+    
     function gerarSensi() {
         const geral = Math.floor(Math.random() * 60) + 140;
         const reddot = Math.floor(Math.random() * 60) + 140;
@@ -1201,7 +1168,7 @@
         const miraAWM = Math.floor(Math.random() * 60) + 140;
         const olhadinha = Math.floor(Math.random() * 60) + 140;
         const dpi = Math.floor(Math.random() * 440) + 450;
-        
+        
         document.getElementById('sensi-geral').textContent = geral;
         document.getElementById('sensi-reddot').textContent = reddot;
         document.getElementById('sensi-2x').textContent = mira2x;
@@ -1210,24 +1177,24 @@
         document.getElementById('sensi-olhadinha').textContent = olhadinha;
         document.getElementById('dpiValue').textContent = `DPI: ${dpi}`;
     }
-    
+    
     function aplicarSensi() {
         if (!marcaSelecionada) {
             showToast('Selecione uma marca de celular!', true);
             return;
         }
-        
+        
         showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`);
         fecharSensiModal();
     }
-    
+    
     function abrirSensiModal() {
         document.getElementById('sensiModal').style.display = 'block';
         carregarMarcas();
         resetarTimer();
         document.getElementById('sensiValues').style.display = 'none';
     }
-    
+    
     function fecharSensiModal() {
         document.getElementById('sensiModal').style.display = 'none';
         if (timerInterval) clearInterval(timerInterval);
@@ -1239,16 +1206,16 @@
         if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`);
         else showToast('Digite o nome da arma!', true);
     }
-    
+    
     function iniciarProcessoBypass() {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('bypass-process').style.display = 'block';
-        
+        
         const logs = document.getElementById('bypass-logs');
         const barra = document.getElementById('bypass-bar');
         const status = document.getElementById('bypass-status');
         logs.innerHTML = '';
-        
+        
         const frases = ["> Iniciando bypass...", "> Conectando ao kernel...", "> Desativando proteções...", "> Bypass concluído!"];
         let i = 0;
         const loop = setInterval(() => {
@@ -1267,16 +1234,16 @@
             }
         }, 800);
     }
-    
+    
     function iniciarProcessoInject() {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('inject-process').style.display = 'block';
-        
+        
         const logs = document.getElementById('inject-logs');
         const barra = document.getElementById('inject-bar');
         const status = document.getElementById('inject-status');
         logs.innerHTML = '';
-        
+        
         const frases = ["> Inicializando inject...", "> Carregando módulos...", "> Injetando scripts...", "> Injeção concluída!"];
         let i = 0;
         const loop = setInterval(() => {
@@ -1295,9 +1262,9 @@
             }
         }, 800);
     }
-    
+    
     // Inicializar
-    carregarKeysDoGist();
+    carregarKeys();
     </script>
 </body>
 </html>
