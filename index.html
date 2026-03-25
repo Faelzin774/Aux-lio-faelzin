@@ -217,7 +217,6 @@
             margin-top: 5px;
         }
 
-        /* Modal Sensibilidade Completo */
         .modal-sensi {
             display: none;
             position: fixed;
@@ -378,7 +377,6 @@
             cursor: pointer;
         }
 
-        /* Modal INFO */
         .modal-info {
             display: none;
             position: fixed;
@@ -442,7 +440,6 @@
             margin: 15px 0;
         }
 
-        /* Admin Panel */
         .admin-container {
             width: 90%;
             max-width: 500px;
@@ -493,6 +490,11 @@
             border-left: 4px solid #00ff00;
         }
 
+        .key-card.used {
+            border-left: 4px solid #ffaa00;
+            opacity: 0.8;
+        }
+
         .key-code {
             font-family: monospace;
             font-size: 12px;
@@ -511,6 +513,7 @@
 
         .btn-generate { color: #00ff00; border-color: #00ff00; }
         .btn-delete { color: #ff0000; border-color: #ff0000; }
+        .btn-reset { color: #ffaa00; border-color: #ffaa00; }
 
         .keys-list {
             max-height: 400px;
@@ -592,6 +595,21 @@
             70% { opacity: 1; }
             100% { opacity: 0; transform: translateX(100px); display: none; }
         }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #000;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -661,28 +679,21 @@
         </div>
     </div>
 
-    <!-- MODAL SENSIBILIDADE COMPLETO -->
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 style="color: var(--sensi);">SENSIBILIDADE</h2>
                 <span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
             </div>
-            
             <input type="text" class="search-box" placeholder="🔍 Pesquisar marca do celular..." id="searchBrand" onkeyup="filtrarMarcas()">
-            
             <div class="brands-grid" id="brandsGrid"></div>
-
             <div class="sensi-config">
                 <div class="sensi-title">CONFIGURAÇÕES</div>
-                
                 <div class="timer-container">
                     <div class="timer-display" id="timerDisplay">10.0</div>
                     <div class="timer-label">segundos para gerar</div>
                 </div>
-
                 <button class="btn-generate-sensi" id="btnGenerateSensi" onclick="iniciarTimerGeracao()">GERAR SENSI</button>
-
                 <div id="sensiValues" style="display: none;">
                     <div class="sensi-row"><span>GERAL</span><span id="sensi-geral">0</span></div>
                     <div class="sensi-row"><span>PONTO VERMELHO</span><span id="sensi-reddot">0</span></div>
@@ -691,14 +702,12 @@
                     <div class="sensi-row"><span>MIRA AWM</span><span id="sensi-awm">0</span></div>
                     <div class="sensi-row"><span>OLHADINHA</span><span id="sensi-olhadinha">0</span></div>
                     <div class="dpi-value" id="dpiValue">DPI: 0</div>
-                    
                     <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL INFO -->
     <div id="infoModal" class="modal-info">
         <div class="modal-content" style="border-color: var(--bypass);">
             <div class="modal-header">
@@ -734,7 +743,6 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
@@ -810,17 +818,21 @@
     }
 
     // ========== FUNÇÕES DO GITHUB GIST ==========
-    async function carregarKeysDoGist() {
+    async function carregarKeysDoGist(forcarRecarga = false) {
         try {
-            const response = await fetch(GIST_RAW_URL + "?t=" + Date.now());
+            const url = GIST_RAW_URL + (forcarRecarga ? "?t=" + Date.now() : "");
+            const response = await fetch(url);
             if (!response.ok) throw new Error('Erro');
-            keysDatabase = await response.json();
+            const data = await response.json();
+            keysDatabase = data;
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
+            // Salvar backup local
+            localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
         } catch (error) {
-            document.getElementById('statusOnline').innerHTML = '🔴 Offline';
-            document.getElementById('statusOnline').style.color = '#ff4444';
+            document.getElementById('statusOnline').innerHTML = '🔴 Offline - Usando cache';
+            document.getElementById('statusOnline').style.color = '#ffaa00';
             const local = localStorage.getItem('fael_keys_backup');
             if (local) {
                 keysDatabase = JSON.parse(local);
@@ -832,31 +844,42 @@
 
     async function salvarKeysNoGist() {
         if (!githubToken) {
-            showToast('⚠️ Configure seu TOKEN do GitHub!', true);
+            showToast('⚠️ Configure seu TOKEN do GitHub primeiro!', true);
             return false;
         }
         try {
+            // Primeiro pegar o SHA atual
             const getResponse = await fetch(GIST_API_URL, {
                 headers: { 'Authorization': `token ${githubToken}` }
             });
             const gistData = await getResponse.json();
             const fileSha = gistData.files['fael_keys.json']?.sha;
             
-            await fetch(GIST_API_URL, {
+            // Atualizar o gist
+            const updateResponse = await fetch(GIST_API_URL, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `token ${githubToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    files: { 'fael_keys.json': { content: JSON.stringify(keysDatabase, null, 2), sha: fileSha } }
+                    files: {
+                        'fael_keys.json': {
+                            content: JSON.stringify(keysDatabase, null, 2),
+                            sha: fileSha
+                        }
+                    }
                 })
             });
+            
+            if (!updateResponse.ok) throw new Error('Erro ao salvar');
+            
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             showToast('✅ Keys salvas no Gist!');
             return true;
         } catch (error) {
-            showToast('❌ Erro ao salvar!', true);
+            console.error('Erro:', error);
+            showToast('❌ Erro ao salvar no Gist! Verifique o token.', true);
             return false;
         }
     }
@@ -867,7 +890,7 @@
             githubToken = token;
             localStorage.setItem('github_token', token);
             document.getElementById('githubToken').value = '';
-            showToast('✅ Token salvo!');
+            showToast('✅ Token salvo com sucesso!');
         } else {
             showToast('❌ Token inválido!', true);
         }
@@ -882,14 +905,18 @@
         if (!key) { msgDiv.textContent = 'Digite uma key!'; return; }
         
         btn.disabled = true;
-        btn.innerHTML = '⏳ VERIFICANDO...';
+        btn.innerHTML = '<span class="loading"></span> VERIFICANDO...';
+        msgDiv.textContent = 'Verificando...';
+        msgDiv.style.color = '#ffaa00';
         
-        await carregarKeysDoGist();
+        // Forçar recarregar do Gist
+        await carregarKeysDoGist(true);
         
         const keyData = keysDatabase[key];
         
         if (!keyData) {
             msgDiv.textContent = '❌ KEY INVÁLIDA!';
+            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -897,6 +924,7 @@
         
         if (keyData.status !== 'ativa') {
             msgDiv.textContent = '❌ KEY DESATIVADA!';
+            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -904,6 +932,7 @@
         
         if (keyData.usado && keyData.tipo !== 'ADMIN') {
             msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
+            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -911,6 +940,7 @@
         
         if (new Date(keyData.expiraEm) < new Date()) {
             msgDiv.textContent = '❌ KEY EXPIRADA!';
+            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -920,11 +950,21 @@
         keyAtual = key;
         keyDataAtual = keyData;
         
+        // Se não for ADMIN e não foi usada ainda, marcar como usada e salvar no Gist
         if (keyData.tipo !== 'ADMIN' && !keyData.usado) {
             keyData.usado = true;
-            keyData.usadoPor = navigator.userAgent;
+            keyData.usadoPor = navigator.userAgent + " | " + new Date().toLocaleString();
             keyData.usadoEm = new Date().toISOString();
-            await salvarKeysNoGist();
+            
+            // Salvar no Gist imediatamente
+            const salvou = await salvarKeysNoGist();
+            if (!salvou) {
+                msgDiv.textContent = '⚠️ Erro ao validar key. Tente novamente!';
+                msgDiv.style.color = '#ffaa00';
+                btn.disabled = false;
+                btn.innerHTML = 'LOGAR';
+                return;
+            }
         }
         
         document.getElementById('login-screen').style.display = 'none';
@@ -932,6 +972,8 @@
         if (keyData.tipo === 'ADMIN') {
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('admin-container').style.display = 'block';
+            // Recarregar lista de keys
+            await carregarKeysDoGist(true);
             atualizarStats();
             renderizarKeysList();
             if (githubToken) {
@@ -952,6 +994,7 @@
         
         btn.disabled = false;
         btn.innerHTML = 'LOGAR';
+        msgDiv.textContent = '';
     }
     
     function voltarParaLogin() {
@@ -978,19 +1021,30 @@
         let keys = Object.values(keysDatabase);
         if (filtroAtual) keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
         
-        container.innerHTML = keys.map(key => `
-            <div class="key-card ${key.status === 'ativa' ? 'active' : ''}">
-                <div class="key-code">🔑 ${key.codigo}</div>
-                <div>Tipo: ${key.tipo} | Status: ${key.status} | ${key.usado ? '❌ Usada' : '✓ Disponível'}</div>
-                <div>Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}</div>
-                ${key.tipo !== 'ADMIN' ? `
-                    <div>
-                        <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
-                        <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+        container.innerHTML = keys.map(key => {
+            let statusClass = key.status === 'ativa' ? 'active' : '';
+            if (key.usado && key.tipo !== 'ADMIN') statusClass = 'used';
+            
+            return `
+                <div class="key-card ${statusClass}">
+                    <div class="key-code">🔑 ${key.codigo}</div>
+                    <div style="font-size: 11px; margin-top: 5px;">
+                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong> | 
+                        Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'} | 
+                        Uso: ${key.usado ? '❌ Usada' : '✓ Disponível'}
+                        ${key.usado ? `<br>📱 Usado em: ${new Date(key.usadoEm).toLocaleString('pt-BR')}` : ''}
+                        <br>📅 Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
                     </div>
-                ` : '<div>⚡ KEY MASTER</div>'}
-            </div>
-        `).join('');
+                    ${key.tipo !== 'ADMIN' ? `
+                        <div style="margin-top: 8px;">
+                            <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
+                            ${key.usado ? `<button class="btn-admin-action btn-reset" onclick="resetarKey('${key.codigo}')">🔄 RESETAR USO</button>` : ''}
+                            <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+                        </div>
+                    ` : '<div style="margin-top: 8px; color: #ffaa00;">⚡ KEY MASTER ADMIN</div>'}
+                </div>
+            `;
+        }).join('');
     }
     
     async function gerarNovaKey(tipo) {
@@ -1007,14 +1061,32 @@
             expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         };
         
-        await salvarKeysNoGist();
-        atualizarStats();
-        renderizarKeysList();
-        showToast(`✅ Key ${tipo} gerada: ${codigo}`);
+        const salvou = await salvarKeysNoGist();
+        if (salvou) {
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`✅ Key ${tipo} gerada: ${codigo}`);
+        } else {
+            showToast(`⚠️ Key gerada mas NÃO salva! Configure o token.`, true);
+        }
+    }
+    
+    async function resetarKey(codigo) {
+        if (confirm(`Resetar uso da key ${codigo}? Isso vai permitir que ela seja usada novamente.`)) {
+            if (keysDatabase[codigo]) {
+                keysDatabase[codigo].usado = false;
+                keysDatabase[codigo].usadoPor = null;
+                keysDatabase[codigo].usadoEm = null;
+                await salvarKeysNoGist();
+                atualizarStats();
+                renderizarKeysList();
+                showToast(`🔄 Key ${codigo} resetada!`);
+            }
+        }
     }
     
     async function excluirKey(codigo) {
-        if (confirm(`Excluir key ${codigo}?`)) {
+        if (confirm(`Excluir key ${codigo} permanentemente?`)) {
             delete keysDatabase[codigo];
             await salvarKeysNoGist();
             atualizarStats();
@@ -1025,7 +1097,7 @@
     
     function copiarKey(codigo) {
         navigator.clipboard.writeText(codigo);
-        showToast(`📋 Key copiada!`);
+        showToast(`📋 Key copiada: ${codigo}`);
     }
     
     function filtrarKeys() {
@@ -1044,7 +1116,7 @@
         document.getElementById('infoTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
         
         const dataAtivacao = keyDataAtual.usadoEm ? new Date(keyDataAtual.usadoEm) : new Date();
-        document.getElementById('infoDataAtivacao').textContent = dataAtivacao.toLocaleDateString('pt-BR') + ' ' + dataAtivacao.toLocaleTimeString('pt-BR');
+        document.getElementById('infoDataAtivacao').textContent = dataAtivacao.toLocaleString('pt-BR');
         
         const dataExpiracao = new Date(keyDataAtual.expiraEm);
         document.getElementById('infoDataExpiracao').textContent = dataExpiracao.toLocaleDateString('pt-BR');
