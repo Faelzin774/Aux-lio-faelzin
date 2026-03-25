@@ -118,6 +118,20 @@
             transition: all 0.3s;
         }
 
+        .info-header-btn {
+            background: transparent;
+            color: var(--bypass);
+            border: 2px solid var(--bypass);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-right: 8px;
+        }
+
         .category-title {
             color: var(--hacker);
             font-size: 10px;
@@ -203,6 +217,7 @@
             margin-top: 5px;
         }
 
+        /* Modal Sensibilidade Completo */
         .modal-sensi {
             display: none;
             position: fixed;
@@ -226,6 +241,208 @@
             border: 2px solid var(--sensi);
         }
 
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid var(--sensi);
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 5px;
+        }
+
+        .brand-item {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .brand-item:hover {
+            border-color: var(--sensi);
+            background: #1a1a1a;
+        }
+
+        .brand-item.selected {
+            border-color: var(--sensi);
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .sensi-config {
+            background: #111;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .sensi-title {
+            color: var(--sensi);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #000;
+            border-radius: 10px;
+            border: 1px solid var(--sensi);
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--sensi);
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn-generate-sensi {
+            background: var(--sensi);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            width: 100%;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .sensi-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .sensi-row span:first-child {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .sensi-row span:last-child {
+            color: var(--sensi);
+            font-weight: bold;
+        }
+
+        .dpi-value {
+            font-size: 18px;
+            color: var(--sensi);
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #000;
+            border-radius: 8px;
+            border: 1px solid var(--sensi);
+        }
+
+        .btn-apply-sensi {
+            background: transparent;
+            color: var(--sensi);
+            border: 2px solid var(--sensi);
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        /* Modal INFO */
+        .modal-info {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .info-card {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid var(--bypass);
+            text-align: center;
+        }
+
+        .info-title {
+            color: var(--bypass);
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-field {
+            background: #111;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .info-label {
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            color: var(--hacker);
+            font-size: 16px;
+            font-weight: bold;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+
+        .key-code-display {
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--bypass);
+            word-break: break-all;
+            border: 1px solid var(--bypass);
+            margin: 15px 0;
+        }
+
+        /* Admin Panel */
         .admin-container {
             width: 90%;
             max-width: 500px;
@@ -241,8 +458,6 @@
             color: var(--admin);
             font-size: 20px;
             margin-bottom: 20px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px var(--admin);
         }
 
         .stats-grid {
@@ -266,12 +481,6 @@
             color: var(--admin);
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
-        }
-
         .key-card {
             background: #111;
             border: 1px solid #333;
@@ -284,21 +493,10 @@
             border-left: 4px solid #00ff00;
         }
 
-        .key-card.inactive {
-            border-left: 4px solid #ff0000;
-            opacity: 0.7;
-        }
-
         .key-code {
             font-family: monospace;
             font-size: 12px;
             color: #ffaa00;
-            word-break: break-all;
-        }
-
-        .key-status {
-            font-size: 11px;
-            margin-top: 5px;
         }
 
         .btn-admin-action {
@@ -309,27 +507,10 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 11px;
-            transition: all 0.3s;
-        }
-
-        .btn-admin-action:hover {
-            transform: scale(1.05);
         }
 
         .btn-generate { color: #00ff00; border-color: #00ff00; }
-        .btn-activate { color: #00ff00; border-color: #00ff00; }
-        .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
         .btn-delete { color: #ff0000; border-color: #ff0000; }
-
-        .search-box {
-            width: 100%;
-            padding: 10px;
-            background: #000;
-            border: 1px solid var(--admin);
-            color: #fff;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
 
         .keys-list {
             max-height: 400px;
@@ -343,7 +524,6 @@
             background: #000;
             z-index: 9999;
             padding: 40px 20px;
-            box-sizing: border-box;
             font-family: 'Courier New', monospace;
         }
 
@@ -351,8 +531,6 @@
             color: var(--hacker);
             font-size: 14px;
             line-height: 2;
-            white-space: pre-wrap;
-            margin-bottom: 20px;
         }
 
         .process-bar-container {
@@ -382,7 +560,6 @@
             cursor: pointer;
             margin-top: 20px;
             width: 100%;
-            font-weight: bold;
         }
 
         .status-online {
@@ -420,7 +597,7 @@
 <body>
 
     <div id="login-screen">
-        <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
+        <h2>FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
         <button class="btn-login" id="loginBtn" onclick="validarKey()">LOGAR</button>
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
@@ -429,7 +606,10 @@
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
-            <button class="sensi-header-btn" onclick="abrirSensiModal()">SENSIBILIDADE</button>
+            <div>
+                <button class="info-header-btn" onclick="abrirInfoModal()">ℹ️ INFO</button>
+                <button class="sensi-header-btn" onclick="abrirSensiModal()">🎯 SENSI</button>
+            </div>
         </div>
         
         <div id="panel-standard">
@@ -450,21 +630,21 @@
         </div>
 
         <div id="panel-rage" style="display: none;">
-            <div class="main-title"><h1 style="color: var(--danger); text-shadow: 0 0 10px var(--danger);">MOD MENU RAGE</h1></div>
+            <div class="main-title"><h1 style="color: var(--danger);">MOD MENU RAGE</h1></div>
             <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">
-                <div><span>Deus (God Mode)</span><small style="display: block; font-size: 9px; color: #aaa;">Não toma dano</small></div>
+                <div><span>Deus (God Mode)</span><small style="display: block; font-size: 9px;">Não toma dano</small></div>
                 <label class="switch"><input type="checkbox"><span class="slider"></span></label>
             </div>
-            <div class="category-title" style="color: #fff; margin-top: 20px;">PUXAR ARMA</div>
+            <div class="category-title">PUXAR ARMA</div>
             <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                 <input type="text" class="weapon-input" id="weaponName" placeholder="Digite o nome da arma...">
                 <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer; width: 100%;">PUXAR</button>
             </div>
-            <div class="category-title" style="color: var(--danger); border-left-color: var(--danger);">MAIS RAGE</div>
+            <div class="category-title" style="color: var(--danger);">MAIS RAGE</div>
             <div class="option-row option-row-rage">
                 <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Matar no avião ⚠️</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
                 <span class="rage-desc">ativa quando estiver no avião</span>
@@ -481,6 +661,80 @@
         </div>
     </div>
 
+    <!-- MODAL SENSIBILIDADE COMPLETO -->
+    <div id="sensiModal" class="modal-sensi">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: var(--sensi);">SENSIBILIDADE</h2>
+                <span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="🔍 Pesquisar marca do celular..." id="searchBrand" onkeyup="filtrarMarcas()">
+            
+            <div class="brands-grid" id="brandsGrid"></div>
+
+            <div class="sensi-config">
+                <div class="sensi-title">CONFIGURAÇÕES</div>
+                
+                <div class="timer-container">
+                    <div class="timer-display" id="timerDisplay">10.0</div>
+                    <div class="timer-label">segundos para gerar</div>
+                </div>
+
+                <button class="btn-generate-sensi" id="btnGenerateSensi" onclick="iniciarTimerGeracao()">GERAR SENSI</button>
+
+                <div id="sensiValues" style="display: none;">
+                    <div class="sensi-row"><span>GERAL</span><span id="sensi-geral">0</span></div>
+                    <div class="sensi-row"><span>PONTO VERMELHO</span><span id="sensi-reddot">0</span></div>
+                    <div class="sensi-row"><span>MIRA 2X</span><span id="sensi-2x">0</span></div>
+                    <div class="sensi-row"><span>MIRA 4X</span><span id="sensi-4x">0</span></div>
+                    <div class="sensi-row"><span>MIRA AWM</span><span id="sensi-awm">0</span></div>
+                    <div class="sensi-row"><span>OLHADINHA</span><span id="sensi-olhadinha">0</span></div>
+                    <div class="dpi-value" id="dpiValue">DPI: 0</div>
+                    
+                    <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INFO -->
+    <div id="infoModal" class="modal-info">
+        <div class="modal-content" style="border-color: var(--bypass);">
+            <div class="modal-header">
+                <h2 style="color: var(--bypass);">ℹ️ INFORMAÇÕES DA KEY</h2>
+                <span onclick="fecharInfoModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <div class="info-card">
+                <div class="info-field">
+                    <div class="info-label">🔑 KEY UTILIZADA</div>
+                    <div class="key-code-display" id="infoKeyCode">---</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">📌 TIPO DE ACESSO</div>
+                    <div class="info-value" id="infoTipo">---</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">⏰ DATA DE ATIVAÇÃO</div>
+                    <div class="info-value" id="infoDataAtivacao">---</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">📅 DATA DE EXPIRAÇÃO</div>
+                    <div class="info-value" id="infoDataExpiracao">---</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">⏳ DIAS RESTANTES</div>
+                    <div class="info-value" id="infoDiasRestantes">---</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">📱 DISPOSITIVO</div>
+                    <div class="info-value" id="infoDispositivo">---</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
@@ -490,30 +744,17 @@
                 <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
                 <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex: 1;">➕ GERAR VIP</button>
-                <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex: 1;">🔥 GERAR RAGE</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ GERAR VIP</button>
+                <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 GERAR RAGE</button>
             </div>
             <div style="margin-bottom: 15px;">
-                <input type="password" id="githubToken" class="key-input" placeholder="🔑 COLE SEU TOKEN DO GITHUB AQUI" style="width: 100%; font-size: 11px;">
+                <input type="password" id="githubToken" class="key-input" placeholder="🔑 COLE SEU TOKEN DO GITHUB" style="width: 100%; font-size: 11px;">
                 <button onclick="salvarToken()" class="btn-admin-action btn-generate" style="margin-top: 5px;">💾 SALVAR TOKEN</button>
             </div>
-            <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()">
+            <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
             <div id="keysList" class="keys-list"></div>
             <button class="btn-back" onclick="voltarParaLogin()">← VOLTAR</button>
-        </div>
-    </div>
-
-    <div id="sensiModal" class="modal-sensi">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between;"><h2 style="color: var(--sensi);">SENSIBILIDADE</h2><span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span></div>
-            <div class="sensi-config">
-                <div class="option-row">Geral <input type="range" min="0" max="200" value="100" id="sensiGeral"></div>
-                <div class="option-row">Red Dot <input type="range" min="0" max="200" value="100" id="sensiRedDot"></div>
-                <div class="option-row">Mira 2x <input type="range" min="0" max="200" value="100" id="sensi2x"></div>
-                <div class="option-row">Mira 4x <input type="range" min="0" max="200" value="100" id="sensi4x"></div>
-                <button class="btn-login" onclick="aplicarSensibilidade()">APLICAR</button>
-            </div>
         </div>
     </div>
 
@@ -534,6 +775,19 @@
     <div class="status-online" id="statusOnline">🟢 Carregando...</div>
 
     <script>
+    // ==================== LISTA DE MARCAS ====================
+    const marcas = [
+        "Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", 
+        "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", 
+        "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", 
+        "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", 
+        "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"
+    ];
+
+    let marcaSelecionada = null;
+    let timerInterval = null;
+    let tempoRestante = 10;
+
     // ==================== CONFIGURAÇÃO DO GIST ====================
     const GIST_ID = "bbf26f4ad077bd75732e3cc60307b5e3";
     const GIST_USER = "Faelzin774";
@@ -543,37 +797,33 @@
     let keysDatabase = {};
     let filtroAtual = '';
     let githubToken = localStorage.getItem('github_token') || '';
+    let keyAtual = null;
+    let keyDataAtual = null;
 
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.textContent = message;
         toast.style.backgroundColor = isError ? '#ff4444' : '#00ff00';
-        toast.style.color = '#000';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
 
     // ========== FUNÇÕES DO GITHUB GIST ==========
-    
     async function carregarKeysDoGist() {
         try {
             const response = await fetch(GIST_RAW_URL + "?t=" + Date.now());
-            if (!response.ok) throw new Error('Erro ao carregar');
+            if (!response.ok) throw new Error('Erro');
             keysDatabase = await response.json();
-            document.getElementById('statusOnline').innerHTML = '🟢 Conectado ao Gist';
+            document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
-            showToast('✅ Keys carregadas com sucesso!');
             return true;
         } catch (error) {
-            console.error('Erro ao carregar keys:', error);
-            document.getElementById('statusOnline').innerHTML = '🔴 Erro ao conectar';
+            document.getElementById('statusOnline').innerHTML = '🔴 Offline';
             document.getElementById('statusOnline').style.color = '#ff4444';
-            
             const local = localStorage.getItem('fael_keys_backup');
             if (local) {
                 keysDatabase = JSON.parse(local);
-                showToast('⚠️ Usando backup local', true);
                 return true;
             }
             return false;
@@ -582,54 +832,31 @@
 
     async function salvarKeysNoGist() {
         if (!githubToken) {
-            showToast('⚠️ Configure seu TOKEN do GitHub primeiro!', true);
+            showToast('⚠️ Configure seu TOKEN do GitHub!', true);
             return false;
         }
-
         try {
             const getResponse = await fetch(GIST_API_URL, {
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
+                headers: { 'Authorization': `token ${githubToken}` }
             });
-            
-            if (!getResponse.ok) throw new Error('Erro ao obter informações do Gist');
             const gistData = await getResponse.json();
             const fileSha = gistData.files['fael_keys.json']?.sha;
             
-            const updateData = {
-                files: {
-                    'fael_keys.json': {
-                        content: JSON.stringify(keysDatabase, null, 2)
-                    }
-                }
-            };
-            
-            if (fileSha) {
-                updateData.files['fael_keys.json'].sha = fileSha;
-            }
-            
-            const updateResponse = await fetch(GIST_API_URL, {
+            await fetch(GIST_API_URL, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `token ${githubToken}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updateData)
+                body: JSON.stringify({
+                    files: { 'fael_keys.json': { content: JSON.stringify(keysDatabase, null, 2), sha: fileSha } }
+                })
             });
-            
-            if (!updateResponse.ok) throw new Error('Erro ao salvar');
-            
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
-            showToast('✅ Keys salvas no Gist com sucesso!');
+            showToast('✅ Keys salvas no Gist!');
             return true;
-            
         } catch (error) {
-            console.error('Erro ao salvar:', error);
-            showToast('❌ Erro ao salvar no Gist. Verifique seu token!', true);
-            localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
+            showToast('❌ Erro ao salvar!', true);
             return false;
         }
     }
@@ -640,158 +867,22 @@
             githubToken = token;
             localStorage.setItem('github_token', token);
             document.getElementById('githubToken').value = '';
-            showToast('✅ Token salvo com sucesso!');
+            showToast('✅ Token salvo!');
         } else {
             showToast('❌ Token inválido!', true);
         }
     }
 
-    // ========== FUNÇÕES ADMIN ==========
-    
-    function atualizarStats() {
-        const keys = Object.values(keysDatabase);
-        const total = keys.length;
-        const ativas = keys.filter(k => k.status === 'ativa').length;
-        const usadas = keys.filter(k => k.usado === true && k.tipo !== 'ADMIN').length;
-        const disponiveis = keys.filter(k => k.status === 'ativa' && !k.usado && k.tipo !== 'ADMIN').length;
-        
-        document.getElementById('totalKeys').textContent = total;
-        document.getElementById('activeKeys').textContent = ativas;
-        document.getElementById('usedKeys').textContent = usadas;
-        document.getElementById('availableKeys').textContent = disponiveis;
-    }
-
-    function renderizarKeysList() {
-        const container = document.getElementById('keysList');
-        let keys = Object.values(keysDatabase);
-        
-        if (filtroAtual) {
-            keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
-        }
-        
-        keys.sort((a, b) => new Date(b.criadaEm) - new Date(a.criadaEm));
-        
-        if (keys.length === 0) {
-            container.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Nenhuma key encontrada</div>';
-            return;
-        }
-        
-        container.innerHTML = keys.map(key => {
-            const expirada = new Date(key.expiraEm) < new Date();
-            const statusClass = key.status === 'ativa' && !expirada ? 'active' : 'inactive';
-            const statusText = expirada ? 'EXPIRADA' : (key.status === 'ativa' ? 'ATIVA' : 'DESATIVADA');
-            const statusColor = expirada ? '#ffaa00' : (key.status === 'ativa' ? '#00ff00' : '#ff0000');
-            
-            return `
-                <div class="key-card ${statusClass}">
-                    <div class="key-code">🔑 ${key.codigo}</div>
-                    <div class="key-status">
-                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong><br>
-                        Status: <span style="color: ${statusColor}">${statusText}</span><br>
-                        Uso: ${key.usado ? '❌ JÁ USADA' : '✓ DISPONÍVEL'}<br>
-                        ${key.usado ? `📱 Usado em: ${new Date(key.usadoEm).toLocaleDateString('pt-BR')}<br>` : ''}
-                        ⏰ Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
-                    </div>
-                    ${key.tipo !== 'ADMIN' ? `
-                        <div style="margin-top: 10px;">
-                            ${key.status === 'ativa' && !expirada ? 
-                                `<button class="btn-admin-action btn-deactivate" onclick="desativarKey('${key.codigo}')">🔒 DESATIVAR</button>` :
-                                `<button class="btn-admin-action btn-activate" onclick="ativarKey('${key.codigo}')">🔓 ATIVAR</button>`
-                            }
-                            <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
-                            ${!key.usado && key.status === 'ativa' && !expirada ? 
-                                `<button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>` : ''
-                            }
-                        </div>
-                    ` : '<div style="margin-top: 10px; color: #ffaa00;">⚡ KEY MASTER ADMIN</div>'}
-                </div>
-            `;
-        }).join('');
-    }
-    
-    async function gerarNovaKey(tipo) {
-        const timestamp = Date.now();
-        const random = Math.random().toString(36).substring(2, 10).toUpperCase();
-        const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
-        
-        keysDatabase[codigo] = {
-            codigo: codigo,
-            tipo: tipo,
-            status: "ativa",
-            usado: false,
-            usadoPor: null,
-            criadaEm: new Date().toISOString(),
-            expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        };
-        
-        const salvou = await salvarKeysNoGist();
-        if (salvou) {
-            atualizarStats();
-            renderizarKeysList();
-            showToast(`✅ Key ${tipo} gerada: ${codigo}`);
-        } else {
-            atualizarStats();
-            renderizarKeysList();
-            showToast(`⚠️ Key gerada mas NÃO salva no Gist. Configure o token!`, true);
-        }
-    }
-    
-    async function ativarKey(codigo) {
-        if (keysDatabase[codigo]) {
-            keysDatabase[codigo].status = 'ativa';
-            await salvarKeysNoGist();
-            atualizarStats();
-            renderizarKeysList();
-            showToast(`✅ Key ${codigo} ativada!`);
-        }
-    }
-    
-    async function desativarKey(codigo) {
-        if (keysDatabase[codigo]) {
-            keysDatabase[codigo].status = 'desativada';
-            await salvarKeysNoGist();
-            atualizarStats();
-            renderizarKeysList();
-            showToast(`⚠️ Key ${codigo} desativada!`);
-        }
-    }
-    
-    async function excluirKey(codigo) {
-        if (confirm(`Tem certeza que deseja EXCLUIR a key ${codigo}?`)) {
-            delete keysDatabase[codigo];
-            await salvarKeysNoGist();
-            atualizarStats();
-            renderizarKeysList();
-            showToast(`🗑️ Key ${codigo} excluída!`);
-        }
-    }
-    
-    function copiarKey(codigo) {
-        navigator.clipboard.writeText(codigo);
-        showToast(`📋 Key copiada: ${codigo}`);
-    }
-    
-    function filtrarKeys() {
-        filtroAtual = document.getElementById('searchKey').value;
-        renderizarKeysList();
-    }
-    
     // ========== FUNÇÕES DE LOGIN ==========
-    
     async function validarKey() {
         const key = document.getElementById('keyInput').value;
         const msgDiv = document.getElementById('loginMsg');
         const btn = document.getElementById('loginBtn');
         
-        if (!key) {
-            msgDiv.textContent = 'Digite uma key!';
-            return;
-        }
+        if (!key) { msgDiv.textContent = 'Digite uma key!'; return; }
         
         btn.disabled = true;
         btn.innerHTML = '⏳ VERIFICANDO...';
-        msgDiv.textContent = 'Verificando key...';
-        msgDiv.style.color = '#ffaa00';
         
         await carregarKeysDoGist();
         
@@ -799,7 +890,6 @@
         
         if (!keyData) {
             msgDiv.textContent = '❌ KEY INVÁLIDA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -807,7 +897,6 @@
         
         if (keyData.status !== 'ativa') {
             msgDiv.textContent = '❌ KEY DESATIVADA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -815,7 +904,6 @@
         
         if (keyData.usado && keyData.tipo !== 'ADMIN') {
             msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -823,11 +911,14 @@
         
         if (new Date(keyData.expiraEm) < new Date()) {
             msgDiv.textContent = '❌ KEY EXPIRADA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
         }
+        
+        // Salvar key atual para info
+        keyAtual = key;
+        keyDataAtual = keyData;
         
         if (keyData.tipo !== 'ADMIN' && !keyData.usado) {
             keyData.usado = true;
@@ -843,9 +934,8 @@
             document.getElementById('admin-container').style.display = 'block';
             atualizarStats();
             renderizarKeysList();
-            // Preencher token se já tiver salvo
             if (githubToken) {
-                document.getElementById('githubToken').placeholder = '✅ Token já configurado';
+                document.getElementById('githubToken').placeholder = '✅ Token configurado';
             }
         } else {
             document.getElementById('main-container').style.display = 'block';
@@ -870,68 +960,232 @@
         document.getElementById('admin-container').style.display = 'none';
         document.getElementById('keyInput').value = '';
         document.getElementById('loginMsg').textContent = '';
+        keyAtual = null;
+        keyDataAtual = null;
+    }
+
+    // ========== FUNÇÕES ADMIN ==========
+    function atualizarStats() {
+        const keys = Object.values(keysDatabase);
+        document.getElementById('totalKeys').textContent = keys.length;
+        document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
+        document.getElementById('usedKeys').textContent = keys.filter(k => k.usado === true && k.tipo !== 'ADMIN').length;
+        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && !k.usado && k.tipo !== 'ADMIN').length;
+    }
+
+    function renderizarKeysList() {
+        const container = document.getElementById('keysList');
+        let keys = Object.values(keysDatabase);
+        if (filtroAtual) keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
+        
+        container.innerHTML = keys.map(key => `
+            <div class="key-card ${key.status === 'ativa' ? 'active' : ''}">
+                <div class="key-code">🔑 ${key.codigo}</div>
+                <div>Tipo: ${key.tipo} | Status: ${key.status} | ${key.usado ? '❌ Usada' : '✓ Disponível'}</div>
+                <div>Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}</div>
+                ${key.tipo !== 'ADMIN' ? `
+                    <div>
+                        <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
+                        <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+                    </div>
+                ` : '<div>⚡ KEY MASTER</div>'}
+            </div>
+        `).join('');
     }
     
-    // ========== FUNÇÕES ORIGINAIS ==========
+    async function gerarNovaKey(tipo) {
+        const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
+        
+        keysDatabase[codigo] = {
+            codigo: codigo,
+            tipo: tipo,
+            status: "ativa",
+            usado: false,
+            usadoPor: null,
+            criadaEm: new Date().toISOString(),
+            expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        };
+        
+        await salvarKeysNoGist();
+        atualizarStats();
+        renderizarKeysList();
+        showToast(`✅ Key ${tipo} gerada: ${codigo}`);
+    }
     
-    function puxarArma() {
-        const arma = document.getElementById('weaponName').value;
-        if (arma) {
-            alert(`🔫 Puxando arma: ${arma.toUpperCase()}`);
-        } else {
-            alert('Digite o nome da arma!');
+    async function excluirKey(codigo) {
+        if (confirm(`Excluir key ${codigo}?`)) {
+            delete keysDatabase[codigo];
+            await salvarKeysNoGist();
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`🗑️ Key excluída!`);
         }
+    }
+    
+    function copiarKey(codigo) {
+        navigator.clipboard.writeText(codigo);
+        showToast(`📋 Key copiada!`);
+    }
+    
+    function filtrarKeys() {
+        filtroAtual = document.getElementById('searchKey').value;
+        renderizarKeysList();
+    }
+
+    // ========== FUNÇÕES INFO ==========
+    function abrirInfoModal() {
+        if (!keyAtual || !keyDataAtual) {
+            showToast('Nenhuma key ativa no momento', true);
+            return;
+        }
+        
+        document.getElementById('infoKeyCode').textContent = keyAtual;
+        document.getElementById('infoTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+        
+        const dataAtivacao = keyDataAtual.usadoEm ? new Date(keyDataAtual.usadoEm) : new Date();
+        document.getElementById('infoDataAtivacao').textContent = dataAtivacao.toLocaleDateString('pt-BR') + ' ' + dataAtivacao.toLocaleTimeString('pt-BR');
+        
+        const dataExpiracao = new Date(keyDataAtual.expiraEm);
+        document.getElementById('infoDataExpiracao').textContent = dataExpiracao.toLocaleDateString('pt-BR');
+        
+        const diasRestantes = Math.ceil((dataExpiracao - new Date()) / (1000 * 60 * 60 * 24));
+        document.getElementById('infoDiasRestantes').textContent = diasRestantes > 0 ? `${diasRestantes} dias` : 'EXPIRADA';
+        
+        document.getElementById('infoDispositivo').textContent = keyDataAtual.usadoPor || 'Não registrado';
+        
+        document.getElementById('infoModal').style.display = 'block';
+    }
+    
+    function fecharInfoModal() {
+        document.getElementById('infoModal').style.display = 'none';
+    }
+
+    // ========== FUNÇÕES SENSIBILIDADE ==========
+    function carregarMarcas() {
+        const grid = document.getElementById('brandsGrid');
+        grid.innerHTML = '';
+        marcas.sort().forEach(marca => {
+            const div = document.createElement('div');
+            div.className = 'brand-item';
+            div.textContent = marca;
+            div.onclick = () => {
+                document.querySelectorAll('.brand-item').forEach(i => i.classList.remove('selected'));
+                div.classList.add('selected');
+                marcaSelecionada = marca;
+            };
+            grid.appendChild(div);
+        });
+    }
+    
+    function filtrarMarcas() {
+        const search = document.getElementById('searchBrand').value.toLowerCase();
+        document.querySelectorAll('.brand-item').forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(search) ? 'block' : 'none';
+        });
+    }
+    
+    function resetarTimer() {
+        tempoRestante = 10;
+        document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
+        document.getElementById('btnGenerateSensi').disabled = false;
+        document.getElementById('btnGenerateSensi').textContent = 'GERAR SENSI';
+        document.getElementById('sensiValues').style.display = 'none';
+    }
+    
+    function iniciarTimerGeracao() {
+        if (!marcaSelecionada) {
+            showToast('Selecione uma marca de celular!', true);
+            return;
+        }
+        
+        const btn = document.getElementById('btnGenerateSensi');
+        btn.disabled = true;
+        
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timerInterval = setInterval(() => {
+            tempoRestante = Math.max(0, tempoRestante - 0.1);
+            document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
+            
+            if (tempoRestante <= 0) {
+                clearInterval(timerInterval);
+                gerarSensi();
+                document.getElementById('sensiValues').style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'GERAR NOVAMENTE';
+                tempoRestante = 10;
+            }
+        }, 100);
+    }
+    
+    function gerarSensi() {
+        const geral = Math.floor(Math.random() * 60) + 140;
+        const reddot = Math.floor(Math.random() * 60) + 140;
+        const mira2x = Math.floor(Math.random() * 60) + 140;
+        const mira4x = Math.floor(Math.random() * 60) + 140;
+        const miraAWM = Math.floor(Math.random() * 60) + 140;
+        const olhadinha = Math.floor(Math.random() * 60) + 140;
+        const dpi = Math.floor(Math.random() * 440) + 450;
+        
+        document.getElementById('sensi-geral').textContent = geral;
+        document.getElementById('sensi-reddot').textContent = reddot;
+        document.getElementById('sensi-2x').textContent = mira2x;
+        document.getElementById('sensi-4x').textContent = mira4x;
+        document.getElementById('sensi-awm').textContent = miraAWM;
+        document.getElementById('sensi-olhadinha').textContent = olhadinha;
+        document.getElementById('dpiValue').textContent = `DPI: ${dpi}`;
+    }
+    
+    function aplicarSensi() {
+        if (!marcaSelecionada) {
+            showToast('Selecione uma marca de celular!', true);
+            return;
+        }
+        
+        showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`);
+        fecharSensiModal();
     }
     
     function abrirSensiModal() {
         document.getElementById('sensiModal').style.display = 'block';
+        carregarMarcas();
+        resetarTimer();
+        document.getElementById('sensiValues').style.display = 'none';
     }
     
     function fecharSensiModal() {
         document.getElementById('sensiModal').style.display = 'none';
+        if (timerInterval) clearInterval(timerInterval);
     }
-    
-    function aplicarSensibilidade() {
-        const geral = document.getElementById('sensiGeral').value;
-        const reddot = document.getElementById('sensiRedDot').value;
-        const mira2x = document.getElementById('sensi2x').value;
-        const mira4x = document.getElementById('sensi4x').value;
-        alert(`✅ Sensibilidade aplicada!\n\nGeral: ${geral}%\nRed Dot: ${reddot}%\nMira 2x: ${mira2x}%\nMira 4x: ${mira4x}%`);
-        fecharSensiModal();
+
+    // ========== FUNÇÕES ORIGINAIS ==========
+    function puxarArma() {
+        const arma = document.getElementById('weaponName').value;
+        if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`);
+        else showToast('Digite o nome da arma!', true);
     }
     
     function iniciarProcessoBypass() {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('bypass-process').style.display = 'block';
         
-        const logsArea = document.getElementById('bypass-logs');
+        const logs = document.getElementById('bypass-logs');
         const barra = document.getElementById('bypass-bar');
         const status = document.getElementById('bypass-status');
+        logs.innerHTML = '';
         
-        logsArea.innerHTML = '';
-        barra.style.width = '0%';
-        
-        const frases = [
-            "> Iniciando bypass system...",
-            "> Conectando ao kernel...",
-            "> Desativando proteções...",
-            "> Ocultando processos...",
-            "> Limpando registros...",
-            "> Bypass concluído!"
-        ];
-        
+        const frases = ["> Iniciando bypass...", "> Conectando ao kernel...", "> Desativando proteções...", "> Bypass concluído!"];
         let i = 0;
         const loop = setInterval(() => {
             if (i < frases.length) {
-                const linha = document.createElement('div');
-                linha.textContent = frases[i];
-                logsArea.appendChild(linha);
+                logs.innerHTML += frases[i] + '<br>';
                 barra.style.width = ((i + 1) / frases.length * 100) + '%';
-                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
+                status.textContent = `${Math.round((i + 1) / frases.length * 100)}%`;
                 i++;
             } else {
                 clearInterval(loop);
-                status.textContent = '✓ Bypass ativado!';
+                status.textContent = '✓ Ativado!';
                 setTimeout(() => {
                     document.getElementById('bypass-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
@@ -944,34 +1198,22 @@
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('inject-process').style.display = 'block';
         
-        const logsArea = document.getElementById('inject-logs');
+        const logs = document.getElementById('inject-logs');
         const barra = document.getElementById('inject-bar');
         const status = document.getElementById('inject-status');
+        logs.innerHTML = '';
         
-        logsArea.innerHTML = '';
-        barra.style.width = '0%';
-        
-        const frases = [
-            "> Inicializando inject engine...",
-            "> Carregando módulos...",
-            "> Alocando memória...",
-            "> Injetando scripts...",
-            "> Verificando integridade...",
-            "> Injeção concluída!"
-        ];
-        
+        const frases = ["> Inicializando inject...", "> Carregando módulos...", "> Injetando scripts...", "> Injeção concluída!"];
         let i = 0;
         const loop = setInterval(() => {
             if (i < frases.length) {
-                const linha = document.createElement('div');
-                linha.textContent = frases[i];
-                logsArea.appendChild(linha);
+                logs.innerHTML += frases[i] + '<br>';
                 barra.style.width = ((i + 1) / frases.length * 100) + '%';
-                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
+                status.textContent = `${Math.round((i + 1) / frases.length * 100)}%`;
                 i++;
             } else {
                 clearInterval(loop);
-                status.textContent = '✓ Injeção concluída!';
+                status.textContent = '✓ Concluído!';
                 setTimeout(() => {
                     document.getElementById('inject-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
