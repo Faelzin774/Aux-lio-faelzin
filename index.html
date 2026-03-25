@@ -14,6 +14,13 @@
             --sensi: #00ff00;
             --bypass: #ffaa00;
             --inject: #0066ff;
+            --admin: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
@@ -49,6 +56,7 @@
             text-align: center;
             border-radius: 8px;
             outline: none;
+            font-size: 14px;
         }
 
         .btn-login {
@@ -60,6 +68,12 @@
             font-weight: 900;
             border-radius: 5px;
             width: 100%;
+            font-size: 16px;
+        }
+
+        .btn-login:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         #main-container {
@@ -102,7 +116,6 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         .category-title {
@@ -190,7 +203,6 @@
             margin-top: 5px;
         }
 
-        /* Modal Sensibilidade */
         .modal-sensi {
             display: none;
             position: fixed;
@@ -214,43 +226,50 @@
             border: 2px solid var(--sensi);
         }
 
-        /* Admin Panel */
-        .admin-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ffaa00;
-            color: #000;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 999;
-            font-size: 12px;
-        }
-
-        .admin-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.98);
-            z-index: 10001;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
         .admin-container {
+            width: 90%;
             max-width: 500px;
             margin: 0 auto;
-            background: #0a0a0a;
+            background: #0d0d0d;
             border-radius: 20px;
             padding: 20px;
-            border: 2px solid #ffaa00;
+            border: 2px solid var(--admin);
+        }
+
+        .admin-title {
+            text-align: center;
+            color: var(--admin);
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--admin);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #111;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--admin);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
         }
 
         .key-card {
@@ -282,10 +301,6 @@
             margin-top: 5px;
         }
 
-        .status-active { color: #00ff00; }
-        .status-inactive { color: #ff0000; }
-        .status-used { color: #ffaa00; }
-
         .btn-admin-action {
             background: transparent;
             border: 1px solid;
@@ -294,11 +309,32 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 11px;
+            transition: all 0.3s;
         }
 
+        .btn-admin-action:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-generate { color: #00ff00; border-color: #00ff00; }
         .btn-activate { color: #00ff00; border-color: #00ff00; }
         .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
         .btn-delete { color: #ff0000; border-color: #ff0000; }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            border: 1px solid var(--admin);
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .keys-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
 
         .process-overlay {
             display: none;
@@ -336,26 +372,66 @@
 
         .fill-bypass { background: var(--bypass); }
         .fill-inject { background: var(--inject); }
+
+        .btn-back {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .status-online {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 10px;
+            background: #111;
+            padding: 4px 8px;
+            border-radius: 10px;
+            z-index: 999;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            background: #00ff00;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10002;
+            animation: fadeOut 3s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(0); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(100px); display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen">
-        <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">VIP</span></h2>
+        <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
-        <button class="btn-login" onclick="validarKey()">LOGAR</button>
+        <button class="btn-login" id="loginBtn" onclick="validarKey()">LOGAR</button>
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL -->
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
             <button class="sensi-header-btn" onclick="abrirSensiModal()">SENSIBILIDADE</button>
         </div>
         
-        <!-- PAINEL VIP (Key: FAEL-VIP-2026) -->
         <div id="panel-standard">
             <div class="category-title">Auxílio de Mira</div>
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -373,106 +449,74 @@
             <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
         </div>
 
-        <!-- PAINEL RAGE (Key: dono456) -->
         <div id="panel-rage" style="display: none;">
             <div class="main-title"><h1 style="color: var(--danger); text-shadow: 0 0 10px var(--danger);">MOD MENU RAGE</h1></div>
-            
             <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            
             <div class="option-row">
-                <div>
-                    <span>Deus (God Mode)</span>
-                    <small style="display: block; font-size: 9px; color: #aaa;">Não toma dano de nenhum inimigo</small>
-                </div>
+                <div><span>Deus (God Mode)</span><small style="display: block; font-size: 9px; color: #aaa;">Não toma dano</small></div>
                 <label class="switch"><input type="checkbox"><span class="slider"></span></label>
             </div>
-
             <div class="category-title" style="color: #fff; margin-top: 20px;">PUXAR ARMA</div>
-            <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #444;">
-                <span style="font-size: 11px; font-weight: bold; color: var(--hacker);">PUXA QUALQUER ARMA DO JOGO</span>
+            <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                 <input type="text" class="weapon-input" id="weaponName" placeholder="Digite o nome da arma...">
-                <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer;">PUXAR</button>
+                <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer; width: 100%;">PUXAR</button>
             </div>
-
             <div class="category-title" style="color: var(--danger); border-left-color: var(--danger);">MAIS RAGE</div>
-            
             <div class="option-row option-row-rage">
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span style="color: var(--danger); font-weight: bold;">Matar no avião ⚠️</span>
-                    <label class="switch"><input type="checkbox" id="killPlane"><span class="slider" style="background-color: #440000;"></span></label>
-                </div>
+                <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Matar no avião ⚠️</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
                 <span class="rage-desc">ativa quando estiver no avião</span>
             </div>
-
-            <div class="option-row option-row-rage" style="margin-top: 8px;">
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span style="color: var(--danger); font-weight: bold;">Aimkill</span>
-                    <label class="switch"><input type="checkbox" id="aimkill"><span class="slider" style="background-color: #440000;"></span></label>
-                </div>
+            <div class="option-row option-row-rage">
+                <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Aimkill</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
                 <span class="rage-desc">matar todos do mapa</span>
             </div>
         </div>
 
         <div class="process-box">
-            <button class="btn-process btn-bypass" id="bypassBtn" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
-            <button class="btn-process btn-inject-custom" id="injectBtn" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
+            <button class="btn-process btn-bypass" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
+            <button class="btn-process btn-inject-custom" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
         </div>
     </div>
 
-    <!-- BOTÃO ADMIN -->
-    <button class="admin-btn" onclick="abrirAdminPanel()">👑 ADMIN</button>
-
-    <!-- PAINEL ADMIN -->
-    <div id="adminPanel" class="admin-modal">
+    <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <h2 style="color: #ffaa00;">PAINEL ADMIN</h2>
-                <button onclick="fecharAdminPanel()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">✕</button>
+            <div class="admin-title">👑 PAINEL ADMIN 👑</div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL</div></div>
+                <div class="stat-card"><div class="stat-number" id="activeKeys">0</div><div class="stat-label">ATIVAS</div></div>
+                <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
+                <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
-            
-            <input type="password" id="adminPass" class="key-input" placeholder="SENHA ADMIN" style="width: 100%;">
-            <button onclick="autenticarAdmin()" class="btn-login">ACESSAR</button>
-            
-            <div id="adminContent" style="display: none; margin-top: 20px;">
-                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <button onclick="gerarNovaKey('VIP')" class="btn-process" style="border-color: #00ff00; color: #00ff00; padding: 10px;">➕ GERAR KEY VIP</button>
-                    <button onclick="gerarNovaKey('RAGE')" class="btn-process" style="border-color: #ff4444; color: #ff4444; padding: 10px;">🔥 GERAR KEY RAGE</button>
-                </div>
-                
-                <div id="novaKeyMsg" style="background: #000; padding: 10px; border-radius: 5px; margin-bottom: 20px; display: none;">
-                    <span style="color: #00ff00;">✓ NOVA KEY:</span>
-                    <span id="keyGerada" style="color: #ffaa00; font-family: monospace; word-break: break-all;"></span>
-                    <button onclick="copiarKeyGerada()" style="margin-left: 10px;">📋</button>
-                </div>
-                
-                <h3 style="color: #fff;">KEYS CADASTRADAS</h3>
-                <div id="keysList" style="max-height: 400px; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex: 1;">➕ GERAR VIP</button>
+                <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex: 1;">🔥 GERAR RAGE</button>
             </div>
+            <div style="margin-bottom: 15px;">
+                <input type="password" id="githubToken" class="key-input" placeholder="🔑 COLE SEU TOKEN DO GITHUB AQUI" style="width: 100%; font-size: 11px;">
+                <button onclick="salvarToken()" class="btn-admin-action btn-generate" style="margin-top: 5px;">💾 SALVAR TOKEN</button>
+            </div>
+            <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()">
+            <div id="keysList" class="keys-list"></div>
+            <button class="btn-back" onclick="voltarParaLogin()">← VOLTAR</button>
         </div>
     </div>
 
-    <!-- MODAL SENSIBILIDADE -->
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
-            <div class="modal-header" style="display: flex; justify-content: space-between;">
-                <h2 style="color: var(--sensi);">SENSIBILIDADE</h2>
-                <span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
-            </div>
+            <div style="display: flex; justify-content: space-between;"><h2 style="color: var(--sensi);">SENSIBILIDADE</h2><span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span></div>
             <div class="sensi-config">
-                <div class="sensi-title">AJUSTE DE SENSIBILIDADE</div>
-                <div class="option-row">Sensibilidade Geral <input type="range" min="0" max="200" value="100" id="sensiGeral"></div>
-                <div class="option-row">Mira Red Dot <input type="range" min="0" max="200" value="100" id="sensiRedDot"></div>
+                <div class="option-row">Geral <input type="range" min="0" max="200" value="100" id="sensiGeral"></div>
+                <div class="option-row">Red Dot <input type="range" min="0" max="200" value="100" id="sensiRedDot"></div>
                 <div class="option-row">Mira 2x <input type="range" min="0" max="200" value="100" id="sensi2x"></div>
                 <div class="option-row">Mira 4x <input type="range" min="0" max="200" value="100" id="sensi4x"></div>
-                <button class="btn-login" onclick="aplicarSensibilidade()" style="margin-top: 20px;">APLICAR</button>
+                <button class="btn-login" onclick="aplicarSensibilidade()">APLICAR</button>
             </div>
         </div>
     </div>
 
-    <!-- PROCESSOS -->
     <div id="bypass-process" class="process-overlay">
         <div style="color: var(--bypass);">[ BYPASS SYSTEM ]</div>
         <div id="bypass-logs" class="process-text"></div>
@@ -487,48 +531,185 @@
         <div id="inject-status" class="process-status"></div>
     </div>
 
-    <script>
-    // ==================== BANCO DE DADOS DE KEYS ====================
-    let keysDatabase = {};
+    <div class="status-online" id="statusOnline">🟢 Carregando...</div>
 
-    // Inicializar banco de dados
-    function inicializarDatabase() {
-        const saved = localStorage.getItem('fael_keys_db');
-        if (saved) {
-            keysDatabase = JSON.parse(saved);
-        } else {
-            // Keys padrão
-            keysDatabase = {
-                "FAEL-VIP-2026": {
-                    codigo: "FAEL-VIP-2026",
-                    tipo: "VIP",
-                    status: "ativa",
-                    usado: false,
-                    usadoPor: null,
-                    criadaEm: new Date().toISOString(),
-                    expiraEm: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-                },
-                "dono456": {
-                    codigo: "dono456",
-                    tipo: "RAGE",
-                    status: "ativa",
-                    usado: false,
-                    usadoPor: null,
-                    criadaEm: new Date().toISOString(),
-                    expiraEm: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+    <script>
+    // ==================== CONFIGURAÇÃO DO GIST ====================
+    const GIST_ID = "bbf26f4ad077bd75732e3cc60307b5e3";
+    const GIST_USER = "Faelzin774";
+    const GIST_RAW_URL = `https://gist.githubusercontent.com/${GIST_USER}/${GIST_ID}/raw/fael_keys.json`;
+    const GIST_API_URL = `https://api.github.com/gists/${GIST_ID}`;
+    
+    let keysDatabase = {};
+    let filtroAtual = '';
+    let githubToken = localStorage.getItem('github_token') || '';
+
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        toast.style.backgroundColor = isError ? '#ff4444' : '#00ff00';
+        toast.style.color = '#000';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ========== FUNÇÕES DO GITHUB GIST ==========
+    
+    async function carregarKeysDoGist() {
+        try {
+            const response = await fetch(GIST_RAW_URL + "?t=" + Date.now());
+            if (!response.ok) throw new Error('Erro ao carregar');
+            keysDatabase = await response.json();
+            document.getElementById('statusOnline').innerHTML = '🟢 Conectado ao Gist';
+            document.getElementById('statusOnline').style.color = '#00ff00';
+            showToast('✅ Keys carregadas com sucesso!');
+            return true;
+        } catch (error) {
+            console.error('Erro ao carregar keys:', error);
+            document.getElementById('statusOnline').innerHTML = '🔴 Erro ao conectar';
+            document.getElementById('statusOnline').style.color = '#ff4444';
+            
+            const local = localStorage.getItem('fael_keys_backup');
+            if (local) {
+                keysDatabase = JSON.parse(local);
+                showToast('⚠️ Usando backup local', true);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    async function salvarKeysNoGist() {
+        if (!githubToken) {
+            showToast('⚠️ Configure seu TOKEN do GitHub primeiro!', true);
+            return false;
+        }
+
+        try {
+            const getResponse = await fetch(GIST_API_URL, {
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if (!getResponse.ok) throw new Error('Erro ao obter informações do Gist');
+            const gistData = await getResponse.json();
+            const fileSha = gistData.files['fael_keys.json']?.sha;
+            
+            const updateData = {
+                files: {
+                    'fael_keys.json': {
+                        content: JSON.stringify(keysDatabase, null, 2)
+                    }
                 }
             };
-            salvarDatabase();
+            
+            if (fileSha) {
+                updateData.files['fael_keys.json'].sha = fileSha;
+            }
+            
+            const updateResponse = await fetch(GIST_API_URL, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify(updateData)
+            });
+            
+            if (!updateResponse.ok) throw new Error('Erro ao salvar');
+            
+            localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
+            showToast('✅ Keys salvas no Gist com sucesso!');
+            return true;
+            
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            showToast('❌ Erro ao salvar no Gist. Verifique seu token!', true);
+            localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
+            return false;
         }
-        atualizarListaKeysAdmin();
     }
 
-    function salvarDatabase() {
-        localStorage.setItem('fael_keys_db', JSON.stringify(keysDatabase));
+    function salvarToken() {
+        const token = document.getElementById('githubToken').value;
+        if (token && token.length > 10) {
+            githubToken = token;
+            localStorage.setItem('github_token', token);
+            document.getElementById('githubToken').value = '';
+            showToast('✅ Token salvo com sucesso!');
+        } else {
+            showToast('❌ Token inválido!', true);
+        }
     }
 
-    // Gerar nova key
-    function gerarNovaKey(tipo) {
+    // ========== FUNÇÕES ADMIN ==========
+    
+    function atualizarStats() {
+        const keys = Object.values(keysDatabase);
+        const total = keys.length;
+        const ativas = keys.filter(k => k.status === 'ativa').length;
+        const usadas = keys.filter(k => k.usado === true && k.tipo !== 'ADMIN').length;
+        const disponiveis = keys.filter(k => k.status === 'ativa' && !k.usado && k.tipo !== 'ADMIN').length;
+        
+        document.getElementById('totalKeys').textContent = total;
+        document.getElementById('activeKeys').textContent = ativas;
+        document.getElementById('usedKeys').textContent = usadas;
+        document.getElementById('availableKeys').textContent = disponiveis;
+    }
+
+    function renderizarKeysList() {
+        const container = document.getElementById('keysList');
+        let keys = Object.values(keysDatabase);
+        
+        if (filtroAtual) {
+            keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
+        }
+        
+        keys.sort((a, b) => new Date(b.criadaEm) - new Date(a.criadaEm));
+        
+        if (keys.length === 0) {
+            container.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Nenhuma key encontrada</div>';
+            return;
+        }
+        
+        container.innerHTML = keys.map(key => {
+            const expirada = new Date(key.expiraEm) < new Date();
+            const statusClass = key.status === 'ativa' && !expirada ? 'active' : 'inactive';
+            const statusText = expirada ? 'EXPIRADA' : (key.status === 'ativa' ? 'ATIVA' : 'DESATIVADA');
+            const statusColor = expirada ? '#ffaa00' : (key.status === 'ativa' ? '#00ff00' : '#ff0000');
+            
+            return `
+                <div class="key-card ${statusClass}">
+                    <div class="key-code">🔑 ${key.codigo}</div>
+                    <div class="key-status">
+                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong><br>
+                        Status: <span style="color: ${statusColor}">${statusText}</span><br>
+                        Uso: ${key.usado ? '❌ JÁ USADA' : '✓ DISPONÍVEL'}<br>
+                        ${key.usado ? `📱 Usado em: ${new Date(key.usadoEm).toLocaleDateString('pt-BR')}<br>` : ''}
+                        ⏰ Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
+                    </div>
+                    ${key.tipo !== 'ADMIN' ? `
+                        <div style="margin-top: 10px;">
+                            ${key.status === 'ativa' && !expirada ? 
+                                `<button class="btn-admin-action btn-deactivate" onclick="desativarKey('${key.codigo}')">🔒 DESATIVAR</button>` :
+                                `<button class="btn-admin-action btn-activate" onclick="ativarKey('${key.codigo}')">🔓 ATIVAR</button>`
+                            }
+                            <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+                            ${!key.usado && key.status === 'ativa' && !expirada ? 
+                                `<button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>` : ''
+                            }
+                        </div>
+                    ` : '<div style="margin-top: 10px; color: #ffaa00;">⚡ KEY MASTER ADMIN</div>'}
+                </div>
+            `;
+        }).join('');
+    }
+    
+    async function gerarNovaKey(tipo) {
         const timestamp = Date.now();
         const random = Math.random().toString(36).substring(2, 10).toUpperCase();
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
@@ -543,178 +724,160 @@
             expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         };
         
-        salvarDatabase();
-        
-        document.getElementById('keyGerada').textContent = codigo;
-        document.getElementById('novaKeyMsg').style.display = 'block';
-        atualizarListaKeysAdmin();
-        
-        setTimeout(() => {
-            document.getElementById('novaKeyMsg').style.display = 'none';
-        }, 5000);
+        const salvou = await salvarKeysNoGist();
+        if (salvou) {
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`✅ Key ${tipo} gerada: ${codigo}`);
+        } else {
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`⚠️ Key gerada mas NÃO salva no Gist. Configure o token!`, true);
+        }
     }
-
-    // Validar key (login)
-    function validarKey() {
+    
+    async function ativarKey(codigo) {
+        if (keysDatabase[codigo]) {
+            keysDatabase[codigo].status = 'ativa';
+            await salvarKeysNoGist();
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`✅ Key ${codigo} ativada!`);
+        }
+    }
+    
+    async function desativarKey(codigo) {
+        if (keysDatabase[codigo]) {
+            keysDatabase[codigo].status = 'desativada';
+            await salvarKeysNoGist();
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`⚠️ Key ${codigo} desativada!`);
+        }
+    }
+    
+    async function excluirKey(codigo) {
+        if (confirm(`Tem certeza que deseja EXCLUIR a key ${codigo}?`)) {
+            delete keysDatabase[codigo];
+            await salvarKeysNoGist();
+            atualizarStats();
+            renderizarKeysList();
+            showToast(`🗑️ Key ${codigo} excluída!`);
+        }
+    }
+    
+    function copiarKey(codigo) {
+        navigator.clipboard.writeText(codigo);
+        showToast(`📋 Key copiada: ${codigo}`);
+    }
+    
+    function filtrarKeys() {
+        filtroAtual = document.getElementById('searchKey').value;
+        renderizarKeysList();
+    }
+    
+    // ========== FUNÇÕES DE LOGIN ==========
+    
+    async function validarKey() {
         const key = document.getElementById('keyInput').value;
         const msgDiv = document.getElementById('loginMsg');
+        const btn = document.getElementById('loginBtn');
         
         if (!key) {
             msgDiv.textContent = 'Digite uma key!';
             return;
         }
         
+        btn.disabled = true;
+        btn.innerHTML = '⏳ VERIFICANDO...';
+        msgDiv.textContent = 'Verificando key...';
+        msgDiv.style.color = '#ffaa00';
+        
+        await carregarKeysDoGist();
+        
         const keyData = keysDatabase[key];
         
         if (!keyData) {
             msgDiv.textContent = '❌ KEY INVÁLIDA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
             return;
         }
         
         if (keyData.status !== 'ativa') {
             msgDiv.textContent = '❌ KEY DESATIVADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
             return;
         }
         
-        if (keyData.usado) {
+        if (keyData.usado && keyData.tipo !== 'ADMIN') {
             msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
             return;
         }
         
         if (new Date(keyData.expiraEm) < new Date()) {
             msgDiv.textContent = '❌ KEY EXPIRADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
             return;
         }
         
-        // Marcar key como usada
-        keyData.usado = true;
-        keyData.usadoPor = navigator.userAgent;
-        keyData.usadoEm = new Date().toISOString();
-        salvarDatabase();
+        if (keyData.tipo !== 'ADMIN' && !keyData.usado) {
+            keyData.usado = true;
+            keyData.usadoPor = navigator.userAgent;
+            keyData.usadoEm = new Date().toISOString();
+            await salvarKeysNoGist();
+        }
         
-        // Login
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('main-container').style.display = 'block';
         
-        if (keyData.tipo === 'VIP') {
-            document.getElementById('panel-standard').style.display = 'block';
-            document.getElementById('panel-rage').style.display = 'none';
+        if (keyData.tipo === 'ADMIN') {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'block';
+            atualizarStats();
+            renderizarKeysList();
+            // Preencher token se já tiver salvo
+            if (githubToken) {
+                document.getElementById('githubToken').placeholder = '✅ Token já configurado';
+            }
         } else {
-            document.getElementById('panel-standard').style.display = 'none';
-            document.getElementById('panel-rage').style.display = 'block';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('admin-container').style.display = 'none';
+            
+            if (keyData.tipo === 'VIP') {
+                document.getElementById('panel-standard').style.display = 'block';
+                document.getElementById('panel-rage').style.display = 'none';
+            } else {
+                document.getElementById('panel-standard').style.display = 'none';
+                document.getElementById('panel-rage').style.display = 'block';
+            }
         }
         
-        msgDiv.textContent = '✓ LOGIN REALIZADO!';
-        msgDiv.style.color = '#00ff00';
-    }
-
-    // ==================== FUNÇÕES ADMIN ====================
-    function abrirAdminPanel() {
-        document.getElementById('adminPanel').style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = 'LOGAR';
     }
     
-    function fecharAdminPanel() {
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'none';
-        document.getElementById('adminPass').value = '';
+    function voltarParaLogin() {
+        document.getElementById('login-screen').style.display = 'block';
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('admin-container').style.display = 'none';
+        document.getElementById('keyInput').value = '';
+        document.getElementById('loginMsg').textContent = '';
     }
     
-    function autenticarAdmin() {
-        const senha = document.getElementById('adminPass').value;
-        // Senha admin: admin123
-        if (senha === 'admin123') {
-            document.getElementById('adminContent').style.display = 'block';
-            atualizarListaKeysAdmin();
-        } else {
-            alert('Senha incorreta!');
-        }
-    }
+    // ========== FUNÇÕES ORIGINAIS ==========
     
-    function atualizarListaKeysAdmin() {
-        const container = document.getElementById('keysList');
-        const keys = Object.values(keysDatabase);
-        
-        if (keys.length === 0) {
-            container.innerHTML = '<div style="color: #666;">Nenhuma key cadastrada</div>';
-            return;
-        }
-        
-        container.innerHTML = keys.map(key => `
-            <div class="key-card ${key.status === 'ativa' ? 'active' : 'inactive'}">
-                <div class="key-code">🔑 ${key.codigo}</div>
-                <div class="key-status">
-                    Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : '#ff4444'}">${key.tipo}</strong><br>
-                    Status: <span class="${key.status === 'ativa' ? 'status-active' : 'status-inactive'}">${key.status === 'ativa' ? '✅ ATIVA' : '⛔ DESATIVADA'}</span><br>
-                    Uso: ${key.usado ? '❌ JÁ USADA' : '✓ DISPONÍVEL'}<br>
-                    ${key.usado ? `Usado por: ${key.usadoPor?.substring(0, 50)}...<br>` : ''}
-                    Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
-                </div>
-                <div style="margin-top: 10px;">
-                    ${key.status === 'ativa' ? 
-                        `<button class="btn-admin-action btn-deactivate" onclick="desativarKey('${key.codigo}')">🔒 DESATIVAR</button>` :
-                        `<button class="btn-admin-action btn-activate" onclick="ativarKey('${key.codigo}')">🔓 ATIVAR</button>`
-                    }
-                    <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
-                    ${!key.usado ? `<button class="btn-admin-action" style="color: #00ff00;" onclick="gerarLinkKey('${key.codigo}')">📋 COPIAR LINK</button>` : ''}
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    function ativarKey(codigo) {
-        if (keysDatabase[codigo]) {
-            keysDatabase[codigo].status = 'ativa';
-            salvarDatabase();
-            atualizarListaKeysAdmin();
-            alert(`Key ${codigo} ativada com sucesso!`);
-        }
-    }
-    
-    function desativarKey(codigo) {
-        if (keysDatabase[codigo]) {
-            keysDatabase[codigo].status = 'desativada';
-            salvarDatabase();
-            atualizarListaKeysAdmin();
-            alert(`Key ${codigo} desativada!`);
-        }
-    }
-    
-    function excluirKey(codigo) {
-        if (confirm(`Tem certeza que deseja EXCLUIR a key ${codigo}?`)) {
-            delete keysDatabase[codigo];
-            salvarDatabase();
-            atualizarListaKeysAdmin();
-            alert('Key excluída!');
-        }
-    }
-    
-    function gerarLinkKey(codigo) {
-        const url = window.location.href.split('?')[0];
-        const link = `${url}?key=${codigo}`;
-        navigator.clipboard.writeText(link);
-        alert(`Link copiado!\n${link}\n\nEnvie para o usuário`);
-    }
-    
-    function copiarKeyGerada() {
-        const key = document.getElementById('keyGerada').textContent;
-        navigator.clipboard.writeText(key);
-        alert('Key copiada!');
-    }
-    
-    // Auto preencher key da URL
-    function autoPreencherKeyDaURL() {
-        const params = new URLSearchParams(window.location.search);
-        const key = params.get('key');
-        if (key && document.getElementById('keyInput')) {
-            document.getElementById('keyInput').value = key;
-        }
-    }
-    
-    // ==================== FUNÇÕES ORIGINAIS ====================
     function puxarArma() {
         const arma = document.getElementById('weaponName').value;
         if (arma) {
-            alert(`🔫 Puxando arma: ${arma.toUpperCase()}\n\n(Simulação - Em um jogo real isso puxaria a arma)`);
+            alert(`🔫 Puxando arma: ${arma.toUpperCase()}`);
         } else {
             alert('Digite o nome da arma!');
         }
@@ -733,7 +896,6 @@
         const reddot = document.getElementById('sensiRedDot').value;
         const mira2x = document.getElementById('sensi2x').value;
         const mira4x = document.getElementById('sensi4x').value;
-        
         alert(`✅ Sensibilidade aplicada!\n\nGeral: ${geral}%\nRed Dot: ${reddot}%\nMira 2x: ${mira2x}%\nMira 4x: ${mira4x}%`);
         fecharSensiModal();
     }
@@ -755,33 +917,25 @@
             "> Desativando proteções...",
             "> Ocultando processos...",
             "> Limpando registros...",
-            "> Bypass concluído com sucesso!"
+            "> Bypass concluído!"
         ];
         
         let i = 0;
-        const totalFrases = frases.length;
-        
         const loop = setInterval(() => {
-            if (i < totalFrases) {
+            if (i < frases.length) {
                 const linha = document.createElement('div');
                 linha.textContent = frases[i];
                 logsArea.appendChild(linha);
-                
-                const progresso = ((i + 1) / totalFrases) * 100;
-                barra.style.width = progresso + '%';
-                status.textContent = `Processando... ${Math.round(progresso)}%`;
-                
+                barra.style.width = ((i + 1) / frases.length * 100) + '%';
+                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
                 i++;
             } else {
                 clearInterval(loop);
-                status.textContent = '✓ Bypass ativado com sucesso!';
-                
+                status.textContent = '✓ Bypass ativado!';
                 setTimeout(() => {
                     document.getElementById('bypass-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('bypassBtn').style.background = 'rgba(255, 170, 0, 0.2)';
-                    document.getElementById('bypassBtn').textContent = '✓ BYPASS ATIVO';
-                }, 2000);
+                }, 1500);
             }
         }, 800);
     }
@@ -807,36 +961,27 @@
         ];
         
         let i = 0;
-        const totalFrases = frases.length;
-        
         const loop = setInterval(() => {
-            if (i < totalFrases) {
+            if (i < frases.length) {
                 const linha = document.createElement('div');
                 linha.textContent = frases[i];
                 logsArea.appendChild(linha);
-                
-                const progresso = ((i + 1) / totalFrases) * 100;
-                barra.style.width = progresso + '%';
-                status.textContent = `Processando... ${Math.round(progresso)}%`;
-                
+                barra.style.width = ((i + 1) / frases.length * 100) + '%';
+                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
                 i++;
             } else {
                 clearInterval(loop);
-                status.textContent = '✓ Injeção concluída com sucesso!';
-                
+                status.textContent = '✓ Injeção concluída!';
                 setTimeout(() => {
                     document.getElementById('inject-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('injectBtn').style.background = 'rgba(0, 102, 255, 0.2)';
-                    document.getElementById('injectBtn').textContent = '✓ INJECT ATIVO';
-                }, 2000);
+                }, 1500);
             }
         }, 800);
     }
     
     // Inicializar
-    inicializarDatabase();
-    autoPreencherKeyDaURL();
+    carregarKeysDoGist();
     </script>
 </body>
 </html>
