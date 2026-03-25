@@ -29,7 +29,6 @@
             overflow-y: auto;
         }
 
-        /* --- LOGIN --- */
         #login-screen {
             width: 280px;
             text-align: center;
@@ -63,7 +62,6 @@
             width: 100%;
         }
 
-        /* --- MENU PRINCIPAL --- */
         #main-container {
             display: none;
             width: 90%;
@@ -107,11 +105,6 @@
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
-        .sensi-header-btn:hover {
-            background: var(--sensi);
-            color: #000;
-        }
-
         .category-title {
             color: var(--hacker);
             font-size: 10px;
@@ -134,7 +127,6 @@
             font-size: 13px;
         }
 
-        /* SWITCHES */
         .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
@@ -148,7 +140,6 @@
         input:checked + .slider { background-color: var(--hacker); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BYPASS E BOTAO INJETAR - NOVOS ESTILOS */
         .process-box {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid #333;
@@ -169,61 +160,18 @@
             width: 100%;
             text-transform: uppercase;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
-        .btn-process::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+        .btn-bypass { color: var(--bypass); border-color: var(--bypass); }
+        .btn-inject-custom { color: var(--inject); border-color: var(--inject); margin-top: 10px; }
 
-        .btn-process:active::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-bypass {
-            color: var(--bypass);
-            border-color: var(--bypass);
-        }
-
-        .btn-bypass:hover {
-            background: rgba(255, 170, 0, 0.1);
-        }
-
-        .btn-inject-custom {
-            color: var(--inject);
-            border-color: var(--inject);
-            margin-top: 10px;
-        }
-
-        .btn-inject-custom:hover {
-            background: rgba(0, 102, 255, 0.1);
-        }
-
-        /* ESTILOS ESPECÍFICOS RAGE */
-        .rage-desc {
-            font-size: 10px;
-            color: #bbb;
-            display: block;
-            margin-top: 5px;
-            line-height: 1.3;
-        }
         .option-row-rage {
             flex-direction: column;
             align-items: flex-start;
             border-left: 3px solid var(--danger);
             background: rgba(255, 0, 0, 0.12);
         }
+        
         .weapon-input {
             width: 90%;
             background: #000;
@@ -233,10 +181,16 @@
             border-radius: 5px;
             margin-top: 10px;
             outline: none;
-            font-weight: bold;
         }
 
-        /* MODAL SENSIBILIDADE */
+        .rage-desc {
+            font-size: 10px;
+            color: #bbb;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Modal Sensibilidade */
         .modal-sensi {
             display: none;
             position: fixed;
@@ -260,189 +214,92 @@
             border: 2px solid var(--sensi);
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .modal-header h2 {
-            color: var(--sensi);
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .close-modal {
-            color: #666;
-            font-size: 24px;
+        /* Admin Panel */
+        .admin-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffaa00;
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
             cursor: pointer;
+            font-weight: bold;
+            z-index: 999;
+            font-size: 12px;
         }
 
-        .close-modal:hover {
-            color: var(--danger);
-        }
-
-        .back-modal {
-            color: var(--sensi);
-            font-size: 20px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .search-box {
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 1px solid var(--sensi);
-            color: #fff;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10001;
+            overflow-y: auto;
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        .brands-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 5px;
+        .admin-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #ffaa00;
         }
 
-        .brand-item {
+        .key-card {
             background: #111;
             border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
-        }
-
-        .brand-item:hover {
-            border-color: var(--sensi);
-            background: #1a1a1a;
-        }
-
-        .brand-item.selected {
-            border-color: var(--sensi);
-            background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-
-        .sensi-config {
-            background: #111;
             border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .sensi-title {
-            color: var(--sensi);
-            font-size: 14px;
+            padding: 12px;
             margin-bottom: 10px;
-            text-transform: uppercase;
-            text-align: center;
         }
 
-        .timer-container {
-            text-align: center;
-            margin: 15px 0;
-            padding: 15px;
-            background: #000;
-            border-radius: 10px;
-            border: 1px solid var(--sensi);
+        .key-card.active {
+            border-left: 4px solid #00ff00;
         }
 
-        .timer-display {
-            font-size: 48px;
-            font-weight: bold;
-            color: var(--sensi);
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px var(--sensi);
+        .key-card.inactive {
+            border-left: 4px solid #ff0000;
+            opacity: 0.7;
         }
 
-        .timer-label {
+        .key-code {
+            font-family: monospace;
             font-size: 12px;
-            color: #888;
+            color: #ffaa00;
+            word-break: break-all;
+        }
+
+        .key-status {
+            font-size: 11px;
             margin-top: 5px;
         }
 
-        .btn-generate-sensi {
-            background: var(--sensi);
-            color: #000;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            width: 100%;
-            margin: 10px 0;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
+        .status-active { color: #00ff00; }
+        .status-inactive { color: #ff0000; }
+        .status-used { color: #ffaa00; }
 
-        .btn-generate-sensi:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        .sensi-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 5px 0;
-            border-bottom: 1px solid #222;
-        }
-
-        .sensi-row span:first-child {
-            color: #aaa;
-            font-size: 12px;
-        }
-
-        .sensi-row span:last-child {
-            color: var(--sensi);
-            font-weight: bold;
-        }
-
-        .dpi-value {
-            font-size: 18px;
-            color: var(--sensi);
-            text-align: center;
-            margin: 15px 0;
-            padding: 10px;
-            background: #000;
-            border-radius: 8px;
-            border: 1px solid var(--sensi);
-        }
-
-        .btn-apply-sensi {
+        .btn-admin-action {
             background: transparent;
-            color: var(--sensi);
-            border: 2px solid var(--sensi);
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 15px;
+            border: 1px solid;
+            padding: 5px 10px;
+            margin: 3px;
             cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 5px;
+            font-size: 11px;
         }
 
-        .btn-apply-sensi:hover {
-            background: var(--sensi);
-            color: #000;
-        }
+        .btn-activate { color: #00ff00; border-color: #00ff00; }
+        .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
+        .btn-delete { color: #ff0000; border-color: #ff0000; }
 
-        /* TELAS DE PROCESSO */
         .process-overlay {
             display: none;
             position: fixed;
@@ -477,20 +334,8 @@
             transition: width 0.3s;
         }
 
-        .fill-bypass {
-            background: var(--bypass);
-        }
-
-        .fill-inject {
-            background: var(--inject);
-        }
-
-        .process-status {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 12px;
-            color: #666;
-        }
+        .fill-bypass { background: var(--bypass); }
+        .fill-inject { background: var(--inject); }
     </style>
 </head>
 <body>
@@ -500,18 +345,18 @@
         <h2 style="font-size: 18px; color: #fff; margin: 0;">FAEL <span style="color: var(--hacker);">VIP</span></h2>
         <input type="text" class="key-input" placeholder="DIGITE A KEY" id="keyInput">
         <button class="btn-login" onclick="validarKey()">LOGAR</button>
+        <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
-    <!-- CONTAINER PRINCIPAL DO MENU -->
+    <!-- CONTAINER PRINCIPAL -->
     <div id="main-container">
-        
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
             <button class="sensi-header-btn" onclick="abrirSensiModal()">SENSIBILIDADE</button>
         </div>
         
-        <!-- PAINEL AUXÍLIO (Key: FAEL-VIP-2026) -->
-        <div id="panel-standard" style="display: none;">
+        <!-- PAINEL VIP (Key: FAEL-VIP-2026) -->
+        <div id="panel-standard">
             <div class="category-title">Auxílio de Mira</div>
             <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
@@ -547,8 +392,9 @@
 
             <div class="category-title" style="color: #fff; margin-top: 20px;">PUXAR ARMA</div>
             <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #444;">
-                <span style="font-size: 11px; font-weight: bold; color: var(--hacker);">PUXA QUALQUER ARMA DO JOGO SÓ DIGITAR O NOME AQUI EM BAIXO</span>
-                <input type="text" class="weapon-input" placeholder="Digite o nome da arma...">
+                <span style="font-size: 11px; font-weight: bold; color: var(--hacker);">PUXA QUALQUER ARMA DO JOGO</span>
+                <input type="text" class="weapon-input" id="weaponName" placeholder="Digite o nome da arma...">
+                <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer;">PUXAR</button>
             </div>
 
             <div class="category-title" style="color: var(--danger); border-left-color: var(--danger);">MAIS RAGE</div>
@@ -556,150 +402,342 @@
             <div class="option-row option-row-rage">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                     <span style="color: var(--danger); font-weight: bold;">Matar no avião ⚠️</span>
-                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
+                    <label class="switch"><input type="checkbox" id="killPlane"><span class="slider" style="background-color: #440000;"></span></label>
                 </div>
-                <span class="rage-desc">ativa quando estiver no avião antes do botão de pular esteja pronto pra pular, se tiver disponível a função nao funciona.</span>
+                <span class="rage-desc">ativa quando estiver no avião</span>
             </div>
 
             <div class="option-row option-row-rage" style="margin-top: 8px;">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                     <span style="color: var(--danger); font-weight: bold;">Aimkill</span>
-                    <label class="switch"><input type="checkbox"><span class="slider" style="background-color: #440000;"></span></label>
+                    <label class="switch"><input type="checkbox" id="aimkill"><span class="slider" style="background-color: #440000;"></span></label>
                 </div>
-                <span class="rage-desc">aimkill matar todos do mapa trocando de arma sem parar.</span>
+                <span class="rage-desc">matar todos do mapa</span>
             </div>
         </div>
 
-        <!-- NOVOS BOTÕES DE PROCESSO -->
         <div class="process-box">
             <button class="btn-process btn-bypass" id="bypassBtn" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
             <button class="btn-process btn-inject-custom" id="injectBtn" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
         </div>
     </div>
 
+    <!-- BOTÃO ADMIN -->
+    <button class="admin-btn" onclick="abrirAdminPanel()">👑 ADMIN</button>
+
+    <!-- PAINEL ADMIN -->
+    <div id="adminPanel" class="admin-modal">
+        <div class="admin-container">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h2 style="color: #ffaa00;">PAINEL ADMIN</h2>
+                <button onclick="fecharAdminPanel()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">✕</button>
+            </div>
+            
+            <input type="password" id="adminPass" class="key-input" placeholder="SENHA ADMIN" style="width: 100%;">
+            <button onclick="autenticarAdmin()" class="btn-login">ACESSAR</button>
+            
+            <div id="adminContent" style="display: none; margin-top: 20px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <button onclick="gerarNovaKey('VIP')" class="btn-process" style="border-color: #00ff00; color: #00ff00; padding: 10px;">➕ GERAR KEY VIP</button>
+                    <button onclick="gerarNovaKey('RAGE')" class="btn-process" style="border-color: #ff4444; color: #ff4444; padding: 10px;">🔥 GERAR KEY RAGE</button>
+                </div>
+                
+                <div id="novaKeyMsg" style="background: #000; padding: 10px; border-radius: 5px; margin-bottom: 20px; display: none;">
+                    <span style="color: #00ff00;">✓ NOVA KEY:</span>
+                    <span id="keyGerada" style="color: #ffaa00; font-family: monospace; word-break: break-all;"></span>
+                    <button onclick="copiarKeyGerada()" style="margin-left: 10px;">📋</button>
+                </div>
+                
+                <h3 style="color: #fff;">KEYS CADASTRADAS</h3>
+                <div id="keysList" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL SENSIBILIDADE -->
     <div id="sensiModal" class="modal-sensi">
         <div class="modal-content">
-            <div class="modal-header">
-                <div style="display: flex; align-items: center;">
-                    <span class="back-modal" onclick="fecharSensiModal()">←</span>
-                    <h2>SENSIBILIDADE</h2>
-                </div>
-                <span class="close-modal" onclick="fecharSensiModal()">&times;</span>
+            <div class="modal-header" style="display: flex; justify-content: space-between;">
+                <h2 style="color: var(--sensi);">SENSIBILIDADE</h2>
+                <span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
             </div>
-            
-            <input type="text" class="search-box" placeholder="🔍 Pesquisar marca do celular..." id="searchBrand" onkeyup="filtrarMarcas()">
-            
-            <div class="brands-grid" id="brandsGrid">
-                <!-- Marcas serão inseridas aqui pelo JavaScript -->
-            </div>
-
             <div class="sensi-config">
-                <div class="sensi-title">CONFIGURAÇÕES</div>
-                
-                <div class="timer-container">
-                    <div class="timer-display" id="timerDisplay">10.0</div>
-                    <div class="timer-label">segundos para gerar</div>
-                </div>
-
-                <button class="btn-generate-sensi" id="btnGenerateSensi" onclick="iniciarTimerGeracao()">GERAR SENSI</button>
-
-                <div id="sensiValues" style="display: none;">
-                    <div class="sensi-row">
-                        <span>GERAL</span>
-                        <span id="sensi-geral">0</span>
-                    </div>
-                    <div class="sensi-row">
-                        <span>PONTO VERMELHO</span>
-                        <span id="sensi-reddot">0</span>
-                    </div>
-                    <div class="sensi-row">
-                        <span>MIRA 2X</span>
-                        <span id="sensi-2x">0</span>
-                    </div>
-                    <div class="sensi-row">
-                        <span>MIRA 4X</span>
-                        <span id="sensi-4x">0</span>
-                    </div>
-                    <div class="sensi-row">
-                        <span>MIRA AWM</span>
-                        <span id="sensi-awm">0</span>
-                    </div>
-                    <div class="sensi-row">
-                        <span>OLHADINHA</span>
-                        <span id="sensi-olhadinha">0</span>
-                    </div>
-                    <div class="dpi-value" id="dpiValue">
-                        DPI: 0
-                    </div>
-                    
-                    <button class="btn-apply-sensi" onclick="aplicarSensi()">APLICAR CONFIGURAÇÕES</button>
-                </div>
+                <div class="sensi-title">AJUSTE DE SENSIBILIDADE</div>
+                <div class="option-row">Sensibilidade Geral <input type="range" min="0" max="200" value="100" id="sensiGeral"></div>
+                <div class="option-row">Mira Red Dot <input type="range" min="0" max="200" value="100" id="sensiRedDot"></div>
+                <div class="option-row">Mira 2x <input type="range" min="0" max="200" value="100" id="sensi2x"></div>
+                <div class="option-row">Mira 4x <input type="range" min="0" max="200" value="100" id="sensi4x"></div>
+                <button class="btn-login" onclick="aplicarSensibilidade()" style="margin-top: 20px;">APLICAR</button>
             </div>
         </div>
     </div>
 
-    <!-- TELAS DE PROCESSO -->
+    <!-- PROCESSOS -->
     <div id="bypass-process" class="process-overlay">
-        <div style="color: var(--bypass); font-weight: bold; margin-bottom: 20px;">[ BYPASS SYSTEM ]</div>
+        <div style="color: var(--bypass);">[ BYPASS SYSTEM ]</div>
         <div id="bypass-logs" class="process-text"></div>
-        <div class="process-bar-container">
-            <div id="bypass-bar" class="process-fill fill-bypass"></div>
-        </div>
-        <div id="bypass-status" class="process-status">Inicializando...</div>
+        <div class="process-bar-container"><div id="bypass-bar" class="process-fill fill-bypass"></div></div>
+        <div id="bypass-status" class="process-status"></div>
     </div>
 
     <div id="inject-process" class="process-overlay">
-        <div style="color: var(--inject); font-weight: bold; margin-bottom: 20px;">[ INJECT ENGINE ]</div>
+        <div style="color: var(--inject);">[ INJECT ENGINE ]</div>
         <div id="inject-logs" class="process-text"></div>
-        <div class="process-bar-container">
-            <div id="inject-bar" class="process-fill fill-inject"></div>
-        </div>
-        <div id="inject-status" class="process-status">Inicializando...</div>
+        <div class="process-bar-container"><div id="inject-bar" class="process-fill fill-inject"></div></div>
+        <div id="inject-status" class="process-status"></div>
     </div>
 
     <script>
-    // Lista completa de marcas
-    const marcas = [
-        "Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", 
-        "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", 
-        "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", 
-        "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", 
-        "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo", 
-        "Multi", "Gradiente", "Micromax", "Lava", "Karbonn", "Xolo", "Reliance LYF", "Jio", 
-        "Intex", "Fairphone", "Wiko", "Archos", "MobiWire", "Gigaset", "Medion", "Philips", 
-        "Sharp", "Fujitsu", "Kyocera", "Panasonic", "HTC", "Acer", "Advan", "Polytron", 
-        "Evercoss", "VSmart", "Energizer", "Punkt", "Mudita", "Light Phone", "BQ", "Wileyfox", 
-        "General Mobile", "Casper", "Reeder", "Vestel", "Walton", "Symphony", "Icemobile"
-    ];
+    // ==================== BANCO DE DADOS DE KEYS ====================
+    let keysDatabase = {};
 
-    let marcaSelecionada = null;
-    let timerInterval = null;
-    let tempoRestante = 10;
-
-    function validarKey() {
-        const key = document.getElementById('keyInput').value;
-        const mainContainer = document.getElementById('main-container');
-        const panelStandard = document.getElementById('panel-standard');
-        const panelRage = document.getElementById('panel-rage');
-
-        if(key === "FAEL-VIP-2026") {
-            document.getElementById('login-screen').style.display = 'none';
-            mainContainer.style.display = 'block';
-            panelStandard.style.display = 'block';
-            panelRage.style.display = 'none';
-        } 
-        else if(key === "dono456") {
-            document.getElementById('login-screen').style.display = 'none';
-            mainContainer.style.display = 'block';
-            panelStandard.style.display = 'none';
-            panelRage.style.display = 'block';
-        } 
-        else {
-            alert("KEY INVÁLIDA!");
+    // Inicializar banco de dados
+    function inicializarDatabase() {
+        const saved = localStorage.getItem('fael_keys_db');
+        if (saved) {
+            keysDatabase = JSON.parse(saved);
+        } else {
+            // Keys padrão
+            keysDatabase = {
+                "FAEL-VIP-2026": {
+                    codigo: "FAEL-VIP-2026",
+                    tipo: "VIP",
+                    status: "ativa",
+                    usado: false,
+                    usadoPor: null,
+                    criadaEm: new Date().toISOString(),
+                    expiraEm: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                "dono456": {
+                    codigo: "dono456",
+                    tipo: "RAGE",
+                    status: "ativa",
+                    usado: false,
+                    usadoPor: null,
+                    criadaEm: new Date().toISOString(),
+                    expiraEm: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            };
+            salvarDatabase();
         }
+        atualizarListaKeysAdmin();
     }
 
+    function salvarDatabase() {
+        localStorage.setItem('fael_keys_db', JSON.stringify(keysDatabase));
+    }
+
+    // Gerar nova key
+    function gerarNovaKey(tipo) {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
+        
+        keysDatabase[codigo] = {
+            codigo: codigo,
+            tipo: tipo,
+            status: "ativa",
+            usado: false,
+            usadoPor: null,
+            criadaEm: new Date().toISOString(),
+            expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        };
+        
+        salvarDatabase();
+        
+        document.getElementById('keyGerada').textContent = codigo;
+        document.getElementById('novaKeyMsg').style.display = 'block';
+        atualizarListaKeysAdmin();
+        
+        setTimeout(() => {
+            document.getElementById('novaKeyMsg').style.display = 'none';
+        }, 5000);
+    }
+
+    // Validar key (login)
+    function validarKey() {
+        const key = document.getElementById('keyInput').value;
+        const msgDiv = document.getElementById('loginMsg');
+        
+        if (!key) {
+            msgDiv.textContent = 'Digite uma key!';
+            return;
+        }
+        
+        const keyData = keysDatabase[key];
+        
+        if (!keyData) {
+            msgDiv.textContent = '❌ KEY INVÁLIDA!';
+            return;
+        }
+        
+        if (keyData.status !== 'ativa') {
+            msgDiv.textContent = '❌ KEY DESATIVADA!';
+            return;
+        }
+        
+        if (keyData.usado) {
+            msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
+            return;
+        }
+        
+        if (new Date(keyData.expiraEm) < new Date()) {
+            msgDiv.textContent = '❌ KEY EXPIRADA!';
+            return;
+        }
+        
+        // Marcar key como usada
+        keyData.usado = true;
+        keyData.usadoPor = navigator.userAgent;
+        keyData.usadoEm = new Date().toISOString();
+        salvarDatabase();
+        
+        // Login
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-container').style.display = 'block';
+        
+        if (keyData.tipo === 'VIP') {
+            document.getElementById('panel-standard').style.display = 'block';
+            document.getElementById('panel-rage').style.display = 'none';
+        } else {
+            document.getElementById('panel-standard').style.display = 'none';
+            document.getElementById('panel-rage').style.display = 'block';
+        }
+        
+        msgDiv.textContent = '✓ LOGIN REALIZADO!';
+        msgDiv.style.color = '#00ff00';
+    }
+
+    // ==================== FUNÇÕES ADMIN ====================
+    function abrirAdminPanel() {
+        document.getElementById('adminPanel').style.display = 'block';
+    }
+    
+    function fecharAdminPanel() {
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'none';
+        document.getElementById('adminPass').value = '';
+    }
+    
+    function autenticarAdmin() {
+        const senha = document.getElementById('adminPass').value;
+        // Senha admin: admin123
+        if (senha === 'admin123') {
+            document.getElementById('adminContent').style.display = 'block';
+            atualizarListaKeysAdmin();
+        } else {
+            alert('Senha incorreta!');
+        }
+    }
+    
+    function atualizarListaKeysAdmin() {
+        const container = document.getElementById('keysList');
+        const keys = Object.values(keysDatabase);
+        
+        if (keys.length === 0) {
+            container.innerHTML = '<div style="color: #666;">Nenhuma key cadastrada</div>';
+            return;
+        }
+        
+        container.innerHTML = keys.map(key => `
+            <div class="key-card ${key.status === 'ativa' ? 'active' : 'inactive'}">
+                <div class="key-code">🔑 ${key.codigo}</div>
+                <div class="key-status">
+                    Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : '#ff4444'}">${key.tipo}</strong><br>
+                    Status: <span class="${key.status === 'ativa' ? 'status-active' : 'status-inactive'}">${key.status === 'ativa' ? '✅ ATIVA' : '⛔ DESATIVADA'}</span><br>
+                    Uso: ${key.usado ? '❌ JÁ USADA' : '✓ DISPONÍVEL'}<br>
+                    ${key.usado ? `Usado por: ${key.usadoPor?.substring(0, 50)}...<br>` : ''}
+                    Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
+                </div>
+                <div style="margin-top: 10px;">
+                    ${key.status === 'ativa' ? 
+                        `<button class="btn-admin-action btn-deactivate" onclick="desativarKey('${key.codigo}')">🔒 DESATIVAR</button>` :
+                        `<button class="btn-admin-action btn-activate" onclick="ativarKey('${key.codigo}')">🔓 ATIVAR</button>`
+                    }
+                    <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+                    ${!key.usado ? `<button class="btn-admin-action" style="color: #00ff00;" onclick="gerarLinkKey('${key.codigo}')">📋 COPIAR LINK</button>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function ativarKey(codigo) {
+        if (keysDatabase[codigo]) {
+            keysDatabase[codigo].status = 'ativa';
+            salvarDatabase();
+            atualizarListaKeysAdmin();
+            alert(`Key ${codigo} ativada com sucesso!`);
+        }
+    }
+    
+    function desativarKey(codigo) {
+        if (keysDatabase[codigo]) {
+            keysDatabase[codigo].status = 'desativada';
+            salvarDatabase();
+            atualizarListaKeysAdmin();
+            alert(`Key ${codigo} desativada!`);
+        }
+    }
+    
+    function excluirKey(codigo) {
+        if (confirm(`Tem certeza que deseja EXCLUIR a key ${codigo}?`)) {
+            delete keysDatabase[codigo];
+            salvarDatabase();
+            atualizarListaKeysAdmin();
+            alert('Key excluída!');
+        }
+    }
+    
+    function gerarLinkKey(codigo) {
+        const url = window.location.href.split('?')[0];
+        const link = `${url}?key=${codigo}`;
+        navigator.clipboard.writeText(link);
+        alert(`Link copiado!\n${link}\n\nEnvie para o usuário`);
+    }
+    
+    function copiarKeyGerada() {
+        const key = document.getElementById('keyGerada').textContent;
+        navigator.clipboard.writeText(key);
+        alert('Key copiada!');
+    }
+    
+    // Auto preencher key da URL
+    function autoPreencherKeyDaURL() {
+        const params = new URLSearchParams(window.location.search);
+        const key = params.get('key');
+        if (key && document.getElementById('keyInput')) {
+            document.getElementById('keyInput').value = key;
+        }
+    }
+    
+    // ==================== FUNÇÕES ORIGINAIS ====================
+    function puxarArma() {
+        const arma = document.getElementById('weaponName').value;
+        if (arma) {
+            alert(`🔫 Puxando arma: ${arma.toUpperCase()}\n\n(Simulação - Em um jogo real isso puxaria a arma)`);
+        } else {
+            alert('Digite o nome da arma!');
+        }
+    }
+    
+    function abrirSensiModal() {
+        document.getElementById('sensiModal').style.display = 'block';
+    }
+    
+    function fecharSensiModal() {
+        document.getElementById('sensiModal').style.display = 'none';
+    }
+    
+    function aplicarSensibilidade() {
+        const geral = document.getElementById('sensiGeral').value;
+        const reddot = document.getElementById('sensiRedDot').value;
+        const mira2x = document.getElementById('sensi2x').value;
+        const mira4x = document.getElementById('sensi4x').value;
+        
+        alert(`✅ Sensibilidade aplicada!\n\nGeral: ${geral}%\nRed Dot: ${reddot}%\nMira 2x: ${mira2x}%\nMira 4x: ${mira4x}%`);
+        fecharSensiModal();
+    }
+    
     function iniciarProcessoBypass() {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('bypass-process').style.display = 'block';
@@ -727,13 +765,7 @@
             if (i < totalFrases) {
                 const linha = document.createElement('div');
                 linha.textContent = frases[i];
-                linha.style.opacity = '0';
-                linha.style.transition = 'opacity 0.5s';
                 logsArea.appendChild(linha);
-                
-                setTimeout(() => {
-                    linha.style.opacity = '1';
-                }, 50);
                 
                 const progresso = ((i + 1) / totalFrases) * 100;
                 barra.style.width = progresso + '%';
@@ -751,9 +783,9 @@
                     document.getElementById('bypassBtn').textContent = '✓ BYPASS ATIVO';
                 }, 2000);
             }
-        }, 1000);
+        }, 800);
     }
-
+    
     function iniciarProcessoInject() {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('inject-process').style.display = 'block';
@@ -781,13 +813,7 @@
             if (i < totalFrases) {
                 const linha = document.createElement('div');
                 linha.textContent = frases[i];
-                linha.style.opacity = '0';
-                linha.style.transition = 'opacity 0.5s';
                 logsArea.appendChild(linha);
-                
-                setTimeout(() => {
-                    linha.style.opacity = '1';
-                }, 50);
                 
                 const progresso = ((i + 1) / totalFrases) * 100;
                 barra.style.width = progresso + '%';
@@ -805,123 +831,12 @@
                     document.getElementById('injectBtn').textContent = '✓ INJECT ATIVO';
                 }, 2000);
             }
-        }, 1000);
+        }, 800);
     }
-
-    function abrirSensiModal() {
-        document.getElementById('sensiModal').style.display = 'block';
-        carregarMarcas();
-        resetarTimer();
-        document.getElementById('sensiValues').style.display = 'none';
-    }
-
-    function fecharSensiModal() {
-        document.getElementById('sensiModal').style.display = 'none';
-        if (timerInterval) {
-            clearInterval(timerInterval);
-        }
-    }
-
-    function carregarMarcas() {
-        const grid = document.getElementById('brandsGrid');
-        grid.innerHTML = '';
-        marcas.sort().forEach(marca => {
-            const div = document.createElement('div');
-            div.className = 'brand-item';
-            div.textContent = marca;
-            div.onclick = () => selecionarMarca(marca, div);
-            grid.appendChild(div);
-        });
-    }
-
-    function filtrarMarcas() {
-        const search = document.getElementById('searchBrand').value.toLowerCase();
-        const items = document.querySelectorAll('.brand-item');
-        items.forEach(item => {
-            const marca = item.textContent.toLowerCase();
-            if (marca.includes(search)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
-
-    function selecionarMarca(marca, elemento) {
-        document.querySelectorAll('.brand-item').forEach(item => {
-            item.classList.remove('selected');
-        });
-        elemento.classList.add('selected');
-        marcaSelecionada = marca;
-    }
-
-    function resetarTimer() {
-        tempoRestante = 10;
-        document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
-        document.getElementById('btnGenerateSensi').disabled = false;
-        document.getElementById('btnGenerateSensi').textContent = 'GERAR SENSI';
-        document.getElementById('sensiValues').style.display = 'none';
-    }
-
-    function iniciarTimerGeracao() {
-        if (!marcaSelecionada) {
-            alert('Selecione uma marca de celular primeiro!');
-            return;
-        }
-
-        const btn = document.getElementById('btnGenerateSensi');
-        btn.disabled = true;
-        
-        timerInterval = setInterval(() => {
-            tempoRestante = Math.max(0, tempoRestante - 0.1);
-            document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1);
-            
-            if (tempoRestante <= 0) {
-                clearInterval(timerInterval);
-                gerarSensi();
-                document.getElementById('sensiValues').style.display = 'block';
-                btn.disabled = false;
-                btn.textContent = 'GERAR NOVAMENTE';
-                tempoRestante = 10;
-            }
-        }, 100);
-    }
-
-    function gerarSensi() {
-        const geral = Math.floor(Math.random() * 60) + 140;
-        const reddot = Math.floor(Math.random() * 60) + 140;
-        const mira2x = Math.floor(Math.random() * 60) + 140;
-        const mira4x = Math.floor(Math.random() * 60) + 140;
-        const miraAWM = Math.floor(Math.random() * 60) + 140;
-        const olhadinha = Math.floor(Math.random() * 60) + 140;
-        const dpi = Math.floor(Math.random() * 440) + 450;
-
-        document.getElementById('sensi-geral').textContent = geral;
-        document.getElementById('sensi-reddot').textContent = reddot;
-        document.getElementById('sensi-2x').textContent = mira2x;
-        document.getElementById('sensi-4x').textContent = mira4x;
-        document.getElementById('sensi-awm').textContent = miraAWM;
-        document.getElementById('sensi-olhadinha').textContent = olhadinha;
-        document.getElementById('dpiValue').textContent = `DPI: ${dpi}`;
-    }
-
-    function aplicarSensi() {
-        if (!marcaSelecionada) {
-            alert('Selecione uma marca de celular primeiro!');
-            return;
-        }
-
-        alert(`✅ Configurações aplicadas para ${marcaSelecionada}!\n\n` +
-              `Geral: ${document.getElementById('sensi-geral').textContent}\n` +
-              `Ponto Vermelho: ${document.getElementById('sensi-reddot').textContent}\n` +
-              `Mira 2x: ${document.getElementById('sensi-2x').textContent}\n` +
-              `Mira 4x: ${document.getElementById('sensi-4x').textContent}\n` +
-              `Mira AWM: ${document.getElementById('sensi-awm').textContent}\n` +
-              `Olhadinha: ${document.getElementById('sensi-olhadinha').textContent}\n` +
-              `${document.getElementById('dpiValue').textContent}`);
-        
-        fecharSensiModal();
-    }
+    
+    // Inicializar
+    inicializarDatabase();
+    autoPreencherKeyDaURL();
     </script>
 </body>
 </html>
