@@ -88,9 +88,7 @@
         }
 
         .main-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
@@ -105,31 +103,48 @@
             text-shadow: 0 0 10px var(--hacker);
         }
 
-        .sensi-header-btn {
-            background: transparent;
-            color: var(--sensi);
-            border: 2px solid var(--sensi);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.3s;
+        /* Abas */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: #111;
+            border-radius: 10px;
+            padding: 5px;
         }
 
-        .info-header-btn {
+        .tab-btn {
+            flex: 1;
             background: transparent;
-            color: var(--bypass);
-            border: 2px solid var(--bypass);
-            padding: 8px 15px;
-            border-radius: 20px;
+            border: none;
+            color: #888;
+            padding: 10px 5px;
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
-            text-transform: uppercase;
+            border-radius: 8px;
             transition: all 0.3s;
-            margin-right: 8px;
+            text-transform: uppercase;
+        }
+
+        .tab-btn.active {
+            background: var(--hacker);
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .category-title {
@@ -215,38 +230,6 @@
             color: #bbb;
             display: block;
             margin-top: 5px;
-        }
-
-        .modal-sensi {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .modal-content {
-            max-width: 400px;
-            margin: 0 auto;
-            background: #0a0a0a;
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid var(--sensi);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
         }
 
         .search-box {
@@ -377,52 +360,94 @@
             cursor: pointer;
         }
 
-        .modal-info {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
+        /* Info Card */
         .info-card {
-            background: #0a0a0a;
-            border-radius: 20px;
-            padding: 25px;
-            border: 2px solid var(--bypass);
-            text-align: center;
-        }
-
-        .info-field {
             background: #111;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            text-align: left;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
         }
 
-        .info-label {
-            color: #888;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .info-value {
+        .creator-name {
+            font-size: 24px;
             color: var(--hacker);
-            font-size: 16px;
             font-weight: bold;
-            word-break: break-all;
-            margin-top: 5px;
+            text-shadow: 0 0 10px var(--hacker);
+            margin-bottom: 10px;
         }
 
-        .key-code-display {
+        .creator-title {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .version-box {
+            background: #000;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .version-box span {
+            color: var(--bypass);
+            font-weight: bold;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover .social-icon {
+            background: var(--hacker);
+            box-shadow: 0 0 15px var(--hacker);
+        }
+
+        .social-link span {
+            font-size: 11px;
+            color: #888;
+        }
+
+        /* Key Card */
+        .key-card-info {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--bypass);
+        }
+
+        .key-display {
             background: #000;
             padding: 15px;
             border-radius: 10px;
@@ -430,8 +455,26 @@
             font-size: 14px;
             color: var(--bypass);
             word-break: break-all;
-            border: 1px solid var(--bypass);
             margin: 15px 0;
+            border: 1px solid var(--bypass);
+        }
+
+        .badge-infinito {
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
+        }
+        
+        .badge-permanente {
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
         }
 
         .admin-container {
@@ -489,10 +532,6 @@
             opacity: 0.7;
         }
 
-        .key-card.used {
-            border-left: 4px solid #ffaa00;
-        }
-
         .key-code {
             font-family: monospace;
             font-size: 12px;
@@ -512,7 +551,6 @@
 
         .btn-generate { color: #00ff00; border-color: #00ff00; }
         .btn-delete { color: #ff0000; border-color: #ff0000; }
-        .btn-reset { color: #ffaa00; border-color: #ffaa00; }
         .btn-refresh { color: #0066ff; border-color: #0066ff; }
         .btn-activate { color: #00ff00; border-color: #00ff00; }
         .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
@@ -638,24 +676,6 @@
             padding: 10px;
             border-radius: 8px;
         }
-        
-        .badge-infinito {
-            color: #00ff00;
-            background: rgba(0, 255, 0, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            display: inline-block;
-        }
-        
-        .badge-permanente {
-            color: #ffaa00;
-            background: rgba(255, 170, 0, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            display: inline-block;
-        }
     </style>
 </head>
 <body>
@@ -670,67 +690,69 @@
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
-            <div>
-                <button class="info-header-btn" onclick="abrirInfoModal()">ℹ️ INFO</button>
-                <button class="sensi-header-btn" onclick="abrirSensiModal()">🎯 SENSI</button>
-            </div>
         </div>
         
-        <div id="panel-standard">
-            <div class="category-title">Auxílio de Mira</div>
-            <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Previsão de Tiro <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Correção de Recuo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Ajuste de Sensibilidade Dinâmica <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Compensador Automático <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            
-            <div class="category-title">Otimização</div>
-            <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Redução de Lag <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-            <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <!-- Abas -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="auxilio">🎯 AUXÍLIO</button>
+            <button class="tab-btn" data-tab="sensi">⚙️ SENSI</button>
+            <button class="tab-btn" data-tab="key">🔑 KEY</button>
+            <button class="tab-btn" data-tab="info">ℹ️ INFO</button>
         </div>
 
-        <div id="panel-rage" style="display: none;">
-            <div class="main-title"><h1 style="color: var(--danger);">MOD MENU RAGE</h1></div>
-            <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="option-row">
-                <div><span>Deus (God Mode)</span><small style="display: block; font-size: 9px;">Não toma dano</small></div>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        <!-- Aba AUXÍLIO (Funções originais) -->
+        <div id="tab-auxilio" class="tab-content active">
+            <div id="panel-standard">
+                <div class="category-title">Auxílio de Mira</div>
+                <div class="option-row">Calibrar Sensibilidade <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="option-row">Suavizador de Eixo Y <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="option-row">Estabilizador de Mira <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Previsão de Tiro <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Correção de Recuo <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="option-row">Ajuste de Sensibilidade Dinâmica <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Compensador Automático <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                
+                <div class="category-title">Otimização</div>
+                <div class="option-row">Resposta Touch (360Hz) <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="option-row">Estabilizador de Ping <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Redução de Lag <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                <div class="option-row">Otimização de FPS <label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
             </div>
-            <div class="category-title">PUXAR ARMA</div>
-            <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                <input type="text" class="weapon-input" id="weaponName" placeholder="Digite o nome da arma...">
-                <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer; width: 100%;">PUXAR</button>
+
+            <div id="panel-rage" style="display: none;">
+                <div class="category-title" style="color: var(--danger);">Modo Rage</div>
+                <div class="option-row">Voar <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Invisível <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Aimbot 100% cabeça <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">Aimbot Legít <label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                <div class="option-row">
+                    <div><span>Deus (God Mode)</span><small style="display: block; font-size: 9px;">Não toma dano</small></div>
+                    <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                </div>
+                <div class="category-title">PUXAR ARMA</div>
+                <div style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <input type="text" class="weapon-input" id="weaponName" placeholder="Digite o nome da arma...">
+                    <button onclick="puxarArma()" style="margin-top: 10px; background: var(--danger); border: none; padding: 8px; border-radius: 5px; color: #fff; cursor: pointer; width: 100%;">PUXAR</button>
+                </div>
+                <div class="category-title" style="color: var(--danger);">MAIS RAGE</div>
+                <div class="option-row option-row-rage">
+                    <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Matar no avião ⚠️</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <span class="rage-desc">ativa quando estiver no avião</span>
+                </div>
+                <div class="option-row option-row-rage">
+                    <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Aimkill</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <span class="rage-desc">matar todos do mapa</span>
+                </div>
             </div>
-            <div class="category-title" style="color: var(--danger);">MAIS RAGE</div>
-            <div class="option-row option-row-rage">
-                <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Matar no avião ⚠️</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-                <span class="rage-desc">ativa quando estiver no avião</span>
-            </div>
-            <div class="option-row option-row-rage">
-                <div style="display: flex; justify-content: space-between; width: 100%;"><span style="color: var(--danger);">Aimkill</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-                <span class="rage-desc">matar todos do mapa</span>
+
+            <div class="process-box">
+                <button class="btn-process btn-bypass" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
+                <button class="btn-process btn-inject-custom" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
             </div>
         </div>
 
-        <div class="process-box">
-            <button class="btn-process btn-bypass" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
-            <button class="btn-process btn-inject-custom" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
-        </div>
-    </div>
-
-    <div id="sensiModal" class="modal-sensi">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 style="color: var(--sensi);">SENSIBILIDADE</h2>
-                <span onclick="fecharSensiModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
-            </div>
+        <!-- Aba SENSI -->
+        <div id="tab-sensi" class="tab-content">
             <input type="text" class="search-box" placeholder="🔍 Pesquisar marca do celular..." id="searchBrand" onkeyup="filtrarMarcas()">
             <div class="brands-grid" id="brandsGrid"></div>
             <div class="sensi-config">
@@ -752,34 +774,39 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="infoModal" class="modal-info">
-        <div class="modal-content" style="border-color: var(--bypass);">
-            <div class="modal-header">
-                <h2 style="color: var(--bypass);">ℹ️ INFORMAÇÕES DA KEY</h2>
-                <span onclick="fecharInfoModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
+        <!-- Aba KEY -->
+        <div id="tab-key" class="tab-content">
+            <div class="key-card-info">
+                <div class="category-title" style="text-align: center;">🔑 INFORMAÇÕES DA KEY</div>
+                <div class="key-display" id="keyDisplayCode">---</div>
+                <div class="sensi-row"><span>TIPO DE ACESSO</span><span id="keyDisplayTipo">---</span></div>
+                <div class="sensi-row"><span>📱 LIMITE DE DISPOSITIVOS</span><span><span class="badge-infinito">∞ ILIMITADO</span></span></div>
+                <div class="sensi-row"><span>⏰ VALIDADE</span><span><span class="badge-permanente">♾️ PERMANENTE</span></span></div>
+                <div class="sensi-row"><span>📱 DISPOSITIVO ATUAL</span><span id="keyDisplayDispositivo">---</span></div>
             </div>
+        </div>
+
+        <!-- Aba INFO -->
+        <div id="tab-info" class="tab-content">
             <div class="info-card">
-                <div class="info-field">
-                    <div class="info-label">🔑 KEY UTILIZADA</div>
-                    <div class="key-code-display" id="infoKeyCode">---</div>
+                <div class="creator-name">FAELZIN</div>
+                <div class="creator-title">⭐ CRIADOR DO FAEL ASSIST ⭐</div>
+                <div class="version-box">
+                    <span>📌 VERSÃO: 3.0.0</span><br>
+                    <span>🛠️ ÚLTIMA ATUALIZAÇÃO: MARÇO 2026</span><br>
+                    <span>💡 SUPORTE A: FREE FIRE | COD | PUBG</span><br>
+                    <span>⚡ SISTEMA: BYPASS + INJECT ENGINE</span>
                 </div>
-                <div class="info-field">
-                    <div class="info-label">📌 TIPO DE ACESSO</div>
-                    <div class="info-value" id="infoTipo">---</div>
-                </div>
-                <div class="info-field">
-                    <div class="info-label">📱 LIMITE DE DISPOSITIVOS</div>
-                    <div class="info-value"><span class="badge-infinito">∞ ILIMITADO</span></div>
-                </div>
-                <div class="info-field">
-                    <div class="info-label">⏰ VALIDADE</div>
-                    <div class="info-value"><span class="badge-permanente">♾️ PERMANENTE</span></div>
-                </div>
-                <div class="info-field">
-                    <div class="info-label">📱 DISPOSITIVO ATUAL</div>
-                    <div class="info-value" id="infoDispositivo">---</div>
+                <div class="social-links">
+                    <a href="https://www.tiktok.com/@faelzin_store1?_r=1&_t=ZS-94byOggEocS" target="_blank" class="social-link">
+                        <div class="social-icon">🎵</div>
+                        <span>TikTok</span>
+                    </a>
+                    <a href="https://discord.gg/JRXcBWCvhG" target="_blank" class="social-link">
+                        <div class="social-icon">💬</div>
+                        <span>Discord</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -795,7 +822,6 @@
                 <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
             
-            <!-- GERAR KEY PERSONALIZADA -->
             <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                 <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY PERSONALIZADA</h3>
                 <div class="custom-key-input">
@@ -859,6 +885,27 @@
     let filtroAtual = '';
     let keyAtual = null;
     let keyDataAtual = null;
+
+    // Controle de abas
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            
+            // Se for a aba KEY, atualizar as informações
+            if (btn.dataset.tab === 'key' && keyAtual && keyDataAtual) {
+                atualizarAbaKey();
+            }
+        });
+    });
+
+    function atualizarAbaKey() {
+        document.getElementById('keyDisplayCode').textContent = keyAtual;
+        document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+        document.getElementById('keyDisplayDispositivo').textContent = navigator.userAgent.substring(0, 50) + '...';
+    }
 
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -954,13 +1001,10 @@
             return;
         }
         
-        // SEM LIMITE DE DISPOSITIVOS - INFINITO
-        // Apenas registra o dispositivo para histórico, mas não bloqueia
-        
         keyAtual = key;
         keyDataAtual = keyData;
         
-        // Registrar dispositivo apenas para histórico (não bloqueia)
+        // Registrar dispositivo (apenas para histórico)
         const dispositivoId = navigator.userAgent + "|" + screen.width + "x" + screen.height;
         if (keyData.tipo !== 'ADMIN') {
             if (!keyData.dispositivosUsados) keyData.dispositivosUsados = [];
@@ -982,6 +1026,7 @@
             document.getElementById('main-container').style.display = 'block';
             document.getElementById('admin-container').style.display = 'none';
             
+            // Mostrar painel correto baseado no tipo
             if (keyData.tipo === 'VIP') {
                 document.getElementById('panel-standard').style.display = 'block';
                 document.getElementById('panel-rage').style.display = 'none';
@@ -989,6 +1034,9 @@
                 document.getElementById('panel-standard').style.display = 'none';
                 document.getElementById('panel-rage').style.display = 'block';
             }
+            
+            // Atualizar aba KEY com as informações
+            atualizarAbaKey();
         }
         
         btn.disabled = false;
@@ -1031,7 +1079,6 @@
             let statusClass = '';
             if (key.status === 'ativa') statusClass = 'active';
             else statusClass = 'inactive';
-            if (dispositivosUsados > 0 && key.tipo !== 'ADMIN') statusClass = 'used';
             
             return `
                 <div class="key-card ${statusClass}">
@@ -1039,9 +1086,8 @@
                     <div style="font-size: 11px; margin-top: 5px;">
                         Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong><br>
                         Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}<br>
-                        📱 Dispositivos: <span class="badge-infinito">∞ Ilimitado</span><br>
                         📱 Usado em: ${dispositivosUsados} dispositivo(s)<br>
-                        ⏰ Validade: <span class="badge-permanente">♾️ Permanente</span>
+                        ⏰ Validade: ♾️ Permanente
                     </div>
                     ${key.tipo !== 'ADMIN' ? `
                         <div style="margin-top: 8px;">
@@ -1147,24 +1193,6 @@
         renderizarKeysList();
     }
 
-    // ========== FUNÇÕES INFO ==========
-    function abrirInfoModal() {
-        if (!keyAtual || !keyDataAtual) {
-            showToast('Nenhuma key ativa no momento', true);
-            return;
-        }
-        
-        document.getElementById('infoKeyCode').textContent = keyAtual;
-        document.getElementById('infoTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
-        document.getElementById('infoDispositivo').textContent = navigator.userAgent;
-        
-        document.getElementById('infoModal').style.display = 'block';
-    }
-    
-    function fecharInfoModal() {
-        document.getElementById('infoModal').style.display = 'none';
-    }
-
     // ========== FUNÇÕES SENSIBILIDADE ==========
     function carregarMarcas() {
         const grid = document.getElementById('brandsGrid');
@@ -1247,21 +1275,8 @@
             return;
         }
         showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`);
-        fecharSensiModal();
     }
     
-    function abrirSensiModal() {
-        document.getElementById('sensiModal').style.display = 'block';
-        carregarMarcas();
-        resetarTimer();
-        document.getElementById('sensiValues').style.display = 'none';
-    }
-    
-    function fecharSensiModal() {
-        document.getElementById('sensiModal').style.display = 'none';
-        if (timerInterval) clearInterval(timerInterval);
-    }
-
     // ========== FUNÇÕES ORIGINAIS ==========
     function puxarArma() {
         const arma = document.getElementById('weaponName').value;
