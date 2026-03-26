@@ -490,6 +490,46 @@
             color: #888;
         }
 
+        /* Modal Nome */
+        .modal-nome {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-nome-content {
+            width: 280px;
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid var(--hacker);
+        }
+
+        .modal-nome-content h3 {
+            color: var(--hacker);
+            margin-bottom: 15px;
+        }
+
+        .modal-nome-content input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            background: #000;
+            border: 1px solid var(--hacker);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+        }
+
         /* Admin Panel */
         .admin-container {
             width: 90%;
@@ -701,6 +741,16 @@
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
+    <!-- Modal para colocar o nome -->
+    <div id="modalNome" class="modal-nome">
+        <div class="modal-nome-content">
+            <h3>👤 SEU NOME</h3>
+            <p style="font-size: 12px; color: #888;">Digite seu nome para continuar</p>
+            <input type="text" id="nomeUsuario" placeholder="Ex: João, Maria, Faelzin..." maxlength="30">
+            <button class="btn-login" onclick="salvarNomeUsuario()">CONTINUAR</button>
+        </div>
+    </div>
+
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
@@ -794,7 +844,8 @@
             <div class="key-card-info">
                 <div class="category-title" style="text-align: center;">🔑 INFORMAÇÕES DA KEY</div>
                 <div class="key-display" id="keyDisplayCode">---</div>
-                <div class="sensi-row"><span>TIPO DE ACESSO</span><span id="keyDisplayTipo">---</span></div>
+                <div class="sensi-row"><span>👤 NOME DO USUÁRIO</span><span id="keyDisplayNome">---</span></div>
+                <div class="sensi-row"><span>📌 TIPO DE ACESSO</span><span id="keyDisplayTipo">---</span></div>
                 <div class="sensi-row"><span>📱 LIMITE DE DISPOSITIVOS</span><span><span class="badge-infinito">∞ ILIMITADO</span></span></div>
                 <div class="sensi-row"><span>⏰ VALIDADE</span><span><span class="badge-permanente">♾️ PERMANENTE</span></span></div>
                 <div class="sensi-row"><span>📱 DISPOSITIVO ATUAL</span><span id="keyDisplayDispositivo">---</span></div>
@@ -803,50 +854,22 @@
 
         <!-- Aba INFO -->
         <div id="tab-info" class="tab-content">
-            <!-- Seção AUXÍLIO -->
             <div class="info-section">
                 <div class="info-section-title">🎯 AUXÍLIO</div>
-                <div class="info-item">
-                    <span class="info-label">Versão</span>
-                    <span class="info-value">3.0.0</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Última atualização</span>
-                    <span class="info-value">26/03/2026 - 14:30</span>
-                </div>
+                <div class="info-item"><span class="info-label">Versão</span><span class="info-value">3.0.0</span></div>
+                <div class="info-item"><span class="info-label">Última atualização</span><span class="info-value">26/03/2026 - 14:30</span></div>
             </div>
-
-            <!-- Seção SUPORTE -->
             <div class="info-section">
                 <div class="info-section-title">🎮 SUPORTE</div>
-                <div class="info-item">
-                    <span class="info-label">Jogos compatíveis</span>
-                    <span class="info-value">Free Fire | COD Mobile | PUBG</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Plataformas</span>
-                    <span class="info-value">Android | iOS</span>
-                </div>
+                <div class="info-item"><span class="info-label">Jogos compatíveis</span><span class="info-value">Free Fire | COD Mobile | PUBG</span></div>
+                <div class="info-item"><span class="info-label">Plataformas</span><span class="info-value">Android | iOS</span></div>
             </div>
-
-            <!-- Seção SISTEMA -->
             <div class="info-section">
                 <div class="info-section-title">⚙️ SISTEMA</div>
-                <div class="info-item">
-                    <span class="info-label">Bypass System</span>
-                    <span class="info-value">✓ Ativo</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Inject Engine</span>
-                    <span class="info-value">✓ Ativo</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Anti-Detecção</span>
-                    <span class="info-value">Nível 3</span>
-                </div>
+                <div class="info-item"><span class="info-label">Bypass System</span><span class="info-value">✓ Ativo</span></div>
+                <div class="info-item"><span class="info-label">Inject Engine</span><span class="info-value">✓ Ativo</span></div>
+                <div class="info-item"><span class="info-label">Anti-Detecção</span><span class="info-value">Nível 3</span></div>
             </div>
-
-            <!-- Seção REDES SOCIAIS -->
             <div class="info-section">
                 <div class="info-section-title">📱 REDES SOCIAIS</div>
                 <div class="social-links">
@@ -939,6 +962,9 @@
     let processoAtivo = false;
     let bypassAtivado = false;
     let injectAtivado = false;
+    let nomePendente = null;
+    let keyPendente = null;
+    let keyDataPendente = null;
 
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -949,7 +975,6 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // ========== DETECTAR DISPOSITIVO SIMPLES ==========
     function detectarDispositivo() {
         const ua = navigator.userAgent;
         if (/iPhone/.test(ua)) return '📱 iPhone';
@@ -1046,13 +1071,57 @@
         keyAtual = key;
         keyDataAtual = keyData;
         
+        // VERIFICAR SE JÁ TEM NOME SALVO
+        if (!keyData.nome) {
+            // Se não tem nome, mostra modal para digitar
+            nomePendente = null;
+            keyPendente = key;
+            keyDataPendente = keyData;
+            document.getElementById('modalNome').style.display = 'flex';
+            document.getElementById('nomeUsuario').value = '';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
+        
+        // Se já tem nome, prossegue normalmente
+        finalizarLogin(key, keyData);
+        
+        btn.disabled = false;
+        btn.innerHTML = 'LOGAR';
+    }
+    
+    async function salvarNomeUsuario() {
+        const nome = document.getElementById('nomeUsuario').value.trim();
+        
+        if (!nome) {
+            showToast('❌ Digite seu nome!', true);
+            return;
+        }
+        
+        if (nome.length > 30) {
+            showToast('❌ Nome muito longo! Máximo 30 caracteres.', true);
+            return;
+        }
+        
+        // Salvar nome na key
+        if (keyPendente && keyDataPendente) {
+            keyDataPendente.nome = nome;
+            await salvarKeys();
+            
+            document.getElementById('modalNome').style.display = 'none';
+            finalizarLogin(keyPendente, keyDataPendente);
+        }
+    }
+    
+    function finalizarLogin(key, keyData) {
         // Registrar dispositivo
         const dispositivoId = detectarDispositivo();
         if (keyData.tipo !== 'ADMIN') {
             if (!keyData.dispositivosUsados) keyData.dispositivosUsados = [];
             if (!keyData.dispositivosUsados.includes(dispositivoId)) {
                 keyData.dispositivosUsados.push(dispositivoId);
-                await salvarKeys();
+                salvarKeys();
             }
         }
         
@@ -1061,7 +1130,7 @@
         if (keyData.tipo === 'ADMIN') {
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('admin-container').style.display = 'block';
-            await carregarKeys();
+            carregarKeys();
             atualizarStats();
             renderizarKeysList();
         } else {
@@ -1077,14 +1146,11 @@
             }
             
             // Atualizar aba KEY
-            document.getElementById('keyDisplayCode').textContent = keyAtual;
+            document.getElementById('keyDisplayCode').textContent = key;
+            document.getElementById('keyDisplayNome').textContent = keyData.nome || 'Não definido';
             document.getElementById('keyDisplayTipo').textContent = keyData.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
             document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
         }
-        
-        btn.disabled = false;
-        btn.innerHTML = 'LOGAR';
-        msgDiv.textContent = '';
     }
     
     function voltarParaLogin() {
@@ -1100,15 +1166,20 @@
     // ========== FUNÇÕES ADMIN ==========
     function atualizarStats() {
         const keys = Object.values(keysDatabase);
-        document.getElementById('totalKeys').textContent = keys.length;
-        document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
-        document.getElementById('usedKeys').textContent = keys.filter(k => (k.dispositivosUsados?.length || 0) > 0 && k.tipo !== 'ADMIN').length;
-        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && k.tipo !== 'ADMIN').length;
+        const keysFiltradas = keys.filter(k => k.codigo !== "dono456");
+        document.getElementById('totalKeys').textContent = keysFiltradas.length;
+        document.getElementById('activeKeys').textContent = keysFiltradas.filter(k => k.status === 'ativa').length;
+        document.getElementById('usedKeys').textContent = keysFiltradas.filter(k => (k.dispositivosUsados?.length || 0) > 0).length;
+        document.getElementById('availableKeys').textContent = keysFiltradas.filter(k => k.status === 'ativa').length;
     }
 
     function renderizarKeysList() {
         const container = document.getElementById('keysList');
         let keys = Object.values(keysDatabase);
+        
+        // FILTRAR PARA REMOVER A KEY "dono456" DA LISTA
+        keys = keys.filter(key => key.codigo !== "dono456");
+        
         if (filtroAtual) keys = keys.filter(k => k.codigo.toLowerCase().includes(filtroAtual.toLowerCase()));
         
         if (keys.length === 0) {
@@ -1118,27 +1189,27 @@
         
         container.innerHTML = keys.map(key => {
             const dispositivosUsados = key.dispositivosUsados?.length || 0;
+            const nomeUsuario = key.nome || 'Não definido';
             let statusClass = key.status === 'ativa' ? 'active' : 'inactive';
             
             return `
                 <div class="key-card ${statusClass}">
                     <div class="key-code">🔑 ${key.codigo}</div>
                     <div style="font-size: 11px; margin-top: 5px;">
-                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong><br>
+                        👤 Nome: <strong style="color: #ffaa00;">${nomeUsuario}</strong><br>
+                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : '#ff4444'}">${key.tipo}</strong><br>
                         Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}<br>
                         📱 Usado em: ${dispositivosUsados} dispositivo(s)<br>
                         ⏰ Validade: ♾️ Permanente
                     </div>
-                    ${key.tipo !== 'ADMIN' ? `
-                        <div style="margin-top: 8px;">
-                            ${key.status === 'ativa' ? 
-                                `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` :
-                                `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>`
-                            }
-                            <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
-                            <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
-                        </div>
-                    ` : '<div style="margin-top: 8px; color: #ffaa00;">⚡ KEY MASTER ADMIN</div>'}
+                    <div style="margin-top: 8px;">
+                        ${key.status === 'ativa' ? 
+                            `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` :
+                            `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>`
+                        }
+                        <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
+                        <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -1153,6 +1224,7 @@
             tipo: tipo,
             status: "ativa",
             dispositivosUsados: [],
+            nome: null,
             criadaEm: new Date().toISOString()
         };
         
@@ -1161,7 +1233,7 @@
             await carregarKeys();
             atualizarStats();
             renderizarKeysList();
-            alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
+            alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)\n👤 O usuário vai escolher o nome ao ativar.`);
         }
     }
     
@@ -1188,6 +1260,7 @@
             tipo: tipo,
             status: "ativa",
             dispositivosUsados: [],
+            nome: null,
             criadaEm: new Date().toISOString()
         };
         
@@ -1196,7 +1269,7 @@
             await carregarKeys();
             atualizarStats();
             renderizarKeysList();
-            alert(`✅ KEY PERSONALIZADA GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
+            alert(`✅ KEY PERSONALIZADA GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)\n👤 O usuário vai escolher o nome ao ativar.`);
             document.getElementById('customKeySuffix').value = '';
         }
     }
@@ -1233,7 +1306,7 @@
         renderizarKeysList();
     }
 
-    // ========== PROCESSOS COM BLOQUEIO E MUDANÇA DE BOTÃO ==========
+    // ========== PROCESSOS ==========
     function iniciarProcessoBypass() {
         if (bypassAtivado) {
             showToast('⏳ Bypass já foi ativado!', true);
@@ -1455,6 +1528,7 @@
             
             if (btn.dataset.tab === 'key' && keyAtual && keyDataAtual) {
                 document.getElementById('keyDisplayCode').textContent = keyAtual;
+                document.getElementById('keyDisplayNome').textContent = keyDataAtual.nome || 'Não definido';
                 document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
                 document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
             }
