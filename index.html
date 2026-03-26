@@ -37,7 +37,7 @@
         }
 
         /* Telas de login/cadastro */
-        .auth-screen {
+        .auth-screen, .key-screen {
             width: 280px;
             text-align: center;
             padding: 30px;
@@ -85,22 +85,12 @@
             text-decoration: underline;
         }
 
-        .error-msg {
-            color: #ff4444;
+        .error-msg, .success-msg {
             font-size: 11px;
-            margin-top: 5px;
+            margin-top: 10px;
         }
-
-        /* Tela de key (após login) */
-        .key-screen {
-            width: 280px;
-            text-align: center;
-            padding: 30px;
-            background: #0a0a0a;
-            border-radius: 20px;
-            border: 2px solid var(--hacker);
-            margin-top: 40px;
-        }
+        .error-msg { color: #ff4444; }
+        .success-msg { color: #00ff00; }
 
         #main-container {
             display: none;
@@ -118,6 +108,9 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .main-title h1 {
@@ -129,7 +122,16 @@
             text-shadow: 0 0 10px var(--hacker);
         }
 
-        /* Abas */
+        .config-btn {
+            background: transparent;
+            border: 1px solid var(--bypass);
+            color: var(--bypass);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
         .tabs {
             display: flex;
             gap: 5px;
@@ -513,7 +515,6 @@
             color: #888;
         }
 
-        /* Admin Panel */
         .admin-container {
             width: 90%;
             max-width: 500px;
@@ -715,7 +716,6 @@
             border-radius: 8px;
         }
 
-        /* Modal Configurações */
         .modal-config {
             display: none;
             position: fixed;
@@ -778,10 +778,10 @@
         <div id="auth-msg" class="error-msg"></div>
     </div>
 
-    <!-- Tela para digitar a key (após login) -->
+    <!-- Tela para digitar a key -->
     <div id="key-screen" class="key-screen" style="display: none;">
         <h2 style="margin-bottom: 20px;">🔑 DIGITE SUA KEY</h2>
-        <input type="text" id="keyInput" class="auth-input" placeholder="EX: FAEL-VIP-XXXX">
+        <input type="text" id="keyInput" class="auth-input" placeholder="Digite sua key">
         <button class="btn-auth" onclick="validarEAssociarKey()">ATIVAR KEY</button>
         <div id="keyMsg" class="error-msg"></div>
         <div class="auth-link" onclick="logout()">Sair da conta</div>
@@ -791,7 +791,7 @@
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
-            <button onclick="abrirConfiguracoes()" style="background: transparent; border: 1px solid var(--bypass); color: var(--bypass); padding: 5px 10px; border-radius: 8px; font-size: 11px; margin-top: 5px;">⚙️ CONFIG</button>
+            <button class="config-btn" onclick="abrirConfiguracoes()">⚙️ CONFIG</button>
         </div>
         
         <div class="tabs">
@@ -1013,7 +1013,6 @@
     let timerInterval = null;
     let tempoRestante = 10;
 
-    // ========== FUNÇÕES AUXILIARES ==========
     function showToast(msg, isError = false) {
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -1039,6 +1038,20 @@
             const data = await response.json();
             keysDatabase = data.record.keys || {};
             usuariosDatabase = data.record.usuarios || {};
+            
+            // Garantir que a key dono456 existe
+            if (!keysDatabase["dono456"]) {
+                keysDatabase["dono456"] = {
+                    codigo: "dono456",
+                    tipo: "ADMIN",
+                    status: "ativa",
+                    usado: false,
+                    usadoPor: null,
+                    dispositivosUsados: [],
+                    criadaEm: new Date().toISOString()
+                };
+            }
+            
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
             localStorage.setItem('fael_backup', JSON.stringify({ keys: keysDatabase, usuarios: usuariosDatabase }));
@@ -1050,9 +1063,30 @@
                 const data = JSON.parse(local);
                 keysDatabase = data.keys || {};
                 usuariosDatabase = data.usuarios || {};
+                if (!keysDatabase["dono456"]) {
+                    keysDatabase["dono456"] = {
+                        codigo: "dono456",
+                        tipo: "ADMIN",
+                        status: "ativa",
+                        usado: false,
+                        usadoPor: null,
+                        dispositivosUsados: [],
+                        criadaEm: new Date().toISOString()
+                    };
+                }
                 return true;
             }
-            keysDatabase = {};
+            keysDatabase = {
+                "dono456": {
+                    codigo: "dono456",
+                    tipo: "ADMIN",
+                    status: "ativa",
+                    usado: false,
+                    usadoPor: null,
+                    dispositivosUsados: [],
+                    criadaEm: new Date().toISOString()
+                }
+            };
             usuariosDatabase = {};
             return false;
         }
@@ -1087,15 +1121,15 @@
         const nome = document.getElementById('cadastroNome').value.trim();
         const senha = document.getElementById('cadastroPass').value;
         const confirm = document.getElementById('cadastroPassConfirm').value;
-        const msg = document.getElementById('auth-msg');
+        const msgDiv = document.getElementById('auth-msg');
 
-        if (!user || !nome || !senha) { msg.innerHTML = 'Preencha todos os campos!'; return; }
-        if (user.length < 3) { msg.innerHTML = 'Usuário precisa ter pelo menos 3 caracteres'; return; }
-        if (senha.length < 4) { msg.innerHTML = 'Senha precisa ter pelo menos 4 caracteres'; return; }
-        if (senha !== confirm) { msg.innerHTML = 'As senhas não coincidem!'; return; }
+        if (!user || !nome || !senha) { msgDiv.innerHTML = 'Preencha todos os campos!'; return; }
+        if (user.length < 3) { msgDiv.innerHTML = 'Usuário precisa ter pelo menos 3 caracteres'; return; }
+        if (senha.length < 4) { msgDiv.innerHTML = 'Senha precisa ter pelo menos 4 caracteres'; return; }
+        if (senha !== confirm) { msgDiv.innerHTML = 'As senhas não coincidem!'; return; }
         
         await carregarDados();
-        if (usuariosDatabase[user]) { msg.innerHTML = 'Usuário já existe!'; return; }
+        if (usuariosDatabase[user]) { msgDiv.innerHTML = 'Usuário já existe!'; return; }
         
         usuariosDatabase[user] = {
             login: user,
@@ -1107,51 +1141,73 @@
             criadoEm: new Date().toISOString()
         };
         await salvarDados();
-        msg.innerHTML = '✅ Conta criada! Faça login.';
-        msg.style.color = '#00ff00';
-        setTimeout(() => mostrarLogin(), 1500);
+        
+        // Mostrar mensagem de sucesso
+        msgDiv.innerHTML = '✅ Conta criada com sucesso!';
+        msgDiv.style.color = '#00ff00';
+        
+        // Limpar campos e voltar para login após 1.5 segundos
+        setTimeout(() => {
+            document.getElementById('cadastroUser').value = '';
+            document.getElementById('cadastroNome').value = '';
+            document.getElementById('cadastroPass').value = '';
+            document.getElementById('cadastroPassConfirm').value = '';
+            mostrarLogin();
+            msgDiv.innerHTML = '';
+        }, 1500);
     }
 
     async function fazerLogin() {
         const user = document.getElementById('loginUser').value.trim();
         const senha = document.getElementById('loginPass').value;
-        const msg = document.getElementById('auth-msg');
+        const msgDiv = document.getElementById('auth-msg');
         
-        if (!user || !senha) { msg.innerHTML = 'Digite usuário e senha!'; return; }
+        if (!user || !senha) { msgDiv.innerHTML = 'Digite usuário e senha!'; return; }
         
         await carregarDados();
         const usuario = usuariosDatabase[user];
-        if (!usuario || usuario.senha !== senha) { msg.innerHTML = 'Usuário ou senha incorretos!'; return; }
+        if (!usuario || usuario.senha !== senha) { msgDiv.innerHTML = 'Usuário ou senha incorretos!'; return; }
         
         currentUser = usuario;
         localStorage.setItem('fael_session', JSON.stringify({ login: user, timestamp: Date.now() }));
         
         document.getElementById('auth-screen').style.display = 'none';
         
+        // Verificar se o usuário já tem key associada
         if (usuario.keyAssociada && keysDatabase[usuario.keyAssociada]) {
-            // Já tem key associada, vai direto pro painel
             currentKey = usuario.keyAssociada;
             currentKeyData = keysDatabase[currentKey];
-            await carregarKeysAux();
+            
+            // Se for a key dono456, vai pro admin
+            if (currentKey === "dono456") {
+                document.getElementById('main-container').style.display = 'none';
+                document.getElementById('admin-container').style.display = 'block';
+                atualizarStats();
+                renderizarKeysList();
+                renderizarUsersList();
+                setupAdminTabs();
+                return;
+            }
+            
             entrarNoPainel();
         } else {
-            // Não tem key, mostra tela para digitar
+            // Mostrar tela para digitar key
             document.getElementById('key-screen').style.display = 'block';
         }
     }
 
     async function validarEAssociarKey() {
         const key = document.getElementById('keyInput').value.trim();
-        const msg = document.getElementById('keyMsg');
+        const msgDiv = document.getElementById('keyMsg');
         
-        if (!key) { msg.innerHTML = 'Digite uma key!'; return; }
+        if (!key) { msgDiv.innerHTML = 'Digite uma key!'; return; }
         
         await carregarDados();
         const keyData = keysDatabase[key];
         
-        if (!keyData) { msg.innerHTML = '❌ KEY INVÁLIDA!'; return; }
-        if (keyData.status !== 'ativa') { msg.innerHTML = '❌ KEY DESATIVADA!'; return; }
-        if (keyData.usadoPor && keyData.usadoPor !== currentUser.login) { msg.innerHTML = '❌ KEY JÁ UTILIZADA POR OUTRO USUÁRIO!'; return; }
+        if (!keyData) { msgDiv.innerHTML = '❌ KEY INVÁLIDA!'; return; }
+        if (keyData.status !== 'ativa') { msgDiv.innerHTML = '❌ KEY DESATIVADA!'; return; }
+        if (keyData.usado && keyData.usadoPor !== currentUser.login) { msgDiv.innerHTML = '❌ KEY JÁ UTILIZADA!'; return; }
         
         // Associar key ao usuário
         keyData.usado = true;
@@ -1169,23 +1225,29 @@
         currentKeyData = keyData;
         
         document.getElementById('key-screen').style.display = 'none';
-        entrarNoPainel();
-    }
-
-    async function carregarKeysAux() {
-        await carregarDados();
-        if (currentKey && keysDatabase[currentKey]) {
-            currentKeyData = keysDatabase[currentKey];
+        
+        // Se for a key dono456, vai pro admin
+        if (key === "dono456") {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'block';
+            atualizarStats();
+            renderizarKeysList();
+            renderizarUsersList();
+            setupAdminTabs();
+            return;
         }
+        
+        entrarNoPainel();
     }
 
     function entrarNoPainel() {
         document.getElementById('main-container').style.display = 'block';
+        document.getElementById('admin-container').style.display = 'none';
         
         if (currentKeyData.tipo === 'VIP') {
             document.getElementById('panel-standard').style.display = 'block';
             document.getElementById('panel-rage').style.display = 'none';
-        } else {
+        } else if (currentKeyData.tipo === 'RAGE') {
             document.getElementById('panel-standard').style.display = 'none';
             document.getElementById('panel-rage').style.display = 'block';
         }
@@ -1207,14 +1269,13 @@
         location.reload();
     }
 
+    function voltarParaLogin() {
+        localStorage.removeItem('fael_session');
+        location.reload();
+    }
+
     // ========== ADMIN ==========
-    function entrarAdmin() {
-        document.getElementById('main-container').style.display = 'none';
-        document.getElementById('admin-container').style.display = 'block';
-        atualizarStats();
-        renderizarKeysList();
-        renderizarUsersList();
-        
+    function setupAdminTabs() {
         document.querySelectorAll('.admin-tab').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
@@ -1305,7 +1366,7 @@
     }
 
     async function excluirUsuario(login) {
-        if (confirm(`⚠️ EXCLUIR conta de ${login} permanentemente? Essa ação não pode ser desfeita!`)) {
+        if (confirm(`⚠️ EXCLUIR conta de ${login} permanentemente?`)) {
             const user = usuariosDatabase[login];
             if (user && user.keyAssociada && keysDatabase[user.keyAssociada]) {
                 keysDatabase[user.keyAssociada].usado = false;
@@ -1331,7 +1392,7 @@
         await carregarDados();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\nEnvie para o usuário.`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
     }
 
     async function gerarKeyPersonalizada() {
@@ -1378,6 +1439,7 @@
     function copiarKey(codigo) { navigator.clipboard.writeText(codigo); showToast(`📋 Key copiada!`); }
     function filtrarKeys() { filtroAtual = document.getElementById('searchKey').value; renderizarKeysList(); }
     function filtrarUsuarios() { filtroUserAtual = document.getElementById('searchUser').value; renderizarUsersList(); }
+    async function recarregarKeys() { await carregarDados(); atualizarStats(); renderizarKeysList(); renderizarUsersList(); showToast(`✅ Dados recarregados!`); }
 
     // ========== CONFIGURAÇÕES DO USUÁRIO ==========
     function abrirConfiguracoes() {
@@ -1547,6 +1609,17 @@
                     if (currentUser.keyAssociada && keysDatabase[currentUser.keyAssociada]) {
                         currentKey = currentUser.keyAssociada;
                         currentKeyData = keysDatabase[currentKey];
+                        
+                        if (currentKey === "dono456") {
+                            document.getElementById('main-container').style.display = 'none';
+                            document.getElementById('admin-container').style.display = 'block';
+                            atualizarStats();
+                            renderizarKeysList();
+                            renderizarUsersList();
+                            setupAdminTabs();
+                            return;
+                        }
+                        
                         entrarNoPainel();
                     } else {
                         document.getElementById('key-screen').style.display = 'block';
