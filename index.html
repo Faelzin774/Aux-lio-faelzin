@@ -208,6 +208,10 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        .btn-process.ativo {
+            background: rgba(0, 255, 0, 0.2);
+        }
 
         .btn-bypass { color: var(--bypass); border-color: var(--bypass); }
         .btn-inject-custom { color: var(--inject); border-color: var(--inject); margin-top: 10px; }
@@ -933,6 +937,8 @@
     let keyAtual = null;
     let keyDataAtual = null;
     let processoAtivo = false;
+    let bypassAtivado = false;
+    let injectAtivado = false;
 
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -943,31 +949,13 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
-    // ========== DETECTAR DISPOSITIVO ==========
+    // ========== DETECTAR DISPOSITIVO SIMPLES ==========
     function detectarDispositivo() {
         const ua = navigator.userAgent;
-        
-        if (/iPhone/.test(ua)) {
-            if (ua.includes('iPhone15')) return 'iPhone 15';
-            if (ua.includes('iPhone14')) return 'iPhone 14';
-            if (ua.includes('iPhone13')) return 'iPhone 13';
-            if (ua.includes('iPhone12')) return 'iPhone 12';
-            if (ua.includes('iPhone11')) return 'iPhone 11';
-            return 'iPhone';
-        }
-        
-        if (/iPad/.test(ua)) return 'iPad';
-        
-        if (/Android/.test(ua)) {
-            if (ua.includes('SM-G')) return 'Samsung Galaxy';
-            if (ua.includes('Moto G')) return 'Motorola Moto G';
-            if (ua.includes('MI')) return 'Xiaomi Redmi';
-            if (ua.includes('Pixel')) return 'Google Pixel';
-            if (ua.includes('OnePlus')) return 'OnePlus';
-            return 'Android';
-        }
-        
-        return 'Dispositivo';
+        if (/iPhone/.test(ua)) return '📱 iPhone';
+        if (/iPad/.test(ua)) return '📱 iPad';
+        if (/Android/.test(ua)) return '🤖 Android';
+        return '💻 Desktop';
     }
 
     // ========== FUNÇÕES JSONBIN ==========
@@ -1245,11 +1233,13 @@
         renderizarKeysList();
     }
 
-    // ========== PROCESSOS COM DELAY ==========
-    let bypassTimeout = null;
-    let injectTimeout = null;
-    
+    // ========== PROCESSOS COM BLOQUEIO E MUDANÇA DE BOTÃO ==========
     function iniciarProcessoBypass() {
+        if (bypassAtivado) {
+            showToast('⏳ Bypass já foi ativado!', true);
+            return;
+        }
+        
         if (processoAtivo) {
             showToast('⏳ Aguarde, um processo já está em andamento!', true);
             return;
@@ -1290,17 +1280,26 @@
                 clearInterval(interval);
                 status.textContent = '✓ Bypass ativado com sucesso!';
                 
-                bypassTimeout = setTimeout(() => {
+                setTimeout(() => {
                     document.getElementById('bypass-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
+                    btn.innerHTML = '✓ BYPASS ATIVO';
+                    btn.classList.add('ativo');
                     btn.disabled = false;
                     processoAtivo = false;
-                }, 2000);
+                    bypassAtivado = true;
+                    showToast('✅ Bypass ativado com sucesso!');
+                }, 1500);
             }
-        }, 1200);
+        }, 1000);
     }
     
     function iniciarProcessoInject() {
+        if (injectAtivado) {
+            showToast('⏳ Inject já foi ativado!', true);
+            return;
+        }
+        
         if (processoAtivo) {
             showToast('⏳ Aguarde, um processo já está em andamento!', true);
             return;
@@ -1341,14 +1340,18 @@
                 clearInterval(interval);
                 status.textContent = '✓ Injeção concluída com sucesso!';
                 
-                injectTimeout = setTimeout(() => {
+                setTimeout(() => {
                     document.getElementById('inject-process').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
+                    btn.innerHTML = '✓ INJECT ATIVO';
+                    btn.classList.add('ativo');
                     btn.disabled = false;
                     processoAtivo = false;
-                }, 2000);
+                    injectAtivado = true;
+                    showToast('✅ Inject ativado com sucesso!');
+                }, 1500);
             }
-        }, 1200);
+        }, 1000);
     }
 
     // ========== FUNÇÕES SENSIBILIDADE ==========
@@ -1456,7 +1459,6 @@
                 document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
             }
             
-            // CARREGAR MARCAS QUANDO ABRIR ABA SENSI
             if (btn.dataset.tab === 'sensi') {
                 carregarMarcas();
                 resetarTimer();
