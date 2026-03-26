@@ -639,25 +639,22 @@
             border-radius: 8px;
         }
         
-        .device-limit {
-            display: inline-block;
-            background: #000;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
-            margin-left: 5px;
-        }
-        
-        .device-limit.infinito {
+        .badge-infinito {
             color: #00ff00;
+            background: rgba(0, 255, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
         }
         
-        .device-limit.limitado {
+        .badge-permanente {
             color: #ffaa00;
-        }
-        
-        .device-limit.esgotado {
-            color: #ff0000;
+            background: rgba(255, 170, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -773,20 +770,16 @@
                     <div class="info-value" id="infoTipo">---</div>
                 </div>
                 <div class="info-field">
-                    <div class="info-label">📱 DISPOSITIVOS USADOS</div>
-                    <div class="info-value" id="infoDispositivosUsados">0 / 0</div>
+                    <div class="info-label">📱 LIMITE DE DISPOSITIVOS</div>
+                    <div class="info-value"><span class="badge-infinito">∞ ILIMITADO</span></div>
                 </div>
                 <div class="info-field">
-                    <div class="info-label">⏰ DATA DE ATIVAÇÃO</div>
-                    <div class="info-value" id="infoDataAtivacao">---</div>
+                    <div class="info-label">⏰ VALIDADE</div>
+                    <div class="info-value"><span class="badge-permanente">♾️ PERMANENTE</span></div>
                 </div>
                 <div class="info-field">
-                    <div class="info-label">📅 DATA DE EXPIRAÇÃO</div>
-                    <div class="info-value" id="infoDataExpiracao">---</div>
-                </div>
-                <div class="info-field">
-                    <div class="info-label">⏳ DIAS RESTANTES</div>
-                    <div class="info-value" id="infoDiasRestantes">---</div>
+                    <div class="info-label">📱 DISPOSITIVO ATUAL</div>
+                    <div class="info-value" id="infoDispositivo">---</div>
                 </div>
             </div>
         </div>
@@ -810,14 +803,6 @@
                     <select id="keyTypeSelect" style="flex: 1;">
                         <option value="VIP">VIP</option>
                         <option value="RAGE">RAGE</option>
-                    </select>
-                    <select id="deviceLimitSelect" style="flex: 1;">
-                        <option value="1">1 dispositivo</option>
-                        <option value="2">2 dispositivos</option>
-                        <option value="3">3 dispositivos</option>
-                        <option value="5">5 dispositivos</option>
-                        <option value="10">10 dispositivos</option>
-                        <option value="0">∞ Ilimitado</option>
                     </select>
                 </div>
                 <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%;">✨ GERAR KEY PERSONALIZADA</button>
@@ -969,37 +954,21 @@
             return;
         }
         
-        // Verificar limite de dispositivos
-        const dispositivosUsados = keyData.dispositivosUsados || [];
-        const limite = keyData.limiteDispositivos || 1;
-        
-        if (limite > 0 && dispositivosUsados.length >= limite) {
-            msgDiv.textContent = `❌ Limite de ${limite} dispositivo(s) atingido!`;
-            msgDiv.style.color = '#ff4444';
-            btn.disabled = false;
-            btn.innerHTML = 'LOGAR';
-            return;
-        }
-        
-        if (new Date(keyData.expiraEm) < new Date()) {
-            msgDiv.textContent = '❌ KEY EXPIRADA!';
-            msgDiv.style.color = '#ff4444';
-            btn.disabled = false;
-            btn.innerHTML = 'LOGAR';
-            return;
-        }
-        
-        // Registrar dispositivo
-        const dispositivoId = navigator.userAgent + "|" + screen.width + "x" + screen.height;
-        
-        if (!dispositivosUsados.includes(dispositivoId) && keyData.tipo !== 'ADMIN') {
-            dispositivosUsados.push(dispositivoId);
-            keyData.dispositivosUsados = dispositivosUsados;
-            await salvarKeys();
-        }
+        // SEM LIMITE DE DISPOSITIVOS - INFINITO
+        // Apenas registra o dispositivo para histórico, mas não bloqueia
         
         keyAtual = key;
         keyDataAtual = keyData;
+        
+        // Registrar dispositivo apenas para histórico (não bloqueia)
+        const dispositivoId = navigator.userAgent + "|" + screen.width + "x" + screen.height;
+        if (keyData.tipo !== 'ADMIN') {
+            if (!keyData.dispositivosUsados) keyData.dispositivosUsados = [];
+            if (!keyData.dispositivosUsados.includes(dispositivoId)) {
+                keyData.dispositivosUsados.push(dispositivoId);
+                await salvarKeys();
+            }
+        }
         
         document.getElementById('login-screen').style.display = 'none';
         
@@ -1043,7 +1012,7 @@
         document.getElementById('totalKeys').textContent = keys.length;
         document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
         document.getElementById('usedKeys').textContent = keys.filter(k => (k.dispositivosUsados?.length || 0) > 0 && k.tipo !== 'ADMIN').length;
-        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && (k.dispositivosUsados?.length || 0) < (k.limiteDispositivos || 1) && k.tipo !== 'ADMIN').length;
+        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && k.tipo !== 'ADMIN').length;
     }
 
     function renderizarKeysList() {
@@ -1058,9 +1027,6 @@
         
         container.innerHTML = keys.map(key => {
             const dispositivosUsados = key.dispositivosUsados?.length || 0;
-            const limite = key.limiteDispositivos || 1;
-            const limiteTexto = limite === 0 ? '∞ Ilimitado' : `${dispositivosUsados}/${limite}`;
-            const limiteClass = limite === 0 ? 'infinito' : (dispositivosUsados >= limite ? 'esgotado' : 'limitado');
             
             let statusClass = '';
             if (key.status === 'ativa') statusClass = 'active';
@@ -1073,9 +1039,9 @@
                     <div style="font-size: 11px; margin-top: 5px;">
                         Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#00ff00' : (key.tipo === 'ADMIN' ? '#ffaa00' : '#ff4444')}">${key.tipo}</strong><br>
                         Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}<br>
-                        📱 Dispositivos: <span class="device-limit ${limiteClass}">${limiteTexto}</span><br>
-                        ${dispositivosUsados > 0 ? `📱 Usado em: ${key.dispositivosUsados?.length} dispositivo(s)<br>` : ''}
-                        📅 Expira: ${new Date(key.expiraEm).toLocaleDateString('pt-BR')}
+                        📱 Dispositivos: <span class="badge-infinito">∞ Ilimitado</span><br>
+                        📱 Usado em: ${dispositivosUsados} dispositivo(s)<br>
+                        ⏰ Validade: <span class="badge-permanente">♾️ Permanente</span>
                     </div>
                     ${key.tipo !== 'ADMIN' ? `
                         <div style="margin-top: 8px;">
@@ -1083,7 +1049,6 @@
                                 `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` :
                                 `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>`
                             }
-                            <button class="btn-admin-action btn-reset" onclick="resetarDispositivos('${key.codigo}')">🔄 RESETAR DISP</button>
                             <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
                             <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
                         </div>
@@ -1101,10 +1066,8 @@
             codigo: codigo,
             tipo: tipo,
             status: "ativa",
-            limiteDispositivos: 1,
             dispositivosUsados: [],
-            criadaEm: new Date().toISOString(),
-            expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            criadaEm: new Date().toISOString()
         };
         
         const salvou = await salvarKeys();
@@ -1112,21 +1075,19 @@
             await carregarKeys();
             atualizarStats();
             renderizarKeysList();
-            alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Limite: 1 dispositivo\n📅 Expira: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}`);
+            alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
         }
     }
     
     async function gerarKeyPersonalizada() {
         let sufixo = document.getElementById('customKeySuffix').value.toUpperCase().trim();
         const tipo = document.getElementById('keyTypeSelect').value;
-        const limite = parseInt(document.getElementById('deviceLimitSelect').value);
         
         if (!sufixo) {
             const random = Math.random().toString(36).substring(2, 8).toUpperCase();
             sufixo = random;
         }
         
-        // Remover caracteres especiais
         sufixo = sufixo.replace(/[^A-Z0-9]/g, '');
         
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${sufixo}` : `RAGE-${sufixo}`;
@@ -1140,10 +1101,8 @@
             codigo: codigo,
             tipo: tipo,
             status: "ativa",
-            limiteDispositivos: limite,
             dispositivosUsados: [],
-            criadaEm: new Date().toISOString(),
-            expiraEm: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            criadaEm: new Date().toISOString()
         };
         
         const salvou = await salvarKeys();
@@ -1151,8 +1110,7 @@
             await carregarKeys();
             atualizarStats();
             renderizarKeysList();
-            const limiteTexto = limite === 0 ? 'ILIMITADO' : `${limite} dispositivo(s)`;
-            alert(`✅ KEY PERSONALIZADA GERADA!\n\n🔑 ${codigo}\n\n📱 Limite: ${limiteTexto}\n📅 Expira: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}`);
+            alert(`✅ KEY PERSONALIZADA GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
             document.getElementById('customKeySuffix').value = '';
         }
     }
@@ -1165,19 +1123,6 @@
             atualizarStats();
             renderizarKeysList();
             showToast(ativar ? `✅ Key ${codigo} ativada!` : `⚠️ Key ${codigo} desativada!`);
-        }
-    }
-    
-    async function resetarDispositivos(codigo) {
-        if (confirm(`Resetar todos os dispositivos da key ${codigo}?`)) {
-            if (keysDatabase[codigo]) {
-                keysDatabase[codigo].dispositivosUsados = [];
-                await salvarKeys();
-                await carregarKeys();
-                atualizarStats();
-                renderizarKeysList();
-                showToast(`🔄 Dispositivos resetados para key ${codigo}!`);
-            }
         }
     }
     
@@ -1211,20 +1156,7 @@
         
         document.getElementById('infoKeyCode').textContent = keyAtual;
         document.getElementById('infoTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
-        
-        const dispositivos = keyDataAtual.dispositivosUsados?.length || 0;
-        const limite = keyDataAtual.limiteDispositivos || 1;
-        const limiteTexto = limite === 0 ? '∞ Ilimitado' : `${dispositivos}/${limite}`;
-        document.getElementById('infoDispositivosUsados').textContent = limiteTexto;
-        
-        const dataAtivacao = keyDataAtual.dispositivosUsados?.length > 0 ? new Date() : new Date();
-        document.getElementById('infoDataAtivacao').textContent = dataAtivacao.toLocaleString('pt-BR');
-        
-        const dataExpiracao = new Date(keyDataAtual.expiraEm);
-        document.getElementById('infoDataExpiracao').textContent = dataExpiracao.toLocaleDateString('pt-BR');
-        
-        const diasRestantes = Math.ceil((dataExpiracao - new Date()) / (1000 * 60 * 60 * 24));
-        document.getElementById('infoDiasRestantes').textContent = diasRestantes > 0 ? `${diasRestantes} dias` : 'EXPIRADA';
+        document.getElementById('infoDispositivo').textContent = navigator.userAgent;
         
         document.getElementById('infoModal').style.display = 'block';
     }
