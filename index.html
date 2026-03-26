@@ -36,7 +36,6 @@
             overflow-y: auto;
         }
 
-        /* Tela de Key */
         .key-screen {
             width: 280px;
             text-align: center;
@@ -72,7 +71,6 @@
             font-size: 16px;
         }
 
-        /* Modal Nome */
         .modal-nome {
             display: none;
             position: fixed;
@@ -777,7 +775,6 @@
 </head>
 <body>
 
-    <!-- Tela para digitar a key -->
     <div id="key-screen" class="key-screen">
         <h2 style="margin-bottom: 20px;">FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
         <input type="text" id="keyInput" class="key-input" placeholder="DIGITE SUA KEY">
@@ -785,7 +782,6 @@
         <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
-    <!-- Modal para colocar o nome -->
     <div id="modalNome" class="modal-nome">
         <div class="modal-nome-content">
             <h3>👤 SEU NOME</h3>
@@ -795,7 +791,6 @@
         </div>
     </div>
 
-    <!-- Painel Principal -->
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
@@ -927,7 +922,6 @@
         </div>
     </div>
 
-    <!-- Painel Admin -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
@@ -962,7 +956,6 @@
         </div>
     </div>
 
-    <!-- Modal Configurações (Nome) -->
     <div id="modalConfig" class="modal-config">
         <div class="modal-config-content">
             <h3>⚙️ CONFIGURAÇÕES</h3>
@@ -983,7 +976,6 @@
     const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
     
-    // ==================== LISTA DE MARCAS ====================
     const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"];
 
     let keysDatabase = {};
@@ -1015,7 +1007,6 @@
         return '💻 Desktop';
     }
 
-    // ========== FUNÇÕES JSONBIN ==========
     async function carregarKeys() {
         try {
             const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
@@ -1023,7 +1014,7 @@
             const data = await response.json();
             keysDatabase = data.record.keys || {};
             if (!keysDatabase["dono456"]) {
-                keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
+                keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", criadaEm: new Date().toISOString() };
             }
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
@@ -1035,7 +1026,7 @@
                 keysDatabase = JSON.parse(local);
                 return true;
             }
-            keysDatabase = { "dono456": { codigo: "dono456", tipo: "ADMIN", status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() } };
+            keysDatabase = { "dono456": { codigo: "dono456", tipo: "ADMIN", status: "ativa", criadaEm: new Date().toISOString() } };
             return false;
         }
     }
@@ -1052,7 +1043,6 @@
         } catch (error) { return false; }
     }
 
-    // ========== FUNÇÕES DE LOGIN ==========
     async function validarKey() {
         const key = document.getElementById('keyInput').value.trim();
         const msgDiv = document.getElementById('loginMsg');
@@ -1085,20 +1075,11 @@
             return;
         }
         
-        if (keyData.usado && keyData.usadoPor !== nomeUsuario) {
-            msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
-            msgDiv.style.color = '#ff4444';
-            btn.disabled = false;
-            btn.innerHTML = 'LOGAR';
-            return;
-        }
-        
         keyAtual = key;
         keyDataAtual = keyData;
         
         // Verificar se já tem nome salvo
         if (!nomeUsuario) {
-            // Mostrar modal para digitar nome
             document.getElementById('modalNome').style.display = 'flex';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
@@ -1128,20 +1109,22 @@
         
         document.getElementById('modalNome').style.display = 'none';
         
-        // Marcar key como usada
-        if (keyAtual && keyDataAtual && !keyDataAtual.usado) {
-            keyDataAtual.usado = true;
-            keyDataAtual.usadoPor = nomeUsuario;
-            if (!keyDataAtual.dispositivosUsados) keyDataAtual.dispositivosUsados = [];
-            const dispositivo = detectarDispositivo();
-            if (!keyDataAtual.dispositivosUsados.includes(dispositivo)) keyDataAtual.dispositivosUsados.push(dispositivo);
-            await salvarKeys();
+        // Só registra o nome na key, NÃO marca como usada
+        if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
+            if (!keyDataAtual.usuarios) keyDataAtual.usuarios = [];
+            if (!keyDataAtual.usuarios.includes(nome)) {
+                keyDataAtual.usuarios.push(nome);
+                await salvarKeys();
+            }
         }
         
         finalizarLogin();
     }
     
     function finalizarLogin() {
+        // Salvar key no localStorage para não precisar digitar de novo
+        localStorage.setItem('fael_key', keyAtual);
+        
         document.getElementById('key-screen').style.display = 'none';
         
         if (keyAtual === "dono456") {
@@ -1176,6 +1159,7 @@
     }
     
     function voltarParaLogin() {
+        localStorage.removeItem('fael_key');
         localStorage.removeItem('fael_nome');
         location.reload();
     }
@@ -1185,8 +1169,8 @@
         const keys = Object.values(keysDatabase).filter(k => k.codigo !== "dono456");
         document.getElementById('totalKeys').textContent = keys.length;
         document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
-        document.getElementById('usedKeys').textContent = keys.filter(k => k.usado === true).length;
-        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && !k.usado).length;
+        document.getElementById('usedKeys').textContent = keys.filter(k => k.usuarios?.length > 0).length;
+        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa').length;
     }
 
     function renderizarKeysList() {
@@ -1200,10 +1184,10 @@
             <div class="key-card ${key.status === 'ativa' ? 'active' : 'inactive'}">
                 <div class="key-code">🔑 ${key.codigo}</div>
                 <div style="font-size:11px;margin-top:5px;">
-                    👤 Usuário: ${key.usadoPor || 'Não associado'}<br>
+                    👤 Usuários: ${key.usuarios?.length || 0} usuário(s)<br>
+                    Lista: ${key.usuarios?.join(', ') || 'Nenhum'}<br>
                     Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#0f0' : '#f44'}">${key.tipo}</strong><br>
-                    Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}<br>
-                    📱 Usado em: ${key.dispositivosUsados?.length || 0} dispositivo(s)
+                    Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}
                 </div>
                 <div style="margin-top:8px;">
                     ${key.status === 'ativa' ? `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` : `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>`}
@@ -1217,12 +1201,12 @@
     async function gerarNovaKey(tipo) {
         const random = Math.random().toString(36).substring(2, 10).toUpperCase();
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
-        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
+        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], criadaEm: new Date().toISOString() };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
     }
 
     async function gerarKeyPersonalizada() {
@@ -1232,12 +1216,12 @@
         sufixo = sufixo.replace(/[^A-Z0-9]/g, '');
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${sufixo}` : `RAGE-${sufixo}`;
         if (keysDatabase[codigo]) { showToast('❌ Key já existe!', true); return; }
-        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
+        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], criadaEm: new Date().toISOString() };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
         document.getElementById('customKeySuffix').value = '';
     }
 
@@ -1281,9 +1265,12 @@
             localStorage.setItem('fael_nome', novoNome);
             
             // Atualizar nome na key
-            if (keyAtual && keyDataAtual) {
-                keyDataAtual.usadoPor = novoNome;
-                await salvarKeys();
+            if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
+                if (!keyDataAtual.usuarios) keyDataAtual.usuarios = [];
+                if (!keyDataAtual.usuarios.includes(novoNome)) {
+                    keyDataAtual.usuarios.push(novoNome);
+                    await salvarKeys();
+                }
             }
             
             showToast('✅ Nome alterado com sucesso!');
@@ -1390,7 +1377,6 @@
     }
     function aplicarSensi() { if (!marcaSelecionada) { showToast('Selecione uma marca!', true); return; } showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`); }
 
-    // ========== CONTROLE DE ABAS ==========
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.classList.contains('admin-tab')) return;
@@ -1407,7 +1393,6 @@
     (async function init() {
         await carregarKeys();
         
-        // Verificar se já tem key salva
         const savedKey = localStorage.getItem('fael_key');
         const savedNome = localStorage.getItem('fael_nome');
         
