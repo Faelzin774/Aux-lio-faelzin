@@ -203,6 +203,11 @@
             text-transform: uppercase;
             transition: all 0.3s;
         }
+        
+        .btn-process:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
         .btn-bypass { color: var(--bypass); border-color: var(--bypass); }
         .btn-inject-custom { color: var(--inject); border-color: var(--inject); margin-top: 10px; }
@@ -360,82 +365,46 @@
             cursor: pointer;
         }
 
-        /* Info Card */
-        .info-card {
+        /* Info Organizada */
+        .info-section {
             background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
 
-        .creator-name {
-            font-size: 24px;
-            color: var(--hacker);
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--hacker);
-            margin-bottom: 10px;
-        }
-
-        .creator-title {
-            color: #888;
-            font-size: 12px;
-            margin-bottom: 20px;
-        }
-
-        .version-box {
-            background: #000;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .version-box span {
+        .info-section-title {
             color: var(--bypass);
+            font-size: 14px;
             font-weight: bold;
-        }
-
-        .social-links {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
-            color: #fff;
-            transition: transform 0.3s;
         }
 
-        .social-link:hover {
-            transform: scale(1.1);
-        }
-
-        .social-icon {
-            width: 50px;
-            height: 50px;
-            background: #222;
-            border-radius: 50%;
+        .info-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            transition: all 0.3s;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+            font-size: 12px;
         }
 
-        .social-link:hover .social-icon {
-            background: var(--hacker);
-            box-shadow: 0 0 15px var(--hacker);
+        .info-item:last-child {
+            border-bottom: none;
         }
 
-        .social-link span {
-            font-size: 11px;
+        .info-label {
             color: #888;
+        }
+
+        .info-value {
+            color: var(--hacker);
+            font-weight: bold;
         }
 
         /* Key Card */
@@ -477,6 +446,47 @@
             display: inline-block;
         }
 
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+
+        .social-icon-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #333;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover .social-icon-img {
+            border-color: var(--hacker);
+            box-shadow: 0 0 15px var(--hacker);
+        }
+
+        .social-link span {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Admin Panel */
         .admin-container {
             width: 90%;
             max-width: 500px;
@@ -700,7 +710,7 @@
             <button class="tab-btn" data-tab="info">ℹ️ INFO</button>
         </div>
 
-        <!-- Aba AUXÍLIO (Funções originais) -->
+        <!-- Aba AUXÍLIO -->
         <div id="tab-auxilio" class="tab-content active">
             <div id="panel-standard">
                 <div class="category-title">Auxílio de Mira</div>
@@ -746,8 +756,8 @@
             </div>
 
             <div class="process-box">
-                <button class="btn-process btn-bypass" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
-                <button class="btn-process btn-inject-custom" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
+                <button class="btn-process btn-bypass" id="bypassBtn" onclick="iniciarProcessoBypass()">🔓 BYPASS SYSTEM</button>
+                <button class="btn-process btn-inject-custom" id="injectBtn" onclick="iniciarProcessoInject()">⚡ INJECT ENGINE</button>
             </div>
         </div>
 
@@ -789,22 +799,59 @@
 
         <!-- Aba INFO -->
         <div id="tab-info" class="tab-content">
-            <div class="info-card">
-                <div class="creator-name">FAELZIN</div>
-                <div class="creator-title">⭐ CRIADOR DO FAEL ASSIST ⭐</div>
-                <div class="version-box">
-                    <span>📌 VERSÃO: 3.0.0</span><br>
-                    <span>🛠️ ÚLTIMA ATUALIZAÇÃO: MARÇO 2026</span><br>
-                    <span>💡 SUPORTE A: FREE FIRE | COD | PUBG</span><br>
-                    <span>⚡ SISTEMA: BYPASS + INJECT ENGINE</span>
+            <!-- Seção AUXÍLIO -->
+            <div class="info-section">
+                <div class="info-section-title">🎯 AUXÍLIO</div>
+                <div class="info-item">
+                    <span class="info-label">Versão</span>
+                    <span class="info-value">3.0.0</span>
                 </div>
+                <div class="info-item">
+                    <span class="info-label">Última atualização</span>
+                    <span class="info-value">26/03/2026 - 14:30</span>
+                </div>
+            </div>
+
+            <!-- Seção SUPORTE -->
+            <div class="info-section">
+                <div class="info-section-title">🎮 SUPORTE</div>
+                <div class="info-item">
+                    <span class="info-label">Jogos compatíveis</span>
+                    <span class="info-value">Free Fire | COD Mobile | PUBG</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Plataformas</span>
+                    <span class="info-value">Android | iOS</span>
+                </div>
+            </div>
+
+            <!-- Seção SISTEMA -->
+            <div class="info-section">
+                <div class="info-section-title">⚙️ SISTEMA</div>
+                <div class="info-item">
+                    <span class="info-label">Bypass System</span>
+                    <span class="info-value">✓ Ativo</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Inject Engine</span>
+                    <span class="info-value">✓ Ativo</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Anti-Detecção</span>
+                    <span class="info-value">Nível 3</span>
+                </div>
+            </div>
+
+            <!-- Seção REDES SOCIAIS -->
+            <div class="info-section">
+                <div class="info-section-title">📱 REDES SOCIAIS</div>
                 <div class="social-links">
                     <a href="https://www.tiktok.com/@faelzin_store1?_r=1&_t=ZS-94byOggEocS" target="_blank" class="social-link">
-                        <div class="social-icon">🎵</div>
+                        <img src="https://cdn.discordapp.com/attachments/1481068071669207141/1486540044775981076/IMG_0402.jpg?ex=69c5dfcd&is=69c48e4d&hm=fcc6d1169335992ba8fa744a7f0b3a1d6ab2d338bcf0ea857d39cdc97c32dc9d&" class="social-icon-img" alt="TikTok">
                         <span>TikTok</span>
                     </a>
                     <a href="https://discord.gg/JRXcBWCvhG" target="_blank" class="social-link">
-                        <div class="social-icon">💬</div>
+                        <img src="https://cdn.discordapp.com/attachments/1481068071669207141/1486539885484445866/IMG_0401.jpg?ex=69c5dfa7&is=69c48e27&hm=5a1e3dcf465dcfae53271bd36dda062e31f2df6f60737f308549dfec28fa3977&" class="social-icon-img" alt="Discord">
                         <span>Discord</span>
                     </a>
                 </div>
@@ -885,27 +932,7 @@
     let filtroAtual = '';
     let keyAtual = null;
     let keyDataAtual = null;
-
-    // Controle de abas
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-            
-            // Se for a aba KEY, atualizar as informações
-            if (btn.dataset.tab === 'key' && keyAtual && keyDataAtual) {
-                atualizarAbaKey();
-            }
-        });
-    });
-
-    function atualizarAbaKey() {
-        document.getElementById('keyDisplayCode').textContent = keyAtual;
-        document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
-        document.getElementById('keyDisplayDispositivo').textContent = navigator.userAgent.substring(0, 50) + '...';
-    }
+    let processoAtivo = false;
 
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -914,6 +941,33 @@
         toast.style.backgroundColor = isError ? '#ff4444' : '#00ff00';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ========== DETECTAR DISPOSITIVO ==========
+    function detectarDispositivo() {
+        const ua = navigator.userAgent;
+        
+        if (/iPhone/.test(ua)) {
+            if (ua.includes('iPhone15')) return 'iPhone 15';
+            if (ua.includes('iPhone14')) return 'iPhone 14';
+            if (ua.includes('iPhone13')) return 'iPhone 13';
+            if (ua.includes('iPhone12')) return 'iPhone 12';
+            if (ua.includes('iPhone11')) return 'iPhone 11';
+            return 'iPhone';
+        }
+        
+        if (/iPad/.test(ua)) return 'iPad';
+        
+        if (/Android/.test(ua)) {
+            if (ua.includes('SM-G')) return 'Samsung Galaxy';
+            if (ua.includes('Moto G')) return 'Motorola Moto G';
+            if (ua.includes('MI')) return 'Xiaomi Redmi';
+            if (ua.includes('Pixel')) return 'Google Pixel';
+            if (ua.includes('OnePlus')) return 'OnePlus';
+            return 'Android';
+        }
+        
+        return 'Dispositivo';
     }
 
     // ========== FUNÇÕES JSONBIN ==========
@@ -1004,8 +1058,8 @@
         keyAtual = key;
         keyDataAtual = keyData;
         
-        // Registrar dispositivo (apenas para histórico)
-        const dispositivoId = navigator.userAgent + "|" + screen.width + "x" + screen.height;
+        // Registrar dispositivo
+        const dispositivoId = detectarDispositivo();
         if (keyData.tipo !== 'ADMIN') {
             if (!keyData.dispositivosUsados) keyData.dispositivosUsados = [];
             if (!keyData.dispositivosUsados.includes(dispositivoId)) {
@@ -1026,7 +1080,6 @@
             document.getElementById('main-container').style.display = 'block';
             document.getElementById('admin-container').style.display = 'none';
             
-            // Mostrar painel correto baseado no tipo
             if (keyData.tipo === 'VIP') {
                 document.getElementById('panel-standard').style.display = 'block';
                 document.getElementById('panel-rage').style.display = 'none';
@@ -1035,8 +1088,10 @@
                 document.getElementById('panel-rage').style.display = 'block';
             }
             
-            // Atualizar aba KEY com as informações
-            atualizarAbaKey();
+            // Atualizar aba KEY
+            document.getElementById('keyDisplayCode').textContent = keyAtual;
+            document.getElementById('keyDisplayTipo').textContent = keyData.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+            document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
         }
         
         btn.disabled = false;
@@ -1075,10 +1130,7 @@
         
         container.innerHTML = keys.map(key => {
             const dispositivosUsados = key.dispositivosUsados?.length || 0;
-            
-            let statusClass = '';
-            if (key.status === 'ativa') statusClass = 'active';
-            else statusClass = 'inactive';
+            let statusClass = key.status === 'ativa' ? 'active' : 'inactive';
             
             return `
                 <div class="key-card ${statusClass}">
@@ -1193,9 +1245,116 @@
         renderizarKeysList();
     }
 
+    // ========== PROCESSOS COM DELAY ==========
+    let bypassTimeout = null;
+    let injectTimeout = null;
+    
+    function iniciarProcessoBypass() {
+        if (processoAtivo) {
+            showToast('⏳ Aguarde, um processo já está em andamento!', true);
+            return;
+        }
+        
+        const btn = document.getElementById('bypassBtn');
+        btn.disabled = true;
+        processoAtivo = true;
+        
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('bypass-process').style.display = 'block';
+        
+        const logs = document.getElementById('bypass-logs');
+        const barra = document.getElementById('bypass-bar');
+        const status = document.getElementById('bypass-status');
+        logs.innerHTML = '';
+        
+        const frases = [
+            "> Iniciando bypass system...",
+            "> Conectando ao kernel...",
+            "> Desativando proteções...",
+            "> Bypassando firewall...",
+            "> Ocultando processos...",
+            "> Limpando registros...",
+            "> Bypass concluído com sucesso!"
+        ];
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < frases.length) {
+                const linha = document.createElement('div');
+                linha.textContent = frases[i];
+                logs.appendChild(linha);
+                barra.style.width = ((i + 1) / frases.length * 100) + '%';
+                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
+                i++;
+            } else {
+                clearInterval(interval);
+                status.textContent = '✓ Bypass ativado com sucesso!';
+                
+                bypassTimeout = setTimeout(() => {
+                    document.getElementById('bypass-process').style.display = 'none';
+                    document.getElementById('main-container').style.display = 'block';
+                    btn.disabled = false;
+                    processoAtivo = false;
+                }, 2000);
+            }
+        }, 1200);
+    }
+    
+    function iniciarProcessoInject() {
+        if (processoAtivo) {
+            showToast('⏳ Aguarde, um processo já está em andamento!', true);
+            return;
+        }
+        
+        const btn = document.getElementById('injectBtn');
+        btn.disabled = true;
+        processoAtivo = true;
+        
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('inject-process').style.display = 'block';
+        
+        const logs = document.getElementById('inject-logs');
+        const barra = document.getElementById('inject-bar');
+        const status = document.getElementById('inject-status');
+        logs.innerHTML = '';
+        
+        const frases = [
+            "> Inicializando inject engine...",
+            "> Carregando módulos...",
+            "> Alocando memória...",
+            "> Injetando scripts...",
+            "> Verificando integridade...",
+            "> Otimizando desempenho...",
+            "> Injeção concluída com sucesso!"
+        ];
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < frases.length) {
+                const linha = document.createElement('div');
+                linha.textContent = frases[i];
+                logs.appendChild(linha);
+                barra.style.width = ((i + 1) / frases.length * 100) + '%';
+                status.textContent = `Processando... ${Math.round((i + 1) / frases.length * 100)}%`;
+                i++;
+            } else {
+                clearInterval(interval);
+                status.textContent = '✓ Injeção concluída com sucesso!';
+                
+                injectTimeout = setTimeout(() => {
+                    document.getElementById('inject-process').style.display = 'none';
+                    document.getElementById('main-container').style.display = 'block';
+                    btn.disabled = false;
+                    processoAtivo = false;
+                }, 2000);
+            }
+        }, 1200);
+    }
+
     // ========== FUNÇÕES SENSIBILIDADE ==========
     function carregarMarcas() {
         const grid = document.getElementById('brandsGrid');
+        if (!grid) return;
         grid.innerHTML = '';
         marcas.sort().forEach(marca => {
             const div = document.createElement('div');
@@ -1277,68 +1436,34 @@
         showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`);
     }
     
-    // ========== FUNÇÕES ORIGINAIS ==========
     function puxarArma() {
         const arma = document.getElementById('weaponName').value;
         if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`);
         else showToast('Digite o nome da arma!', true);
     }
-    
-    function iniciarProcessoBypass() {
-        document.getElementById('main-container').style.display = 'none';
-        document.getElementById('bypass-process').style.display = 'block';
-        
-        const logs = document.getElementById('bypass-logs');
-        const barra = document.getElementById('bypass-bar');
-        const status = document.getElementById('bypass-status');
-        logs.innerHTML = '';
-        
-        const frases = ["> Iniciando bypass...", "> Conectando ao kernel...", "> Desativando proteções...", "> Bypass concluído!"];
-        let i = 0;
-        const loop = setInterval(() => {
-            if (i < frases.length) {
-                logs.innerHTML += frases[i] + '<br>';
-                barra.style.width = ((i + 1) / frases.length * 100) + '%';
-                status.textContent = `${Math.round((i + 1) / frases.length * 100)}%`;
-                i++;
-            } else {
-                clearInterval(loop);
-                status.textContent = '✓ Ativado!';
-                setTimeout(() => {
-                    document.getElementById('bypass-process').style.display = 'none';
-                    document.getElementById('main-container').style.display = 'block';
-                }, 1500);
+
+    // ========== CONTROLE DE ABAS ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            
+            if (btn.dataset.tab === 'key' && keyAtual && keyDataAtual) {
+                document.getElementById('keyDisplayCode').textContent = keyAtual;
+                document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+                document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
             }
-        }, 800);
-    }
-    
-    function iniciarProcessoInject() {
-        document.getElementById('main-container').style.display = 'none';
-        document.getElementById('inject-process').style.display = 'block';
-        
-        const logs = document.getElementById('inject-logs');
-        const barra = document.getElementById('inject-bar');
-        const status = document.getElementById('inject-status');
-        logs.innerHTML = '';
-        
-        const frases = ["> Inicializando inject...", "> Carregando módulos...", "> Injetando scripts...", "> Injeção concluída!"];
-        let i = 0;
-        const loop = setInterval(() => {
-            if (i < frases.length) {
-                logs.innerHTML += frases[i] + '<br>';
-                barra.style.width = ((i + 1) / frases.length * 100) + '%';
-                status.textContent = `${Math.round((i + 1) / frases.length * 100)}%`;
-                i++;
-            } else {
-                clearInterval(loop);
-                status.textContent = '✓ Concluído!';
-                setTimeout(() => {
-                    document.getElementById('inject-process').style.display = 'none';
-                    document.getElementById('main-container').style.display = 'block';
-                }, 1500);
+            
+            // CARREGAR MARCAS QUANDO ABRIR ABA SENSI
+            if (btn.dataset.tab === 'sensi') {
+                carregarMarcas();
+                resetarTimer();
+                document.getElementById('sensiValues').style.display = 'none';
             }
-        }, 800);
-    }
+        });
+    });
     
     // Inicializar
     carregarKeys();
