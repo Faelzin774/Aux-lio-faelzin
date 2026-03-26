@@ -36,7 +36,8 @@
             overflow-y: auto;
         }
 
-        .auth-screen, .key-screen {
+        /* Tela de Key */
+        .key-screen {
             width: 280px;
             text-align: center;
             padding: 30px;
@@ -46,10 +47,10 @@
             margin-top: 40px;
         }
 
-        .auth-input {
+        .key-input {
             width: 90%;
             padding: 12px;
-            margin: 10px 0;
+            margin: 20px 0;
             background: #000;
             border: 1px solid var(--hacker);
             color: var(--hacker);
@@ -59,7 +60,7 @@
             font-size: 14px;
         }
 
-        .btn-auth {
+        .btn-login {
             background: var(--hacker);
             color: #000;
             border: none;
@@ -69,27 +70,47 @@
             border-radius: 5px;
             width: 100%;
             font-size: 16px;
-            margin-top: 10px;
         }
 
-        .auth-link {
-            color: var(--bypass);
-            font-size: 12px;
-            margin-top: 15px;
-            cursor: pointer;
-            display: inline-block;
+        /* Modal Nome */
+        .modal-nome {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .auth-link:hover {
-            text-decoration: underline;
+        .modal-nome-content {
+            width: 280px;
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid var(--hacker);
         }
 
-        .error-msg, .success-msg {
-            font-size: 11px;
-            margin-top: 10px;
+        .modal-nome-content h3 {
+            color: var(--hacker);
+            margin-bottom: 15px;
         }
-        .error-msg { color: #ff4444; }
-        .success-msg { color: #00ff00; }
+
+        .modal-nome-content input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            background: #000;
+            border: 1px solid var(--hacker);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+        }
 
         #main-container {
             display: none;
@@ -552,7 +573,7 @@
             color: var(--admin);
         }
 
-        .key-card, .user-card {
+        .key-card {
             background: #111;
             border: 1px solid #333;
             border-radius: 10px;
@@ -560,16 +581,16 @@
             margin-bottom: 10px;
         }
 
-        .key-card.active, .user-card.active {
+        .key-card.active {
             border-left: 4px solid #00ff00;
         }
 
-        .key-card.inactive, .user-card.inactive {
+        .key-card.inactive {
             border-left: 4px solid #ff0000;
             opacity: 0.7;
         }
 
-        .key-code, .user-login {
+        .key-code {
             font-family: monospace;
             font-size: 12px;
             color: #ffaa00;
@@ -591,9 +612,8 @@
         .btn-refresh { color: #0066ff; border-color: #0066ff; }
         .btn-activate { color: #00ff00; border-color: #00ff00; }
         .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
-        .btn-reset { color: #ffaa00; border-color: #ffaa00; }
 
-        .keys-list, .users-list {
+        .keys-list {
             max-height: 400px;
             overflow-y: auto;
         }
@@ -757,33 +777,25 @@
 </head>
 <body>
 
-    <div id="auth-screen" class="auth-screen">
+    <!-- Tela para digitar a key -->
+    <div id="key-screen" class="key-screen">
         <h2 style="margin-bottom: 20px;">FAEL <span style="color: var(--hacker);">ASSIST</span></h2>
-        <div id="auth-login">
-            <input type="text" id="loginUser" class="auth-input" placeholder="USUÁRIO">
-            <input type="password" id="loginPass" class="auth-input" placeholder="SENHA">
-            <button class="btn-auth" onclick="fazerLogin()">ENTRAR</button>
-            <div class="auth-link" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</div>
-        </div>
-        <div id="auth-cadastro" style="display: none;">
-            <input type="text" id="cadastroUser" class="auth-input" placeholder="USUÁRIO (mínimo 3 caracteres)">
-            <input type="text" id="cadastroNome" class="auth-input" placeholder="NOME (como quer ser chamado)">
-            <input type="password" id="cadastroPass" class="auth-input" placeholder="SENHA">
-            <input type="password" id="cadastroPassConfirm" class="auth-input" placeholder="CONFIRMAR SENHA">
-            <button class="btn-auth" onclick="fazerCadastro()">CRIAR CONTA</button>
-            <div class="auth-link" onclick="mostrarLogin()">Já tenho conta? Entrar</div>
-        </div>
-        <div id="auth-msg" class="error-msg"></div>
+        <input type="text" id="keyInput" class="key-input" placeholder="DIGITE SUA KEY">
+        <button class="btn-login" id="loginBtn" onclick="validarKey()">LOGAR</button>
+        <div id="loginMsg" style="color: #ff4444; font-size: 12px; margin-top: 10px;"></div>
     </div>
 
-    <div id="key-screen" class="key-screen" style="display: none;">
-        <h2 style="margin-bottom: 20px;">🔑 DIGITE SUA KEY</h2>
-        <input type="text" id="keyInput" class="auth-input" placeholder="Digite sua key">
-        <button class="btn-auth" onclick="validarEAssociarKey()">ATIVAR KEY</button>
-        <div id="keyMsg" class="error-msg"></div>
-        <div class="auth-link" onclick="logout()">Sair da conta</div>
+    <!-- Modal para colocar o nome -->
+    <div id="modalNome" class="modal-nome">
+        <div class="modal-nome-content">
+            <h3>👤 SEU NOME</h3>
+            <p style="font-size: 12px; color: #888;">Digite seu nome para continuar</p>
+            <input type="text" id="nomeUsuario" placeholder="Ex: João, Maria, Faelzin..." maxlength="30">
+            <button class="btn-login" onclick="salvarNomeUsuario()">CONTINUAR</button>
+        </div>
     </div>
 
+    <!-- Painel Principal -->
     <div id="main-container">
         <div class="main-title">
             <h1>FAEL ASSIST</h1>
@@ -915,68 +927,48 @@
         </div>
     </div>
 
+    <!-- Painel Admin -->
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
-            <div class="tabs" style="margin-bottom: 15px;">
-                <button class="tab-btn admin-tab active" data-admin-tab="keys">🔑 KEYS</button>
-                <button class="tab-btn admin-tab" data-admin-tab="users">👥 USUÁRIOS</button>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL KEYS</div></div>
+                <div class="stat-card"><div class="stat-number" id="activeKeys">0</div><div class="stat-label">ATIVAS</div></div>
+                <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
+                <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
             
-            <div id="admin-tab-keys">
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL KEYS</div></div>
-                    <div class="stat-card"><div class="stat-number" id="activeKeys">0</div><div class="stat-label">ATIVAS</div></div>
-                    <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
-                    <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
+            <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
+                <div class="custom-key-input">
+                    <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)" style="flex: 2;">
+                    <select id="keyTypeSelect" style="flex: 1;">
+                        <option value="VIP">VIP</option>
+                        <option value="RAGE">RAGE</option>
+                    </select>
                 </div>
-                
-                <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
-                    <div class="custom-key-input">
-                        <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)" style="flex: 2;">
-                        <select id="keyTypeSelect" style="flex: 1;">
-                            <option value="VIP">VIP</option>
-                            <option value="RAGE">RAGE</option>
-                        </select>
-                    </div>
-                    <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%;">✨ GERAR KEY</button>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ VIP Auto</button>
-                    <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 RAGE Auto</button>
-                    <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
-                </div>
-                
-                <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
-                <div id="keysList" class="keys-list"></div>
+                <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%;">✨ GERAR KEY</button>
             </div>
             
-            <div id="admin-tab-users" style="display: none;">
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number" id="totalUsers">0</div><div class="stat-label">TOTAL USUÁRIOS</div></div>
-                    <div class="stat-card"><div class="stat-number" id="activeUsers">0</div><div class="stat-label">COM KEY</div></div>
-                </div>
-                <input type="text" class="search-box" id="searchUser" placeholder="🔍 Buscar usuário..." onkeyup="filtrarUsuarios()" style="border-color: var(--admin);">
-                <div id="usersList" class="users-list"></div>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ VIP Auto</button>
+                <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 RAGE Auto</button>
+                <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
             </div>
             
+            <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
+            <div id="keysList" class="keys-list"></div>
             <button class="btn-back" onclick="voltarParaLogin()">← SAIR</button>
         </div>
     </div>
 
+    <!-- Modal Configurações (Nome) -->
     <div id="modalConfig" class="modal-config">
         <div class="modal-config-content">
             <h3>⚙️ CONFIGURAÇÕES</h3>
-            <div id="configInfo">
-                <p style="font-size: 12px; color: #888; margin-bottom: 10px;">👤 Nome atual: <strong id="currentNome" style="color: var(--hacker);"></strong></p>
-                <p id="trocaNomeMsg" style="font-size: 10px; color: #ffaa00;"></p>
-                <input type="text" id="novoNome" placeholder="Novo nome (1x a cada 7 dias)">
-                <input type="password" id="novaSenha" placeholder="Nova senha">
-                <input type="password" id="confirmSenha" placeholder="Confirmar senha">
-                <button class="btn-auth" onclick="salvarConfiguracoes()" style="margin-top: 10px;">SALVAR ALTERAÇÕES</button>
-            </div>
+            <p style="font-size: 12px; color: #888; margin-bottom: 10px;">👤 Nome atual: <strong id="currentNome" style="color: var(--hacker);"></strong></p>
+            <input type="text" id="novoNome" placeholder="Mudar nome">
+            <button class="btn-login" onclick="salvarConfiguracoes()">SALVAR</button>
             <div class="auth-link" onclick="fecharConfiguracoes()" style="margin-top: 15px;">Fechar</div>
         </div>
     </div>
@@ -986,25 +978,25 @@
     <div class="status-online" id="statusOnline">🟢 Carregando...</div>
 
     <script>
+    // ==================== CONFIGURAÇÕES JSONBIN ====================
     const BIN_ID = "69c46b0caa77b81da91cf54d";
     const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
     
+    // ==================== LISTA DE MARCAS ====================
     const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"];
 
     let keysDatabase = {};
-    let usuariosDatabase = {};
-    let filtroAtual = '';
-    let filtroUserAtual = '';
-    let currentUser = null;
-    let currentKeyData = null;
-    let currentKey = null;
+    let keyAtual = null;
+    let keyDataAtual = null;
+    let nomeUsuario = localStorage.getItem('fael_nome') || null;
     let bypassAtivado = false;
     let injectAtivado = false;
     let processoAtivo = false;
     let marcaSelecionada = null;
     let timerInterval = null;
     let tempoRestante = 10;
+    let filtroAtual = '';
 
     function showToast(msg, isError = false) {
         const toast = document.createElement('div');
@@ -1023,220 +1015,178 @@
         return '💻 Desktop';
     }
 
-    async function carregarDados() {
+    // ========== FUNÇÕES JSONBIN ==========
+    async function carregarKeys() {
         try {
             const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
             if (!response.ok) throw new Error();
             const data = await response.json();
             keysDatabase = data.record.keys || {};
-            usuariosDatabase = data.record.usuarios || {};
             if (!keysDatabase["dono456"]) {
                 keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
             }
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
-            localStorage.setItem('fael_backup', JSON.stringify({ keys: keysDatabase, usuarios: usuariosDatabase }));
             return true;
         } catch (error) {
             document.getElementById('statusOnline').innerHTML = '🔴 Offline - Cache';
-            const local = localStorage.getItem('fael_backup');
+            const local = localStorage.getItem('fael_keys_backup');
             if (local) {
-                const data = JSON.parse(local);
-                keysDatabase = data.keys || {};
-                usuariosDatabase = data.usuarios || {};
-                if (!keysDatabase["dono456"]) {
-                    keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
-                }
+                keysDatabase = JSON.parse(local);
                 return true;
             }
             keysDatabase = { "dono456": { codigo: "dono456", tipo: "ADMIN", status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() } };
-            usuariosDatabase = {};
             return false;
         }
     }
 
-    async function salvarDados() {
+    async function salvarKeys() {
         try {
             await fetch(JSONBIN_URL, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                body: JSON.stringify({ keys: keysDatabase, usuarios: usuariosDatabase })
+                body: JSON.stringify({ keys: keysDatabase })
             });
-            localStorage.setItem('fael_backup', JSON.stringify({ keys: keysDatabase, usuarios: usuariosDatabase }));
+            localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
         } catch (error) { return false; }
     }
 
-    function mostrarCadastro() {
-        document.getElementById('auth-login').style.display = 'none';
-        document.getElementById('auth-cadastro').style.display = 'block';
-        document.getElementById('auth-msg').innerHTML = '';
-    }
-    function mostrarLogin() {
-        document.getElementById('auth-login').style.display = 'block';
-        document.getElementById('auth-cadastro').style.display = 'none';
-        document.getElementById('auth-msg').innerHTML = '';
-    }
-
-    async function fazerCadastro() {
-        const user = document.getElementById('cadastroUser').value.trim();
-        const nome = document.getElementById('cadastroNome').value.trim();
-        const senha = document.getElementById('cadastroPass').value;
-        const confirm = document.getElementById('cadastroPassConfirm').value;
-        const msgDiv = document.getElementById('auth-msg');
-
-        if (!user || !nome || !senha) { msgDiv.innerHTML = 'Preencha todos os campos!'; return; }
-        if (user.length < 3) { msgDiv.innerHTML = 'Usuário precisa ter pelo menos 3 caracteres'; return; }
-        if (senha.length < 4) { msgDiv.innerHTML = 'Senha precisa ter pelo menos 4 caracteres'; return; }
-        if (senha !== confirm) { msgDiv.innerHTML = 'As senhas não coincidem!'; return; }
-        
-        await carregarDados();
-        if (usuariosDatabase[user]) { msgDiv.innerHTML = 'Usuário já existe!'; return; }
-        
-        usuariosDatabase[user] = {
-            login: user, nome: nome, senha: senha, keyAssociada: null, tipoKey: null, ultimaTrocaNome: null, criadaEm: new Date().toISOString()
-        };
-        await salvarDados();
-        
-        msgDiv.innerHTML = '✅ Conta criada com sucesso!';
-        msgDiv.style.color = '#00ff00';
-        
-        setTimeout(() => {
-            document.getElementById('cadastroUser').value = '';
-            document.getElementById('cadastroNome').value = '';
-            document.getElementById('cadastroPass').value = '';
-            document.getElementById('cadastroPassConfirm').value = '';
-            mostrarLogin();
-            msgDiv.innerHTML = '';
-        }, 1500);
-    }
-
-    async function fazerLogin() {
-        const user = document.getElementById('loginUser').value.trim();
-        const senha = document.getElementById('loginPass').value;
-        const msgDiv = document.getElementById('auth-msg');
-        
-        if (!user || !senha) { msgDiv.innerHTML = 'Digite usuário e senha!'; return; }
-        
-        await carregarDados();
-        const usuario = usuariosDatabase[user];
-        if (!usuario || usuario.senha !== senha) { msgDiv.innerHTML = 'Usuário ou senha incorretos!'; return; }
-        
-        currentUser = usuario;
-        localStorage.setItem('fael_session', JSON.stringify({ login: user, timestamp: Date.now() }));
-        
-        document.getElementById('auth-screen').style.display = 'none';
-        
-        if (usuario.keyAssociada && keysDatabase[usuario.keyAssociada] && keysDatabase[usuario.keyAssociada].status === 'ativa') {
-            currentKey = usuario.keyAssociada;
-            currentKeyData = keysDatabase[currentKey];
-            
-            if (currentKey === "dono456") {
-                document.getElementById('main-container').style.display = 'none';
-                document.getElementById('admin-container').style.display = 'block';
-                atualizarStats();
-                renderizarKeysList();
-                renderizarUsersList();
-                setupAdminTabs();
-                return;
-            }
-            entrarNoPainel();
-        } else {
-            document.getElementById('key-screen').style.display = 'block';
-        }
-    }
-
-    async function validarEAssociarKey() {
+    // ========== FUNÇÕES DE LOGIN ==========
+    async function validarKey() {
         const key = document.getElementById('keyInput').value.trim();
-        const msgDiv = document.getElementById('keyMsg');
+        const msgDiv = document.getElementById('loginMsg');
+        const btn = document.getElementById('loginBtn');
         
-        if (!key) { msgDiv.innerHTML = 'Digite uma key!'; return; }
+        if (!key) { msgDiv.textContent = 'Digite uma key!'; return; }
         
-        await carregarDados();
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading"></span> VERIFICANDO...';
+        msgDiv.textContent = 'Verificando...';
+        msgDiv.style.color = '#ffaa00';
+        
+        await carregarKeys();
+        
         const keyData = keysDatabase[key];
         
-        if (!keyData) { msgDiv.innerHTML = '❌ KEY INVÁLIDA!'; return; }
-        if (keyData.status !== 'ativa') { msgDiv.innerHTML = '❌ KEY DESATIVADA!'; return; }
-        if (keyData.usado && keyData.usadoPor !== currentUser.login) { msgDiv.innerHTML = '❌ KEY JÁ UTILIZADA!'; return; }
+        if (!keyData) {
+            msgDiv.textContent = '❌ KEY INVÁLIDA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
         
-        keyData.usado = true;
-        keyData.usadoPor = currentUser.login;
-        if (!keyData.dispositivosUsados) keyData.dispositivosUsados = [];
-        const dispositivo = detectarDispositivo();
-        if (!keyData.dispositivosUsados.includes(dispositivo)) keyData.dispositivosUsados.push(dispositivo);
+        if (keyData.status !== 'ativa') {
+            msgDiv.textContent = '❌ KEY DESATIVADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
         
-        currentUser.keyAssociada = key;
-        currentUser.tipoKey = keyData.tipo;
+        if (keyData.usado && keyData.usadoPor !== nomeUsuario) {
+            msgDiv.textContent = '❌ KEY JÁ UTILIZADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
         
-        await salvarDados();
+        keyAtual = key;
+        keyDataAtual = keyData;
         
-        currentKey = key;
-        currentKeyData = keyData;
+        // Verificar se já tem nome salvo
+        if (!nomeUsuario) {
+            // Mostrar modal para digitar nome
+            document.getElementById('modalNome').style.display = 'flex';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
         
+        finalizarLogin();
+        btn.disabled = false;
+        btn.innerHTML = 'LOGAR';
+    }
+    
+    async function salvarNomeUsuario() {
+        const nome = document.getElementById('nomeUsuario').value.trim();
+        
+        if (!nome) {
+            showToast('❌ Digite seu nome!', true);
+            return;
+        }
+        
+        if (nome.length > 30) {
+            showToast('❌ Nome muito longo! Máximo 30 caracteres.', true);
+            return;
+        }
+        
+        nomeUsuario = nome;
+        localStorage.setItem('fael_nome', nome);
+        
+        document.getElementById('modalNome').style.display = 'none';
+        
+        // Marcar key como usada
+        if (keyAtual && keyDataAtual && !keyDataAtual.usado) {
+            keyDataAtual.usado = true;
+            keyDataAtual.usadoPor = nomeUsuario;
+            if (!keyDataAtual.dispositivosUsados) keyDataAtual.dispositivosUsados = [];
+            const dispositivo = detectarDispositivo();
+            if (!keyDataAtual.dispositivosUsados.includes(dispositivo)) keyDataAtual.dispositivosUsados.push(dispositivo);
+            await salvarKeys();
+        }
+        
+        finalizarLogin();
+    }
+    
+    function finalizarLogin() {
         document.getElementById('key-screen').style.display = 'none';
         
-        if (key === "dono456") {
+        if (keyAtual === "dono456") {
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('admin-container').style.display = 'block';
             atualizarStats();
             renderizarKeysList();
-            renderizarUsersList();
-            setupAdminTabs();
             return;
         }
         
-        entrarNoPainel();
-    }
-
-    function entrarNoPainel() {
         document.getElementById('main-container').style.display = 'block';
         document.getElementById('admin-container').style.display = 'none';
         
-        if (currentKeyData.tipo === 'VIP') {
+        if (keyDataAtual.tipo === 'VIP') {
             document.getElementById('panel-standard').style.display = 'block';
             document.getElementById('panel-rage').style.display = 'none';
-        } else if (currentKeyData.tipo === 'RAGE') {
+        } else if (keyDataAtual.tipo === 'RAGE') {
             document.getElementById('panel-standard').style.display = 'none';
             document.getElementById('panel-rage').style.display = 'block';
         }
         
         atualizarInfoKey();
     }
-
+    
     function atualizarInfoKey() {
-        if (currentKey && currentKeyData) {
-            document.getElementById('keyDisplayCode').textContent = currentKey;
-            document.getElementById('keyDisplayNome').textContent = currentUser.nome;
-            document.getElementById('keyDisplayTipo').textContent = currentKeyData.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+        if (keyAtual && keyDataAtual) {
+            document.getElementById('keyDisplayCode').textContent = keyAtual;
+            document.getElementById('keyDisplayNome').textContent = nomeUsuario || 'Não definido';
+            document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
             document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
         }
     }
-
-    function logout() { localStorage.removeItem('fael_session'); location.reload(); }
-    function voltarParaLogin() { localStorage.removeItem('fael_session'); location.reload(); }
-
-    function setupAdminTabs() {
-        document.querySelectorAll('.admin-tab').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById('admin-tab-keys').style.display = btn.dataset.adminTab === 'keys' ? 'block' : 'none';
-                document.getElementById('admin-tab-users').style.display = btn.dataset.adminTab === 'users' ? 'block' : 'none';
-                if (btn.dataset.adminTab === 'users') renderizarUsersList();
-            });
-        });
+    
+    function voltarParaLogin() {
+        localStorage.removeItem('fael_nome');
+        location.reload();
     }
 
+    // ========== FUNÇÕES ADMIN ==========
     function atualizarStats() {
         const keys = Object.values(keysDatabase).filter(k => k.codigo !== "dono456");
         document.getElementById('totalKeys').textContent = keys.length;
         document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
         document.getElementById('usedKeys').textContent = keys.filter(k => k.usado === true).length;
         document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa' && !k.usado).length;
-        
-        const users = Object.values(usuariosDatabase);
-        document.getElementById('totalUsers').textContent = users.length;
-        document.getElementById('activeUsers').textContent = users.filter(u => u.keyAssociada).length;
     }
 
     function renderizarKeysList() {
@@ -1250,7 +1200,7 @@
             <div class="key-card ${key.status === 'ativa' ? 'active' : 'inactive'}">
                 <div class="key-code">🔑 ${key.codigo}</div>
                 <div style="font-size:11px;margin-top:5px;">
-                    👤 Usuário: ${key.usadoPor ? (usuariosDatabase[key.usadoPor]?.nome || key.usadoPor) : 'Não associado'}<br>
+                    👤 Usuário: ${key.usadoPor || 'Não associado'}<br>
                     Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#0f0' : '#f44'}">${key.tipo}</strong><br>
                     Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}<br>
                     📱 Usado em: ${key.dispositivosUsados?.length || 0} dispositivo(s)
@@ -1264,69 +1214,12 @@
         `).join('');
     }
 
-    function renderizarUsersList() {
-        let users = Object.values(usuariosDatabase);
-        if (filtroUserAtual) users = users.filter(u => u.login.toLowerCase().includes(filtroUserAtual.toLowerCase()) || u.nome.toLowerCase().includes(filtroUserAtual.toLowerCase()));
-        
-        const container = document.getElementById('usersList');
-        if (users.length === 0) { container.innerHTML = '<div style="color:#666;text-align:center;padding:20px;">Nenhum usuário</div>'; return; }
-        
-        container.innerHTML = users.map(user => `
-            <div class="user-card ${user.keyAssociada ? 'active' : 'inactive'}">
-                <div class="user-login">👤 ${user.login}</div>
-                <div style="font-size:11px;margin-top:5px;">
-                    Nome: <strong style="color: #ffaa00;">${user.nome}</strong><br>
-                    Key: ${user.keyAssociada || '❌ Nenhuma'}<br>
-                    Tipo: ${user.tipoKey || '-'}<br>
-                    Criado em: ${new Date(user.criadaEm).toLocaleDateString('pt-BR')}
-                </div>
-                <div style="margin-top:8px;">
-                    <button class="btn-admin-action btn-reset" onclick="resetarKeyUsuario('${user.login}')">🔄 Resetar Key</button>
-                    <button class="btn-admin-action btn-delete" onclick="excluirUsuario('${user.login}')">🗑️ EXCLUIR CONTA</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function resetarKeyUsuario(login) {
-        if (confirm(`Resetar key do usuário ${login}?`)) {
-            const user = usuariosDatabase[login];
-            if (user && user.keyAssociada && keysDatabase[user.keyAssociada]) {
-                keysDatabase[user.keyAssociada].usado = false;
-                keysDatabase[user.keyAssociada].usadoPor = null;
-            }
-            user.keyAssociada = null;
-            user.tipoKey = null;
-            await salvarDados();
-            renderizarUsersList();
-            renderizarKeysList();
-            atualizarStats();
-            showToast(`✅ Key do usuário ${login} resetada!`);
-        }
-    }
-
-    async function excluirUsuario(login) {
-        if (confirm(`⚠️ EXCLUIR conta de ${login} permanentemente?`)) {
-            const user = usuariosDatabase[login];
-            if (user && user.keyAssociada && keysDatabase[user.keyAssociada]) {
-                keysDatabase[user.keyAssociada].usado = false;
-                keysDatabase[user.keyAssociada].usadoPor = null;
-            }
-            delete usuariosDatabase[login];
-            await salvarDados();
-            renderizarUsersList();
-            renderizarKeysList();
-            atualizarStats();
-            showToast(`🗑️ Usuário ${login} excluído!`);
-        }
-    }
-
     async function gerarNovaKey(tipo) {
         const random = Math.random().toString(36).substring(2, 10).toUpperCase();
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
         keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
-        await salvarDados();
-        await carregarDados();
+        await salvarKeys();
+        await carregarKeys();
         atualizarStats();
         renderizarKeysList();
         alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
@@ -1340,8 +1233,8 @@
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${sufixo}` : `RAGE-${sufixo}`;
         if (keysDatabase[codigo]) { showToast('❌ Key já existe!', true); return; }
         keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usado: false, usadoPor: null, dispositivosUsados: [], criadaEm: new Date().toISOString() };
-        await salvarDados();
-        await carregarDados();
+        await salvarKeys();
+        await carregarKeys();
         atualizarStats();
         renderizarKeysList();
         alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
@@ -1351,8 +1244,8 @@
     async function ativarDesativarKey(codigo, ativar) {
         if (keysDatabase[codigo]) {
             keysDatabase[codigo].status = ativar ? 'ativa' : 'desativada';
-            await salvarDados();
-            await carregarDados();
+            await salvarKeys();
+            await carregarKeys();
             atualizarStats();
             renderizarKeysList();
             showToast(ativar ? `✅ Key ativada!` : `⚠️ Key desativada!`);
@@ -1362,8 +1255,8 @@
     async function excluirKey(codigo) {
         if (confirm(`Excluir key ${codigo}?`)) {
             delete keysDatabase[codigo];
-            await salvarDados();
-            await carregarDados();
+            await salvarKeys();
+            await carregarKeys();
             atualizarStats();
             renderizarKeysList();
             showToast(`🗑️ Key excluída!`);
@@ -1372,55 +1265,40 @@
 
     function copiarKey(codigo) { navigator.clipboard.writeText(codigo); showToast(`📋 Key copiada!`); }
     function filtrarKeys() { filtroAtual = document.getElementById('searchKey').value; renderizarKeysList(); }
-    function filtrarUsuarios() { filtroUserAtual = document.getElementById('searchUser').value; renderizarUsersList(); }
-    async function recarregarKeys() { await carregarDados(); atualizarStats(); renderizarKeysList(); renderizarUsersList(); showToast(`✅ Dados recarregados!`); }
+    async function recarregarKeys() { await carregarKeys(); atualizarStats(); renderizarKeysList(); showToast(`✅ Dados recarregados!`); }
 
+    // ========== CONFIGURAÇÕES ==========
     function abrirConfiguracoes() {
-        document.getElementById('currentNome').textContent = currentUser.nome;
-        const ultimaTroca = currentUser.ultimaTrocaNome ? new Date(currentUser.ultimaTrocaNome) : null;
-        const diasDesdeUltima = ultimaTroca ? Math.floor((Date.now() - ultimaTroca) / (1000 * 60 * 60 * 24)) : 8;
-        if (diasDesdeUltima < 7) {
-            document.getElementById('trocaNomeMsg').innerHTML = `⚠️ Você só pode trocar o nome novamente em ${7 - diasDesdeUltima} dias`;
-            document.getElementById('novoNome').disabled = true;
-        } else {
-            document.getElementById('trocaNomeMsg').innerHTML = `✅ Você pode trocar seu nome agora!`;
-            document.getElementById('novoNome').disabled = false;
-        }
+        document.getElementById('currentNome').textContent = nomeUsuario || 'Não definido';
         document.getElementById('modalConfig').style.display = 'flex';
     }
 
     async function salvarConfiguracoes() {
         const novoNome = document.getElementById('novoNome').value.trim();
-        const novaSenha = document.getElementById('novaSenha').value;
-        const confirmSenha = document.getElementById('confirmSenha').value;
         
         if (novoNome) {
-            const ultimaTroca = currentUser.ultimaTrocaNome ? new Date(currentUser.ultimaTrocaNome) : null;
-            const diasDesdeUltima = ultimaTroca ? Math.floor((Date.now() - ultimaTroca) / (1000 * 60 * 60 * 24)) : 8;
-            if (diasDesdeUltima < 7) { showToast(`⚠️ Você só pode trocar o nome a cada 7 dias!`, true); return; }
-            currentUser.nome = novoNome;
-            currentUser.ultimaTrocaNome = new Date().toISOString();
+            nomeUsuario = novoNome;
+            localStorage.setItem('fael_nome', novoNome);
+            
+            // Atualizar nome na key
+            if (keyAtual && keyDataAtual) {
+                keyDataAtual.usadoPor = novoNome;
+                await salvarKeys();
+            }
+            
+            showToast('✅ Nome alterado com sucesso!');
+            atualizarInfoKey();
         }
         
-        if (novaSenha) {
-            if (novaSenha.length < 4) { showToast('Senha precisa ter pelo menos 4 caracteres!', true); return; }
-            if (novaSenha !== confirmSenha) { showToast('As senhas não coincidem!', true); return; }
-            currentUser.senha = novaSenha;
-        }
-        
-        await salvarDados();
-        showToast('✅ Configurações salvas!');
         fecharConfiguracoes();
-        document.getElementById('keyDisplayNome').textContent = currentUser.nome;
     }
 
     function fecharConfiguracoes() {
         document.getElementById('modalConfig').style.display = 'none';
         document.getElementById('novoNome').value = '';
-        document.getElementById('novaSenha').value = '';
-        document.getElementById('confirmSenha').value = '';
     }
 
+    // ========== FUNÇÕES ORIGINAIS ==========
     function puxarArma() { const arma = document.getElementById('weaponName').value; if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`); else showToast('Digite o nome da arma!', true); }
     
     function iniciarProcessoBypass() {
@@ -1479,6 +1357,7 @@
         }, 1000);
     }
 
+    // ========== SENSI ==========
     function carregarMarcas() {
         const grid = document.getElementById('brandsGrid'); if (!grid) return; grid.innerHTML = '';
         marcas.sort().forEach(marca => {
@@ -1511,6 +1390,7 @@
     }
     function aplicarSensi() { if (!marcaSelecionada) { showToast('Selecione uma marca!', true); return; } showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`); }
 
+    // ========== CONTROLE DE ABAS ==========
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.classList.contains('admin-tab')) return;
@@ -1523,45 +1403,43 @@
         });
     });
 
-    // ========== INICIALIZAÇÃO CORRIGIDA ==========
+    // ========== INICIALIZAÇÃO ==========
     (async function init() {
-        await carregarDados();
-        const session = localStorage.getItem('fael_session');
-        if (session) {
-            try {
-                const { login } = JSON.parse(session);
-                if (usuariosDatabase[login]) {
-                    currentUser = usuariosDatabase[login];
-                    document.getElementById('auth-screen').style.display = 'none';
-                    
-                    // VERIFICAR SE O USUÁRIO TEM KEY ASSOCIADA E SE ELA É VÁLIDA
-                    if (currentUser.keyAssociada && keysDatabase[currentUser.keyAssociada] && keysDatabase[currentUser.keyAssociada].status === 'ativa') {
-                        currentKey = currentUser.keyAssociada;
-                        currentKeyData = keysDatabase[currentKey];
-                        
-                        if (currentKey === "dono456") {
-                            document.getElementById('main-container').style.display = 'none';
-                            document.getElementById('admin-container').style.display = 'block';
-                            atualizarStats();
-                            renderizarKeysList();
-                            renderizarUsersList();
-                            setupAdminTabs();
-                            return;
-                        }
-                        
-                        entrarNoPainel();
-                        return;
-                    } else {
-                        // Usuário não tem key ou key inválida, mostrar tela de key
-                        document.getElementById('key-screen').style.display = 'block';
-                        return;
-                    }
-                }
-            } catch(e) {
-                console.log('Erro ao restaurar sessão:', e);
+        await carregarKeys();
+        
+        // Verificar se já tem key salva
+        const savedKey = localStorage.getItem('fael_key');
+        const savedNome = localStorage.getItem('fael_nome');
+        
+        if (savedKey && keysDatabase[savedKey] && keysDatabase[savedKey].status === 'ativa') {
+            keyAtual = savedKey;
+            keyDataAtual = keysDatabase[savedKey];
+            nomeUsuario = savedNome;
+            
+            if (keyAtual === "dono456") {
+                document.getElementById('key-screen').style.display = 'none';
+                document.getElementById('main-container').style.display = 'none';
+                document.getElementById('admin-container').style.display = 'block';
+                atualizarStats();
+                renderizarKeysList();
+                return;
             }
+            
+            document.getElementById('key-screen').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            
+            if (keyDataAtual.tipo === 'VIP') {
+                document.getElementById('panel-standard').style.display = 'block';
+                document.getElementById('panel-rage').style.display = 'none';
+            } else {
+                document.getElementById('panel-standard').style.display = 'none';
+                document.getElementById('panel-rage').style.display = 'block';
+            }
+            
+            atualizarInfoKey();
+        } else {
+            document.getElementById('key-screen').style.display = 'block';
         }
-        document.getElementById('auth-screen').style.display = 'block';
     })();
     </script>
 </body>
