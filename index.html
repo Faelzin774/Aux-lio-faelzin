@@ -1255,10 +1255,16 @@
         const userIP = await getIP();
         if (userIP === ADMIN_IP) return true;
         
+        // Mostrar tela de manutenção e ESCONDER tudo
         document.getElementById('maintenance-screen').style.display = 'flex';
         document.getElementById('key-screen').style.display = 'none';
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('admin-container').style.display = 'none';
+        
+        // 🔥 LIMPAR SESSÃO SALVA para não burlar
+        localStorage.removeItem('fael_key');
+        localStorage.removeItem('fael_nome');
+        
         return false;
     }
     
@@ -1269,6 +1275,8 @@
             // Recarregar página para aplicar para todos
             if (!ativado) {
                 setTimeout(() => location.reload(), 1500);
+            } else {
+                setTimeout(() => location.reload(), 1000);
             }
         } else {
             showToast('❌ Erro ao salvar modo manutenção!', true);
@@ -1773,9 +1781,11 @@
         await carregarKeys();
         await carregarManutencao();
         
+        // 🔥 VERIFICAR ACESSO PRIMEIRO
         const acessoPermitido = await verificarAcesso();
         if (!acessoPermitido) return;
         
+        // Só depois de verificar o acesso, restaura a sessão
         const savedKey = localStorage.getItem('fael_key');
         const savedNome = localStorage.getItem('fael_nome');
         
