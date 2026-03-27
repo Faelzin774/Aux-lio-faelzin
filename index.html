@@ -1052,7 +1052,7 @@
                 <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
             
-            <!-- Modo Manutenção -->
+            <!-- Modo Manutenção (salvo no JSONBin) -->
             <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--bypass);">
                 <h3 style="color: var(--bypass); font-size: 14px; margin-bottom: 10px;">🔧 MODO MANUTENÇÃO</h3>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -1131,7 +1131,7 @@
     // IP do Admin
     const ADMIN_IP = "177.11.105.186";
     
-    let modoManutencao = localStorage.getItem('fael_manutencao') === 'true';
+    let modoManutencao = false; // Será carregado do JSONBin
     let tempoSelecionado = { tipo: "permanente", valor: 0 };
     let intervaloAtualizacao = null;
     
@@ -1205,8 +1205,53 @@
         }
     }
     
+    // ==================== FUNÇÕES DE MANUTENÇÃO (SALVAS NO JSONBIN) ====================
+    async function carregarManutencao() {
+        try {
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            if (!response.ok) throw new Error();
+            const data = await response.json();
+            const config = data.record.config || {};
+            modoManutencao = config.manutencao === true;
+            return true;
+        } catch (error) {
+            modoManutencao = false;
+            return false;
+        }
+    }
+    
+    async function salvarManutencao(ativado) {
+        try {
+            // Primeiro carregar dados atuais
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            if (!response.ok) throw new Error();
+            const data = await response.json();
+            const record = data.record;
+            
+            // Atualizar configuração
+            if (!record.config) record.config = {};
+            record.config.manutencao = ativado;
+            
+            // Salvar de volta
+            await fetch(JSONBIN_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                body: JSON.stringify(record)
+            });
+            
+            modoManutencao = ativado;
+            return true;
+        } catch (error) {
+            console.error('Erro ao salvar manutenção:', error);
+            return false;
+        }
+    }
+    
     async function verificarAcesso() {
+        await carregarManutencao();
+        
         if (!modoManutencao) return true;
+        
         const userIP = await getIP();
         if (userIP === ADMIN_IP) return true;
         
@@ -1217,50 +1262,18 @@
         return false;
     }
     
-    function toggleManutencao(ativado) {
-        modoManutencao = ativado;
-        localStorage.setItem('fael_manutencao', ativado ? 'true' : 'false');
-        showToast(ativado ? '🔧 Modo manutenção ATIVADO!' : '✅ Modo manutenção DESATIVADO!');
-    }
-    
-    // ==================== CONFIGURAÇÃO DOS BOTÕES DE TEMPO ====================
-    function configurarBotoesTempo() {
-        const botoes = document.querySelectorAll('.tempo-btn');
-        const valorInputDiv = document.getElementById('valorTempoInput');
-        const tempoValor = document.getElementById('tempoValor');
-        const tempoUnidade = document.getElementById('tempoUnidade');
-        
-        botoes.forEach(btn => {
-            btn.addEventListener('click', () => {
-                botoes.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const tipo = btn.dataset.tipo;
-                tempoSelecionado.tipo = tipo;
-                
-                if (tipo === "permanente") {
-                    valorInputDiv.style.display = 'none';
-                    tempoSelecionado.valor = 0;
-                } else {
-                    valorInputDiv.style.display = 'flex';
-                    let unidade = "";
-                    switch(tipo) {
-                        case "minuto": unidade = "minuto(s)"; break;
-                        case "hora": unidade = "hora(s)"; break;
-                        case "dia": unidade = "dia(s)"; break;
-                        case "semana": unidade = "semana(s)"; break;
-                        case "mes": unidade = "mês(es)"; break;
-                    }
-                    tempoUnidade.textContent = unidade;
-                    tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
-                }
-            });
-        });
-        
-        if (tempoValor) {
-            tempoValor.addEventListener('change', () => {
-                tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
-            });
+    async function toggleManutencao(ativado) {
+        const salvou = await salvarManutencao(ativado);
+        if (salvou) {
+            showToast(ativado ? '🔧 Modo manutenção ATIVADO! (Salvo na nuvem)' : '✅ Modo manutenção DESATIVADO! (Salvo na nuvem)');
+            // Recarregar página para aplicar para todos
+            if (!ativado) {
+                setTimeout(() => location.reload(), 1500);
+            }
+        } else {
+            showToast('❌ Erro ao salvar modo manutenção!', true);
+            // Reverter toggle
+            document.getElementById('maintenanceToggle').checked = !ativado;
         }
     }
     
@@ -1291,10 +1304,20 @@
 
     async function salvarKeys() {
         try {
+            // Primeiro carregar dados atuais para não perder a configuração
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            let record = {};
+            if (response.ok) {
+                const data = await response.json();
+                record = data.record;
+            }
+            
+            record.keys = keysDatabase;
+            
             await fetch(JSONBIN_URL, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                body: JSON.stringify({ keys: keysDatabase })
+                body: JSON.stringify(record)
             });
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
             return true;
@@ -1599,6 +1622,47 @@
         return '💻 Desktop';
     }
 
+    // ==================== CONFIGURAÇÃO DOS BOTÕES DE TEMPO ====================
+    function configurarBotoesTempo() {
+        const botoes = document.querySelectorAll('.tempo-btn');
+        const valorInputDiv = document.getElementById('valorTempoInput');
+        const tempoValor = document.getElementById('tempoValor');
+        const tempoUnidade = document.getElementById('tempoUnidade');
+        
+        botoes.forEach(btn => {
+            btn.addEventListener('click', () => {
+                botoes.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const tipo = btn.dataset.tipo;
+                tempoSelecionado.tipo = tipo;
+                
+                if (tipo === "permanente") {
+                    valorInputDiv.style.display = 'none';
+                    tempoSelecionado.valor = 0;
+                } else {
+                    valorInputDiv.style.display = 'flex';
+                    let unidade = "";
+                    switch(tipo) {
+                        case "minuto": unidade = "minuto(s)"; break;
+                        case "hora": unidade = "hora(s)"; break;
+                        case "dia": unidade = "dia(s)"; break;
+                        case "semana": unidade = "semana(s)"; break;
+                        case "mes": unidade = "mês(es)"; break;
+                    }
+                    tempoUnidade.textContent = unidade;
+                    tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
+                }
+            });
+        });
+        
+        if (tempoValor) {
+            tempoValor.addEventListener('change', () => {
+                tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
+            });
+        }
+    }
+
     // ==================== FUNÇÕES ORIGINAIS ====================
     function puxarArma() { const arma = document.getElementById('weaponName').value; if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`); else showToast('Digite o nome da arma!', true); }
     
@@ -1707,6 +1771,7 @@
     // ==================== INICIALIZAÇÃO ====================
     (async function init() {
         await carregarKeys();
+        await carregarManutencao();
         
         const acessoPermitido = await verificarAcesso();
         if (!acessoPermitido) return;
