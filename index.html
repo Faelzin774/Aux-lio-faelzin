@@ -93,23 +93,6 @@
             border: 2px solid var(--hacker);
         }
 
-        .modal-nome-content h3 {
-            color: var(--hacker);
-            margin-bottom: 15px;
-        }
-
-        .modal-nome-content input {
-            width: 90%;
-            padding: 12px;
-            margin: 15px 0;
-            background: #000;
-            border: 1px solid var(--hacker);
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            outline: none;
-        }
-
         #main-container {
             display: none;
             width: 90%;
@@ -610,6 +593,7 @@
         .btn-refresh { color: #0066ff; border-color: #0066ff; }
         .btn-activate { color: #00ff00; border-color: #00ff00; }
         .btn-deactivate { color: #ffaa00; border-color: #ffaa00; }
+        .btn-maintenance { color: #ffaa00; border-color: #ffaa00; }
 
         .keys-list {
             max-height: 400px;
@@ -771,6 +755,75 @@
             border-radius: 8px;
             outline: none;
         }
+
+        /* Tela de Manutenção */
+        .maintenance-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a, #000);
+            z-index: 30000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .maintenance-content {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 30px;
+            border: 2px solid var(--bypass);
+            max-width: 350px;
+        }
+
+        .maintenance-content h1 {
+            color: var(--bypass);
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .maintenance-content p {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--bypass);
+            animation: loading 1.5s ease-in-out infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top-color: var(--bypass);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
@@ -788,6 +841,20 @@
             <p style="font-size: 12px; color: #888;">Digite seu nome para continuar</p>
             <input type="text" id="nomeUsuario" placeholder="Ex: João, Maria, Faelzin..." maxlength="30">
             <button class="btn-login" onclick="salvarNomeUsuario()">CONTINUAR</button>
+        </div>
+    </div>
+
+    <!-- Tela de Manutenção -->
+    <div id="maintenance-screen" class="maintenance-screen">
+        <div class="maintenance-content">
+            <div class="spinner"></div>
+            <h1>🔄 EM ATUALIZAÇÃO</h1>
+            <p>O sistema está passando por uma atualização.</p>
+            <p>Volte em alguns minutos.</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p style="font-size: 10px; margin-top: 15px;">FAEL ASSIST - Versão 3.0.0</p>
         </div>
     </div>
 
@@ -932,6 +999,19 @@
                 <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
             </div>
             
+            <!-- Modo Manutenção -->
+            <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--bypass);">
+                <h3 style="color: var(--bypass); font-size: 14px; margin-bottom: 10px;">🔧 MODO MANUTENÇÃO</h3>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 12px;">Ativar/Desativar modo de atualização</span>
+                    <label class="switch">
+                        <input type="checkbox" id="maintenanceToggle" onchange="toggleManutencao(this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas seu IP (192.168.1.120) terá acesso. Outros verão tela de atualização.</p>
+            </div>
+            
             <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                 <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
                 <div class="custom-key-input">
@@ -971,10 +1051,16 @@
     <div class="status-online" id="statusOnline">🟢 Carregando...</div>
 
     <script>
-    // ==================== CONFIGURAÇÕES JSONBIN ====================
+    // ==================== CONFIGURAÇÕES ====================
     const BIN_ID = "69c46b0caa77b81da91cf54d";
     const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    
+    // IP do Admin (seu IP)
+    const ADMIN_IP = "192.168.1.120";
+    
+    // Variável de manutenção (salva no localStorage)
+    let modoManutencao = localStorage.getItem('fael_manutencao') === 'true';
     
     const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"];
 
@@ -989,24 +1075,43 @@
     let timerInterval = null;
     let tempoRestante = 10;
     let filtroAtual = '';
-
-    function showToast(msg, isError = false) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = msg;
-        toast.style.backgroundColor = isError ? '#ff4444' : '#00ff00';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+    
+    // ==================== FUNÇÃO PARA PEGAR IP DO USUÁRIO ====================
+    async function getIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            return null;
+        }
     }
-
-    function detectarDispositivo() {
-        const ua = navigator.userAgent;
-        if (/iPhone/.test(ua)) return '📱 iPhone';
-        if (/iPad/.test(ua)) return '📱 iPad';
-        if (/Android/.test(ua)) return '🤖 Android';
-        return '💻 Desktop';
+    
+    // ==================== VERIFICAR ACESSO (MODO MANUTENÇÃO) ====================
+    async function verificarAcesso() {
+        if (!modoManutencao) return true;
+        
+        const userIP = await getIP();
+        if (userIP === ADMIN_IP) {
+            return true;
+        }
+        
+        // Mostrar tela de manutenção
+        document.getElementById('maintenance-screen').style.display = 'flex';
+        document.getElementById('key-screen').style.display = 'none';
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('admin-container').style.display = 'none';
+        return false;
     }
-
+    
+    // ==================== FUNÇÃO PARA ATIVAR/DESATIVAR MANUTENÇÃO ====================
+    function toggleManutencao(ativado) {
+        modoManutencao = ativado;
+        localStorage.setItem('fael_manutencao', ativado ? 'true' : 'false');
+        showToast(ativado ? '🔧 Modo manutenção ATIVADO! Apenas seu IP terá acesso.' : '✅ Modo manutenção DESATIVADO! Todos podem acessar.');
+    }
+    
+    // ==================== FUNÇÕES JSONBIN ====================
     async function carregarKeys() {
         try {
             const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
@@ -1043,6 +1148,7 @@
         } catch (error) { return false; }
     }
 
+    // ==================== VERIFICAR KEY ====================
     async function validarKey() {
         const key = document.getElementById('keyInput').value.trim();
         const msgDiv = document.getElementById('loginMsg');
@@ -1078,7 +1184,6 @@
         keyAtual = key;
         keyDataAtual = keyData;
         
-        // Verificar se já tem nome salvo
         if (!nomeUsuario) {
             document.getElementById('modalNome').style.display = 'flex';
             btn.disabled = false;
@@ -1099,32 +1204,14 @@
             return;
         }
         
-        if (nome.length > 30) {
-            showToast('❌ Nome muito longo! Máximo 30 caracteres.', true);
-            return;
-        }
-        
         nomeUsuario = nome;
         localStorage.setItem('fael_nome', nome);
-        
         document.getElementById('modalNome').style.display = 'none';
-        
-        // Só registra o nome na key, NÃO marca como usada
-        if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
-            if (!keyDataAtual.usuarios) keyDataAtual.usuarios = [];
-            if (!keyDataAtual.usuarios.includes(nome)) {
-                keyDataAtual.usuarios.push(nome);
-                await salvarKeys();
-            }
-        }
-        
         finalizarLogin();
     }
     
     function finalizarLogin() {
-        // Salvar key no localStorage para não precisar digitar de novo
         localStorage.setItem('fael_key', keyAtual);
-        
         document.getElementById('key-screen').style.display = 'none';
         
         if (keyAtual === "dono456") {
@@ -1132,6 +1219,9 @@
             document.getElementById('admin-container').style.display = 'block';
             atualizarStats();
             renderizarKeysList();
+            // Atualizar toggle de manutenção
+            const toggle = document.getElementById('maintenanceToggle');
+            if (toggle) toggle.checked = modoManutencao;
             return;
         }
         
@@ -1164,7 +1254,7 @@
         location.reload();
     }
 
-    // ========== FUNÇÕES ADMIN ==========
+    // ==================== FUNÇÕES ADMIN ====================
     function atualizarStats() {
         const keys = Object.values(keysDatabase).filter(k => k.codigo !== "dono456");
         document.getElementById('totalKeys').textContent = keys.length;
@@ -1251,7 +1341,7 @@
     function filtrarKeys() { filtroAtual = document.getElementById('searchKey').value; renderizarKeysList(); }
     async function recarregarKeys() { await carregarKeys(); atualizarStats(); renderizarKeysList(); showToast(`✅ Dados recarregados!`); }
 
-    // ========== CONFIGURAÇÕES ==========
+    // ==================== CONFIGURAÇÕES ====================
     function abrirConfiguracoes() {
         document.getElementById('currentNome').textContent = nomeUsuario || 'Não definido';
         document.getElementById('modalConfig').style.display = 'flex';
@@ -1264,7 +1354,6 @@
             nomeUsuario = novoNome;
             localStorage.setItem('fael_nome', novoNome);
             
-            // Atualizar nome na key
             if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
                 if (!keyDataAtual.usuarios) keyDataAtual.usuarios = [];
                 if (!keyDataAtual.usuarios.includes(novoNome)) {
@@ -1285,7 +1374,25 @@
         document.getElementById('novoNome').value = '';
     }
 
-    // ========== FUNÇÕES ORIGINAIS ==========
+    // ==================== FUNÇÕES AUXILIARES ====================
+    function showToast(msg, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        toast.style.backgroundColor = isError ? '#ff4444' : '#00ff00';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function detectarDispositivo() {
+        const ua = navigator.userAgent;
+        if (/iPhone/.test(ua)) return '📱 iPhone';
+        if (/iPad/.test(ua)) return '📱 iPad';
+        if (/Android/.test(ua)) return '🤖 Android';
+        return '💻 Desktop';
+    }
+
+    // ==================== FUNÇÕES ORIGINAIS ====================
     function puxarArma() { const arma = document.getElementById('weaponName').value; if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`); else showToast('Digite o nome da arma!', true); }
     
     function iniciarProcessoBypass() {
@@ -1344,7 +1451,7 @@
         }, 1000);
     }
 
-    // ========== SENSI ==========
+    // ==================== SENSI ====================
     function carregarMarcas() {
         const grid = document.getElementById('brandsGrid'); if (!grid) return; grid.innerHTML = '';
         marcas.sort().forEach(marca => {
@@ -1377,6 +1484,7 @@
     }
     function aplicarSensi() { if (!marcaSelecionada) { showToast('Selecione uma marca!', true); return; } showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`); }
 
+    // ==================== CONTROLE DE ABAS ====================
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.classList.contains('admin-tab')) return;
@@ -1389,9 +1497,13 @@
         });
     });
 
-    // ========== INICIALIZAÇÃO ==========
+    // ==================== INICIALIZAÇÃO ====================
     (async function init() {
         await carregarKeys();
+        
+        // Verificar modo manutenção
+        const acessoPermitido = await verificarAcesso();
+        if (!acessoPermitido) return;
         
         const savedKey = localStorage.getItem('fael_key');
         const savedNome = localStorage.getItem('fael_nome');
@@ -1407,6 +1519,8 @@
                 document.getElementById('admin-container').style.display = 'block';
                 atualizarStats();
                 renderizarKeysList();
+                const toggle = document.getElementById('maintenanceToggle');
+                if (toggle) toggle.checked = modoManutencao;
                 return;
             }
             
