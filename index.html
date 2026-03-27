@@ -476,6 +476,21 @@
             font-size: 10px;
             display: inline-block;
         }
+        
+        .badge-expirada {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
+        }
+        
+        .timer-restante {
+            color: var(--bypass);
+            font-family: monospace;
+            font-size: 14px;
+        }
 
         .social-links {
             display: flex;
@@ -569,6 +584,11 @@
         .key-card.inactive {
             border-left: 4px solid #ff0000;
             opacity: 0.7;
+        }
+        
+        .key-card.expired {
+            border-left: 4px solid #ff4444;
+            opacity: 0.6;
         }
 
         .key-code {
@@ -792,37 +812,74 @@
             font-size: 14px;
         }
 
-        .loading-bar {
-            width: 100%;
-            height: 4px;
-            background: #333;
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-
-        .loading-progress {
-            width: 0%;
-            height: 100%;
-            background: var(--bypass);
-            animation: loading 1.5s ease-in-out infinite;
-            border-radius: 2px;
-        }
-
-        @keyframes loading {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border: 3px solid #333;
             border-top-color: var(--bypass);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 20px auto;
+        }
+
+        /* Seleção de tempo */
+        .tempo-section {
+            background: #111;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tempo-section h3 {
+            color: var(--admin);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .tempo-opcoes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .tempo-btn {
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .tempo-btn.active {
+            background: var(--admin);
+            border-color: var(--admin);
+            color: #000;
+        }
+        
+        .valor-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .valor-input input {
+            flex: 1;
+            background: #000;
+            border: 1px solid var(--admin);
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .valor-input span {
+            color: #888;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -844,16 +901,12 @@
         </div>
     </div>
 
-    <!-- Tela de Manutenção -->
     <div id="maintenance-screen" class="maintenance-screen">
         <div class="maintenance-content">
             <div class="spinner"></div>
-            <h1>🔄 EM ATUALIZAÇÃO</h1>
+            <h1>EM ATUALIZAÇÃO</h1>
             <p>O sistema está passando por uma atualização.</p>
             <p>Volte em alguns minutos.</p>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
             <p style="font-size: 10px; margin-top: 15px;">FAEL ASSIST - Versão 3.0.0</p>
         </div>
     </div>
@@ -950,8 +1003,8 @@
                 <div class="key-display" id="keyDisplayCode">---</div>
                 <div class="sensi-row"><span>👤 NOME DO USUÁRIO</span><span id="keyDisplayNome">---</span></div>
                 <div class="sensi-row"><span>📌 TIPO DE ACESSO</span><span id="keyDisplayTipo">---</span></div>
+                <div class="sensi-row"><span>⏰ TEMPO RESTANTE</span><span id="keyDisplayTempo" class="timer-restante">---</span></div>
                 <div class="sensi-row"><span>📱 LIMITE DE DISPOSITIVOS</span><span><span class="badge-infinito">∞ ILIMITADO</span></span></div>
-                <div class="sensi-row"><span>⏰ VALIDADE</span><span><span class="badge-permanente">♾️ PERMANENTE</span></span></div>
                 <div class="sensi-row"><span>📱 DISPOSITIVO ATUAL</span><span id="keyDisplayDispositivo">---</span></div>
             </div>
         </div>
@@ -960,7 +1013,7 @@
             <div class="info-section">
                 <div class="info-section-title">🎯 AUXÍLIO</div>
                 <div class="info-item"><span class="info-label">Versão</span><span class="info-value">3.0.0</span></div>
-                <div class="info-item"><span class="info-label">Última atualização</span><span class="info-value">26/03/2026 - 14:30</span></div>
+                <div class="info-item"><span class="info-label">Última atualização</span><span class="info-value">27/03/2026 - 14:30</span></div>
             </div>
             <div class="info-section">
                 <div class="info-section-title">🎮 SUPORTE</div>
@@ -1009,9 +1062,10 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas seu IP (192.168.1.120) terá acesso. Outros verão tela de atualização.</p>
+                <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas o administrador terá acesso. Outros verão tela de atualização.</p>
             </div>
             
+            <!-- GERAR KEY COM TEMPO -->
             <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                 <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
                 <div class="custom-key-input">
@@ -1021,7 +1075,25 @@
                         <option value="RAGE">RAGE</option>
                     </select>
                 </div>
-                <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%;">✨ GERAR KEY</button>
+                
+                <!-- Seleção de Tempo -->
+                <div class="tempo-section">
+                    <h3>⏰ TEMPO DE DURAÇÃO</h3>
+                    <div class="tempo-opcoes">
+                        <button class="tempo-btn" data-tipo="permanente">♾️ PERMANENTE</button>
+                        <button class="tempo-btn" data-tipo="hora">⏱️ HORA(S)</button>
+                        <button class="tempo-btn" data-tipo="minuto">⏲️ MINUTO(S)</button>
+                        <button class="tempo-btn" data-tipo="dia">📅 DIA(S)</button>
+                        <button class="tempo-btn" data-tipo="semana">📆 SEMANA(S)</button>
+                        <button class="tempo-btn" data-tipo="mes">📅 MÊS(ES)</button>
+                    </div>
+                    <div class="valor-input" id="valorTempoInput" style="display: none;">
+                        <input type="number" id="tempoValor" min="1" max="999" value="1">
+                        <span id="tempoUnidade">hora(s)</span>
+                    </div>
+                </div>
+                
+                <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%; margin-top: 10px;">✨ GERAR KEY</button>
             </div>
             
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
@@ -1056,11 +1128,12 @@
     const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
     
-    // IP do Admin (seu IP)
+    // IP do Admin
     const ADMIN_IP = "177.11.105.186";
     
-    // Variável de manutenção (salva no localStorage)
     let modoManutencao = localStorage.getItem('fael_manutencao') === 'true';
+    let tempoSelecionado = { tipo: "permanente", valor: 0 };
+    let intervaloAtualizacao = null;
     
     const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"];
 
@@ -1075,8 +1148,53 @@
     let timerInterval = null;
     let tempoRestante = 10;
     let filtroAtual = '';
+
+    // ==================== FUNÇÕES DE TEMPO ====================
+    function calcularDataExpiracao(tipo, valor) {
+        if (tipo === "permanente") return null;
+        
+        const now = new Date();
+        switch(tipo) {
+            case "minuto": now.setMinutes(now.getMinutes() + valor); break;
+            case "hora": now.setHours(now.getHours() + valor); break;
+            case "dia": now.setDate(now.getDate() + valor); break;
+            case "semana": now.setDate(now.getDate() + (valor * 7)); break;
+            case "mes": now.setMonth(now.getMonth() + valor); break;
+            default: return null;
+        }
+        return now.toISOString();
+    }
     
-    // ==================== FUNÇÃO PARA PEGAR IP DO USUÁRIO ====================
+    function formatarTempoRestante(dataExpiracao) {
+        if (!dataExpiracao) return "♾️ PERMANENTE";
+        
+        const agora = new Date();
+        const expiracao = new Date(dataExpiracao);
+        
+        if (expiracao <= agora) return "⏰ EXPIRADA!";
+        
+        const diffMs = expiracao - agora;
+        const diffSeg = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSeg / 60);
+        const diffHoras = Math.floor(diffMin / 60);
+        const diffDias = Math.floor(diffHoras / 24);
+        const diffSemanas = Math.floor(diffDias / 7);
+        const diffMeses = Math.floor(diffDias / 30);
+        
+        if (diffMeses > 0) return `${diffMeses} mês(es)`;
+        if (diffSemanas > 0) return `${diffSemanas} semana(s)`;
+        if (diffDias > 0) return `${diffDias} dia(s)`;
+        if (diffHoras > 0) return `${diffHoras} hora(s)`;
+        if (diffMin > 0) return `${diffMin} minuto(s)`;
+        return `${diffSeg} segundo(s)`;
+    }
+    
+    function keyExpirada(dataExpiracao) {
+        if (!dataExpiracao) return false;
+        return new Date(dataExpiracao) <= new Date();
+    }
+    
+    // ==================== FUNÇÃO PARA PEGAR IP ====================
     async function getIP() {
         try {
             const response = await fetch('https://api.ipify.org?format=json');
@@ -1087,16 +1205,11 @@
         }
     }
     
-    // ==================== VERIFICAR ACESSO (MODO MANUTENÇÃO) ====================
     async function verificarAcesso() {
         if (!modoManutencao) return true;
-        
         const userIP = await getIP();
-        if (userIP === ADMIN_IP) {
-            return true;
-        }
+        if (userIP === ADMIN_IP) return true;
         
-        // Mostrar tela de manutenção
         document.getElementById('maintenance-screen').style.display = 'flex';
         document.getElementById('key-screen').style.display = 'none';
         document.getElementById('main-container').style.display = 'none';
@@ -1104,11 +1217,51 @@
         return false;
     }
     
-    // ==================== FUNÇÃO PARA ATIVAR/DESATIVAR MANUTENÇÃO ====================
     function toggleManutencao(ativado) {
         modoManutencao = ativado;
         localStorage.setItem('fael_manutencao', ativado ? 'true' : 'false');
-        showToast(ativado ? '🔧 Modo manutenção ATIVADO! Apenas seu IP terá acesso.' : '✅ Modo manutenção DESATIVADO! Todos podem acessar.');
+        showToast(ativado ? '🔧 Modo manutenção ATIVADO!' : '✅ Modo manutenção DESATIVADO!');
+    }
+    
+    // ==================== CONFIGURAÇÃO DOS BOTÕES DE TEMPO ====================
+    function configurarBotoesTempo() {
+        const botoes = document.querySelectorAll('.tempo-btn');
+        const valorInputDiv = document.getElementById('valorTempoInput');
+        const tempoValor = document.getElementById('tempoValor');
+        const tempoUnidade = document.getElementById('tempoUnidade');
+        
+        botoes.forEach(btn => {
+            btn.addEventListener('click', () => {
+                botoes.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const tipo = btn.dataset.tipo;
+                tempoSelecionado.tipo = tipo;
+                
+                if (tipo === "permanente") {
+                    valorInputDiv.style.display = 'none';
+                    tempoSelecionado.valor = 0;
+                } else {
+                    valorInputDiv.style.display = 'flex';
+                    let unidade = "";
+                    switch(tipo) {
+                        case "minuto": unidade = "minuto(s)"; break;
+                        case "hora": unidade = "hora(s)"; break;
+                        case "dia": unidade = "dia(s)"; break;
+                        case "semana": unidade = "semana(s)"; break;
+                        case "mes": unidade = "mês(es)"; break;
+                    }
+                    tempoUnidade.textContent = unidade;
+                    tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
+                }
+            });
+        });
+        
+        if (tempoValor) {
+            tempoValor.addEventListener('change', () => {
+                tempoSelecionado.valor = parseInt(tempoValor.value) || 1;
+            });
+        }
     }
     
     // ==================== FUNÇÕES JSONBIN ====================
@@ -1119,7 +1272,7 @@
             const data = await response.json();
             keysDatabase = data.record.keys || {};
             if (!keysDatabase["dono456"]) {
-                keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", criadaEm: new Date().toISOString() };
+                keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", expiraEm: null, criadaEm: new Date().toISOString() };
             }
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
             document.getElementById('statusOnline').style.color = '#00ff00';
@@ -1131,7 +1284,7 @@
                 keysDatabase = JSON.parse(local);
                 return true;
             }
-            keysDatabase = { "dono456": { codigo: "dono456", tipo: "ADMIN", status: "ativa", criadaEm: new Date().toISOString() } };
+            keysDatabase = { "dono456": { codigo: "dono456", tipo: "ADMIN", status: "ativa", expiraEm: null, criadaEm: new Date().toISOString() } };
             return false;
         }
     }
@@ -1181,6 +1334,14 @@
             return;
         }
         
+        if (keyExpirada(keyData.expiraEm)) {
+            msgDiv.textContent = '❌ KEY EXPIRADA!';
+            msgDiv.style.color = '#ff4444';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
+        }
+        
         keyAtual = key;
         keyDataAtual = keyData;
         
@@ -1219,9 +1380,9 @@
             document.getElementById('admin-container').style.display = 'block';
             atualizarStats();
             renderizarKeysList();
-            // Atualizar toggle de manutenção
             const toggle = document.getElementById('maintenanceToggle');
             if (toggle) toggle.checked = modoManutencao;
+            configurarBotoesTempo();
             return;
         }
         
@@ -1237,6 +1398,14 @@
         }
         
         atualizarInfoKey();
+        
+        // Iniciar contador regressivo
+        if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
+        intervaloAtualizacao = setInterval(() => {
+            if (keyAtual && keyDataAtual && document.getElementById('tab-key').classList.contains('active')) {
+                atualizarInfoKey();
+            }
+        }, 1000);
     }
     
     function atualizarInfoKey() {
@@ -1244,11 +1413,13 @@
             document.getElementById('keyDisplayCode').textContent = keyAtual;
             document.getElementById('keyDisplayNome').textContent = nomeUsuario || 'Não definido';
             document.getElementById('keyDisplayTipo').textContent = keyDataAtual.tipo === 'VIP' ? '⭐ VIP - Auxílio de Mira' : '🔥 RAGE - Modo Arena';
+            document.getElementById('keyDisplayTempo').innerHTML = formatarTempoRestante(keyDataAtual.expiraEm);
             document.getElementById('keyDisplayDispositivo').textContent = detectarDispositivo();
         }
     }
     
     function voltarParaLogin() {
+        if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
         localStorage.removeItem('fael_key');
         localStorage.removeItem('fael_nome');
         location.reload();
@@ -1257,10 +1428,12 @@
     // ==================== FUNÇÕES ADMIN ====================
     function atualizarStats() {
         const keys = Object.values(keysDatabase).filter(k => k.codigo !== "dono456");
+        const ativas = keys.filter(k => k.status === 'ativa' && !keyExpirada(k.expiraEm)).length;
+        const expiradas = keys.filter(k => keyExpirada(k.expiraEm)).length;
         document.getElementById('totalKeys').textContent = keys.length;
-        document.getElementById('activeKeys').textContent = keys.filter(k => k.status === 'ativa').length;
-        document.getElementById('usedKeys').textContent = keys.filter(k => k.usuarios?.length > 0).length;
-        document.getElementById('availableKeys').textContent = keys.filter(k => k.status === 'ativa').length;
+        document.getElementById('activeKeys').textContent = ativas;
+        document.getElementById('usedKeys').textContent = expiradas;
+        document.getElementById('availableKeys').textContent = ativas;
     }
 
     function renderizarKeysList() {
@@ -1270,28 +1443,50 @@
         const container = document.getElementById('keysList');
         if (keys.length === 0) { container.innerHTML = '<div style="color:#666;text-align:center;padding:20px;">Nenhuma key</div>'; return; }
         
-        container.innerHTML = keys.map(key => `
-            <div class="key-card ${key.status === 'ativa' ? 'active' : 'inactive'}">
-                <div class="key-code">🔑 ${key.codigo}</div>
-                <div style="font-size:11px;margin-top:5px;">
-                    👤 Usuários: ${key.usuarios?.length || 0} usuário(s)<br>
-                    Lista: ${key.usuarios?.join(', ') || 'Nenhum'}<br>
-                    Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#0f0' : '#f44'}">${key.tipo}</strong><br>
-                    Status: ${key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada'}
+        container.innerHTML = keys.map(key => {
+            const expirada = keyExpirada(key.expiraEm);
+            let statusClass = 'active';
+            if (key.status !== 'ativa') statusClass = 'inactive';
+            else if (expirada) statusClass = 'expired';
+            
+            const statusText = expirada ? '⏰ EXPIRADA' : (key.status === 'ativa' ? '✅ Ativa' : '⛔ Desativada');
+            const tempoTexto = formatarTempoRestante(key.expiraEm);
+            
+            return `
+                <div class="key-card ${statusClass}">
+                    <div class="key-code">🔑 ${key.codigo}</div>
+                    <div style="font-size:11px;margin-top:5px;">
+                        👤 Usuários: ${key.usuarios?.length || 0} usuário(s)<br>
+                        Lista: ${key.usuarios?.join(', ') || 'Nenhum'}<br>
+                        Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#0f0' : '#f44'}">${key.tipo}</strong><br>
+                        Status: ${statusText}<br>
+                        ⏰ ${tempoTexto}
+                    </div>
+                    <div style="margin-top:8px;">
+                        ${!expirada && key.status === 'ativa' ? `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` : 
+                          !expirada && key.status !== 'ativa' ? `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>` :
+                          `<button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>`}
+                        <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
+                        ${!expirada ? `<button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>` : ''}
+                    </div>
                 </div>
-                <div style="margin-top:8px;">
-                    ${key.status === 'ativa' ? `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` : `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>`}
-                    <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
-                    <button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     async function gerarNovaKey(tipo) {
         const random = Math.random().toString(36).substring(2, 10).toUpperCase();
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
-        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], criadaEm: new Date().toISOString() };
+        const expiraEm = null;
+        
+        keysDatabase[codigo] = { 
+            codigo: codigo, 
+            tipo: tipo, 
+            status: "ativa", 
+            usuarios: [], 
+            expiraEm: expiraEm,
+            criadaEm: new Date().toISOString() 
+        };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
@@ -1305,13 +1500,25 @@
         if (!sufixo) sufixo = Math.random().toString(36).substring(2, 8).toUpperCase();
         sufixo = sufixo.replace(/[^A-Z0-9]/g, '');
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${sufixo}` : `RAGE-${sufixo}`;
+        
         if (keysDatabase[codigo]) { showToast('❌ Key já existe!', true); return; }
-        keysDatabase[codigo] = { codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], criadaEm: new Date().toISOString() };
+        
+        const expiraEm = calcularDataExpiracao(tempoSelecionado.tipo, tempoSelecionado.valor);
+        const tempoTexto = tempoSelecionado.tipo === "permanente" ? "PERMANENTE" : `${tempoSelecionado.valor} ${tempoSelecionado.tipo}(s)`;
+        
+        keysDatabase[codigo] = { 
+            codigo: codigo, 
+            tipo: tipo, 
+            status: "ativa", 
+            usuarios: [], 
+            expiraEm: expiraEm,
+            criadaEm: new Date().toISOString() 
+        };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n⏰ Duração: ${tempoTexto}`);
         document.getElementById('customKeySuffix').value = '';
     }
 
@@ -1501,14 +1708,13 @@
     (async function init() {
         await carregarKeys();
         
-        // Verificar modo manutenção
         const acessoPermitido = await verificarAcesso();
         if (!acessoPermitido) return;
         
         const savedKey = localStorage.getItem('fael_key');
         const savedNome = localStorage.getItem('fael_nome');
         
-        if (savedKey && keysDatabase[savedKey] && keysDatabase[savedKey].status === 'ativa') {
+        if (savedKey && keysDatabase[savedKey] && keysDatabase[savedKey].status === 'ativa' && !keyExpirada(keysDatabase[savedKey].expiraEm)) {
             keyAtual = savedKey;
             keyDataAtual = keysDatabase[savedKey];
             nomeUsuario = savedNome;
@@ -1521,6 +1727,7 @@
                 renderizarKeysList();
                 const toggle = document.getElementById('maintenanceToggle');
                 if (toggle) toggle.checked = modoManutencao;
+                configurarBotoesTempo();
                 return;
             }
             
@@ -1536,6 +1743,13 @@
             }
             
             atualizarInfoKey();
+            
+            if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
+            intervaloAtualizacao = setInterval(() => {
+                if (keyAtual && keyDataAtual && document.getElementById('tab-key').classList.contains('active')) {
+                    atualizarInfoKey();
+                }
+            }, 1000);
         } else {
             document.getElementById('key-screen').style.display = 'block';
         }
