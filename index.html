@@ -1055,6 +1055,19 @@
             display: block;
             animation: fadeIn 0.3s ease;
         }
+        
+        .puxar-dados-box {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .puxar-title {
+            text-align: center;
+            color: var(--cpf);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -1205,7 +1218,7 @@
             <div class="info-section">
                 <div class="info-section-title">🎯 AUXÍLIO</div>
                 <div class="info-item"><span class="info-label">Versão</span><span class="info-value">6.0</span></div>
-                <div class="info-item"><span class="info-label">Última atualização</span><span class="info-value">27/03/2026 - 14:30</span></div>
+                <div class="info-item"><span class="info-label">Última atualização</span><span class="info-value">29/03/2026</span></div>
             </div>
             <div class="info-section">
                 <div class="info-section-title">🎮 SUPORTE</div>
@@ -1222,11 +1235,11 @@
                 <div class="info-section-title">📱 REDES SOCIAIS</div>
                 <div class="social-links">
                     <a href="https://www.tiktok.com/@faelzin_store1?_r=1&_t=ZS-94byOggEocS" target="_blank" class="social-link">
-                        <img src="https://i.imgur.com/ijhtlu8.jpeg" class="social-icon-img" alt="TikTok">
+                        <img src="https://i.imgur.com/ijhtlu8.jpeg" class="social-icon-img" alt="TikTok" onerror="this.src='https://via.placeholder.com/55?text=TT'">
                         <span>TikTok</span>
                     </a>
                     <a href="https://discord.gg/JRXcBWCvhG" target="_blank" class="social-link">
-                        <img src="https://i.imgur.com/UtTU4rF.jpeg" class="social-icon-img" alt="Discord">
+                        <img src="https://i.imgur.com/UtTU4rF.jpeg" class="social-icon-img" alt="Discord" onerror="this.src='https://via.placeholder.com/55?text=DC'">
                         <span>Discord</span>
                     </a>
                 </div>
@@ -1234,17 +1247,15 @@
         </div>
     </div>
 
-    <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
+    <div id="admin-container" style="display: none;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
             
-            <!-- Tabs do Admin -->
             <div class="tabs" style="margin-bottom: 20px;">
-                <button class="tab-btn admin-tab active" id="adminBtnKeys" data-admin-tab="keys">🔑 KEYS</button>
-                <button class="tab-btn admin-tab" id="adminBtnPuxar" data-admin-tab="puxar">📊 PUXAR DADOS</button>
+                <button class="tab-btn admin-tab active" id="adminBtnKeys">🔑 KEYS</button>
+                <button class="tab-btn admin-tab" id="adminBtnPuxar">📊 PUXAR DADOS</button>
             </div>
             
-            <!-- Conteúdo Aba Keys -->
             <div id="admin-tab-keys" class="admin-tab-content active">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL KEYS</div></div>
@@ -1262,14 +1273,14 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-                    <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas o administrador terá acesso. Outros verão tela de atualização.</p>
+                    <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas o administrador terá acesso.</p>
                 </div>
                 
                 <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
                     <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
                     <div class="custom-key-input">
-                        <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)" style="flex: 2;">
-                        <select id="keyTypeSelect" style="flex: 1;">
+                        <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)">
+                        <select id="keyTypeSelect">
                             <option value="VIP">VIP</option>
                             <option value="RAGE">RAGE</option>
                         </select>
@@ -1304,15 +1315,19 @@
                 <div id="keysList" class="keys-list"></div>
             </div>
             
-            <!-- Conteúdo Aba Puxar Dados (CPF) -->
             <div id="admin-tab-puxar" class="admin-tab-content" style="display: none;">
-                <div class="cpf-consulta-container">
-                    <div class="category-title" style="color: var(--cpf);">🔍 CONSULTAR CPF</div>
-                    <div class="cpf-input-group">
-                        <input type="text" id="cpfInput" class="cpf-input" placeholder="Digite o CPF (ex: 12345678900)" maxlength="11">
+                <div class="puxar-dados-box">
+                    <div class="puxar-title">🔍 CONSULTAR CPF</div>
+                    <p style="text-align: center; font-size: 12px; color: #888; margin-bottom: 20px;">Digite um CPF válido com 11 dígitos</p>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <input type="text" id="cpfInput" class="cpf-input" placeholder="Ex: 12345678900" maxlength="11" style="flex: 2;">
                         <button class="btn-puxar-cpf" id="btnPuxarCpf" onclick="consultarCPF()">🔍 PUXAR DADOS</button>
                     </div>
-                    <div id="resultadoCpf" class="resultado-cpf"></div>
+                    
+                    <div id="resultadoCpf" style="background: #0a0a0a; border: 1px solid var(--cpf); border-radius: 10px; padding: 15px; display: none;">
+                        <div style="text-align: center; color: #888;">Aguardando consulta...</div>
+                    </div>
                 </div>
             </div>
             
@@ -1340,7 +1355,6 @@
     const API_KEY_JSON = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
     
-    // API CPF
     const CPF_API_KEY = "66cb3375ecce852ac09dd145a22232116c9ce6f657f15910076b16ad92d5a489";
     const CPF_API_URL = "https://apicpf.com/api/consulta";
     
@@ -1351,7 +1365,7 @@
     let intervaloAtualizacao = null;
     let keyParaEditarIp = null;
     
-    const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel", "TCL", "Alcatel", "BlackBerry", "Meizu", "Coolpad", "Hisense", "Gionee", "Doogee", "Blackview", "Oukitel", "Ulefone", "Cubot", "AGM", "Elephone", "Umidigi", "BLU", "Caterpillar", "Razer", "Microsoft", "Positivo"];
+    const marcas = ["Samsung", "Apple", "Xiaomi", "Motorola", "Huawei", "OPPO", "vivo", "Realme", "Honor", "Google", "Sony", "Asus", "Nokia", "Lenovo", "ZTE", "Nubia", "Red Magic", "OnePlus", "Nothing", "CMF", "Infinix", "Tecno", "Itel"];
 
     let keysDatabase = {};
     let keyAtual = null;
@@ -1366,7 +1380,6 @@
     let filtroAtual = '';
     let userIP = null;
 
-    // ==================== FUNÇÃO PARA PEGAR IP ====================
     async function getIP() {
         try {
             const response = await fetch('https://api.ipify.org?format=json');
@@ -1377,7 +1390,6 @@
         }
     }
 
-    // ==================== FUNÇÕES DE TEMPO ====================
     function calcularDataExpiracao(tipo, valor) {
         if (tipo === "permanente") return null;
         const now = new Date();
@@ -1402,10 +1414,6 @@
         const diffMin = Math.floor(diffSeg / 60);
         const diffHoras = Math.floor(diffMin / 60);
         const diffDias = Math.floor(diffHoras / 24);
-        const diffSemanas = Math.floor(diffDias / 7);
-        const diffMeses = Math.floor(diffDias / 30);
-        if (diffMeses > 0) return `${diffMeses} mês(es)`;
-        if (diffSemanas > 0) return `${diffSemanas} semana(s)`;
         if (diffDias > 0) return `${diffDias} dia(s)`;
         if (diffHoras > 0) return `${diffHoras} hora(s)`;
         if (diffMin > 0) return `${diffMin} minuto(s)`;
@@ -1417,7 +1425,6 @@
         return new Date(dataExpiracao) <= new Date();
     }
     
-    // ==================== FUNÇÕES DE MANUTENÇÃO ====================
     async function carregarManutencao() {
         try {
             const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
@@ -1477,7 +1484,6 @@
         }
     }
     
-    // ==================== FUNÇÕES JSONBIN ====================
     async function carregarKeys() {
         try {
             const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
@@ -1488,7 +1494,6 @@
                 keysDatabase["dono456"] = { codigo: "dono456", tipo: "ADMIN", status: "ativa", expiraEm: null, ipsPermitidos: [], criadaEm: new Date().toISOString() };
             }
             document.getElementById('statusOnline').innerHTML = '🟢 Conectado';
-            document.getElementById('statusOnline').style.color = '#00ff00';
             return true;
         } catch (error) {
             document.getElementById('statusOnline').innerHTML = '🔴 Offline - Cache';
@@ -1521,7 +1526,6 @@
         } catch (error) { return false; }
     }
 
-    // ==================== FUNÇÕES DE IP ====================
     function abrirModalAdicionarIp(codigo) {
         keyParaEditarIp = codigo;
         document.getElementById('modalAddIp').style.display = 'flex';
@@ -1596,7 +1600,6 @@
         fecharModalIp();
     }
     
-    // ==================== FUNÇÃO CONSULTAR CPF ====================
     async function consultarCPF() {
         const cpf = document.getElementById('cpfInput').value.trim().replace(/\D/g, '');
         const btn = document.getElementById('btnPuxarCpf');
@@ -1609,8 +1612,8 @@
         
         btn.disabled = true;
         btn.innerHTML = '<span class="cpf-loader"></span> CONSULTANDO...';
+        resultadoDiv.style.display = 'block';
         resultadoDiv.innerHTML = '<div style="text-align:center; padding:20px;"><span class="cpf-loader"></span> Buscando dados...</div>';
-        resultadoDiv.classList.add('show');
         
         try {
             const response = await fetch(`${CPF_API_URL}?cpf=${cpf}`, {
@@ -1624,43 +1627,21 @@
             const data = await response.json();
             
             if (response.ok && data) {
-                let html = `
-                    <div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>
-                `;
+                let html = `<div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>`;
                 
-                const campos = [
-                    { label: "📄 Nome", key: "nome" },
-                    { label: "🎂 Data de Nascimento", key: "data_nascimento" },
-                    { label: "👩‍🦱 Nome da Mãe", key: "nome_mae" },
-                    { label: "👨 Nome do Pai", key: "nome_pai" },
-                    { label: "📞 Telefone", key: "telefone" },
-                    { label: "📧 Email", key: "email" },
-                    { label: "📋 CPF", key: "cpf" },
-                    { label: "🏠 CEP", key: "cep" },
-                    { label: "📍 Endereço", key: "endereco" },
-                    { label: "🏙️ Cidade", key: "cidade" },
-                    { label: "🗺️ Estado", key: "estado" },
-                    { label: "📅 Situação Cadastral", key: "situacao_cadastral" },
-                    { label: "🔑 Score", key: "score" }
-                ];
+                if (data.nome) html += `<div class="resultado-item"><span class="resultado-label">📄 Nome</span><span class="resultado-valor">${data.nome}</span></div>`;
+                if (data.data_nascimento) html += `<div class="resultado-item"><span class="resultado-label">🎂 Data Nasc.</span><span class="resultado-valor">${data.data_nascimento}</span></div>`;
+                if (data.nome_mae) html += `<div class="resultado-item"><span class="resultado-label">👩‍🦱 Nome da Mãe</span><span class="resultado-valor">${data.nome_mae}</span></div>`;
+                if (data.nome_pai) html += `<div class="resultado-item"><span class="resultado-label">👨 Nome do Pai</span><span class="resultado-valor">${data.nome_pai}</span></div>`;
+                if (data.telefone) html += `<div class="resultado-item"><span class="resultado-label">📞 Telefone</span><span class="resultado-valor">${data.telefone}</span></div>`;
+                if (data.email) html += `<div class="resultado-item"><span class="resultado-label">📧 Email</span><span class="resultado-valor">${data.email}</span></div>`;
+                if (data.cep) html += `<div class="resultado-item"><span class="resultado-label">🏠 CEP</span><span class="resultado-valor">${data.cep}</span></div>`;
+                if (data.endereco) html += `<div class="resultado-item"><span class="resultado-label">📍 Endereço</span><span class="resultado-valor">${data.endereco}</span></div>`;
+                if (data.cidade) html += `<div class="resultado-item"><span class="resultado-label">🏙️ Cidade</span><span class="resultado-valor">${data.cidade}</span></div>`;
+                if (data.estado) html += `<div class="resultado-item"><span class="resultado-label">🗺️ Estado</span><span class="resultado-valor">${data.estado}</span></div>`;
                 
-                let encontrouDados = false;
-                
-                for (const campo of campos) {
-                    const valor = data[campo.key] || data[campo.key.toLowerCase()] || null;
-                    if (valor && valor !== "" && valor !== "null") {
-                        html += `
-                            <div class="resultado-item">
-                                <span class="resultado-label">${campo.label}</span>
-                                <span class="resultado-valor">${valor}</span>
-                            </div>
-                        `;
-                        encontrouDados = true;
-                    }
-                }
-                
-                if (!encontrouDados) {
-                    html += `<div class="resultado-item"><span class="resultado-label">📦 Dados completos</span><span class="resultado-valor">${JSON.stringify(data, null, 2)}</span></div>`;
+                if (html === `<div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>`) {
+                    html += `<div class="resultado-item"><span class="resultado-label">📦 Dados</span><span class="resultado-valor"><pre style="color: var(--cpf); font-size: 10px; white-space: pre-wrap; max-width: 200px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre></span></div>`;
                 }
                 
                 resultadoDiv.innerHTML = html;
@@ -1670,18 +1651,17 @@
                     <div class="cpf-status status-error">❌ ERRO NA CONSULTA</div>
                     <div class="resultado-item">
                         <span class="resultado-label">Mensagem</span>
-                        <span class="resultado-valor">${data.mensagem || 'CPF não encontrado ou API indisponível'}</span>
+                        <span class="resultado-valor">${data.mensagem || 'CPF não encontrado'}</span>
                     </div>
                 `;
-                showToast('❌ CPF não encontrado ou erro na consulta!', true);
+                showToast('❌ CPF não encontrado!', true);
             }
         } catch (error) {
-            console.error('Erro na consulta CPF:', error);
             resultadoDiv.innerHTML = `
                 <div class="cpf-status status-error">❌ ERRO DE CONEXÃO</div>
                 <div class="resultado-item">
                     <span class="resultado-label">Erro</span>
-                    <span class="resultado-valor">Não foi possível conectar à API. Verifique sua conexão.</span>
+                    <span class="resultado-valor">Não foi possível conectar à API.</span>
                 </div>
             `;
             showToast('❌ Erro ao consultar CPF!', true);
@@ -1691,7 +1671,6 @@
         }
     }
     
-    // ==================== VERIFICAR KEY ====================
     async function validarKey() {
         const key = document.getElementById('keyInput').value.trim();
         const msgDiv = document.getElementById('loginMsg');
@@ -1702,7 +1681,6 @@
         btn.disabled = true;
         btn.innerHTML = '<span class="loading"></span> VERIFICANDO...';
         msgDiv.textContent = 'Verificando...';
-        msgDiv.style.color = '#ffaa00';
         
         await carregarKeys();
         userIP = await getIP();
@@ -1711,7 +1689,6 @@
         
         if (!keyData) {
             msgDiv.textContent = '❌ KEY INVÁLIDA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -1719,7 +1696,6 @@
         
         if (keyData.status !== 'ativa') {
             msgDiv.textContent = '❌ KEY DESATIVADA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
@@ -1727,26 +1703,22 @@
         
         if (keyExpirada(keyData.expiraEm)) {
             msgDiv.textContent = '❌ KEY EXPIRADA!';
-            msgDiv.style.color = '#ff4444';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
             return;
         }
         
-        if (keyData.ipsPermitidos && keyData.ipsPermitidos.length > 0) {
-            if (!keyData.ipsPermitidos.includes(userIP)) {
-                msgDiv.textContent = '❌ KEY JÁ ESTÁ SENDO UTILIZADA!';
-                msgDiv.style.color = '#ff4444';
-                btn.disabled = false;
-                btn.innerHTML = 'LOGAR';
-                return;
-            }
+        if (keyData.ipsPermitidos && keyData.ipsPermitidos.length > 0 && !keyData.ipsPermitidos.includes(userIP) && key !== "dono456") {
+            msgDiv.textContent = '❌ KEY JÁ ESTÁ SENDO UTILIZADA!';
+            btn.disabled = false;
+            btn.innerHTML = 'LOGAR';
+            return;
         }
         
         keyAtual = key;
         keyDataAtual = keyData;
         
-        if (!nomeUsuario) {
+        if (!nomeUsuario && key !== "dono456") {
             document.getElementById('modalNome').style.display = 'flex';
             btn.disabled = false;
             btn.innerHTML = 'LOGAR';
@@ -1771,16 +1743,10 @@
         document.getElementById('modalNome').style.display = 'none';
         
         if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
-            if (!keyDataAtual.ipsPermitidos) {
-                keyDataAtual.ipsPermitidos = [];
-            }
-            if (!keyDataAtual.ipsPermitidos.includes(userIP)) {
-                keyDataAtual.ipsPermitidos.push(userIP);
-            }
+            if (!keyDataAtual.ipsPermitidos) keyDataAtual.ipsPermitidos = [];
+            if (!keyDataAtual.ipsPermitidos.includes(userIP)) keyDataAtual.ipsPermitidos.push(userIP);
             if (!keyDataAtual.usuarios) keyDataAtual.usuarios = [];
-            if (!keyDataAtual.usuarios.includes(nome)) {
-                keyDataAtual.usuarios.push(nome);
-            }
+            if (!keyDataAtual.usuarios.includes(nome)) keyDataAtual.usuarios.push(nome);
             await salvarKeys();
         }
         
@@ -1843,7 +1809,6 @@
         location.reload();
     }
 
-    // ==================== FUNÇÕES ADMIN ====================
     function atualizarStats() {
         const keys = Object.values(keysDatabase).filter(k => k.codigo !== "dono456");
         const ativas = keys.filter(k => k.status === 'ativa' && !keyExpirada(k.expiraEm)).length;
@@ -1875,7 +1840,7 @@
                 <div class="key-card ${statusClass}">
                     <div class="key-code">🔑 ${key.codigo}</div>
                     <div style="font-size:11px;margin-top:5px;">
-                        👤 Usuários: ${key.usuarios?.length || 0} usuário(s)<br>
+                        👤 Usuários: ${key.usuarios?.length || 0}<br>
                         Lista: ${key.usuarios?.join(', ') || 'Nenhum'}<br>
                         🌐 IPs: ${ipsTexto}<br>
                         Tipo: <strong style="color: ${key.tipo === 'VIP' ? '#0f0' : '#f44'}">${key.tipo}</strong><br>
@@ -1886,10 +1851,9 @@
                         ${!expirada && key.status === 'ativa' ? `<button class="btn-admin-action btn-deactivate" onclick="ativarDesativarKey('${key.codigo}', false)">🔒 DESATIVAR</button>` : 
                           !expirada && key.status !== 'ativa' ? `<button class="btn-admin-action btn-activate" onclick="ativarDesativarKey('${key.codigo}', true)">🔓 ATIVAR</button>` :
                           `<button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>`}
-                        <button class="btn-admin-action btn-add-ip" onclick="abrirModalAdicionarIp('${key.codigo}')">➕ ADICIONAR IP</button>
-                        ${ips.length > 0 ? `<button class="btn-admin-action btn-remove-ip" onclick="abrirModalRemoverIp('${key.codigo}')">🗑️ REMOVER IP</button>` : ''}
+                        <button class="btn-admin-action btn-add-ip" onclick="abrirModalAdicionarIp('${key.codigo}')">➕ IP</button>
+                        ${ips.length > 0 ? `<button class="btn-admin-action btn-remove-ip" onclick="abrirModalRemoverIp('${key.codigo}')">🗑️ IP</button>` : ''}
                         <button class="btn-admin-action btn-generate" onclick="copiarKey('${key.codigo}')">📋 COPIAR</button>
-                        ${!expirada ? `<button class="btn-admin-action btn-delete" onclick="excluirKey('${key.codigo}')">🗑️ EXCLUIR</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1901,19 +1865,14 @@
         const codigo = tipo === 'VIP' ? `FAEL-VIP-${random}` : `RAGE-${random}`;
         
         keysDatabase[codigo] = { 
-            codigo: codigo, 
-            tipo: tipo, 
-            status: "ativa", 
-            usuarios: [], 
-            ipsPermitidos: [],
-            expiraEm: null,
-            criadaEm: new Date().toISOString() 
+            codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], ipsPermitidos: [],
+            expiraEm: null, criadaEm: new Date().toISOString() 
         };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n♾️ Permanente (nunca expira)\n🌐 Será vinculada ao IP do primeiro uso.`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n♾️ PERMANENTE`);
     }
 
     async function gerarKeyPersonalizada() {
@@ -1926,22 +1885,16 @@
         if (keysDatabase[codigo]) { showToast('❌ Key já existe!', true); return; }
         
         const expiraEm = calcularDataExpiracao(tempoSelecionado.tipo, tempoSelecionado.valor);
-        const tempoTexto = tempoSelecionado.tipo === "permanente" ? "PERMANENTE" : `${tempoSelecionado.valor} ${tempoSelecionado.tipo}(s)`;
         
         keysDatabase[codigo] = { 
-            codigo: codigo, 
-            tipo: tipo, 
-            status: "ativa", 
-            usuarios: [], 
-            ipsPermitidos: [],
-            expiraEm: expiraEm,
-            criadaEm: new Date().toISOString() 
+            codigo: codigo, tipo: tipo, status: "ativa", usuarios: [], ipsPermitidos: [],
+            expiraEm: expiraEm, criadaEm: new Date().toISOString() 
         };
         await salvarKeys();
         await carregarKeys();
         atualizarStats();
         renderizarKeysList();
-        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}\n\n📱 Ilimitado (∞ dispositivos)\n⏰ Duração: ${tempoTexto}\n🌐 Será vinculada ao IP do primeiro uso.`);
+        alert(`✅ KEY GERADA!\n\n🔑 ${codigo}`);
         document.getElementById('customKeySuffix').value = '';
     }
 
@@ -1971,7 +1924,6 @@
     function filtrarKeys() { filtroAtual = document.getElementById('searchKey').value; renderizarKeysList(); }
     async function recarregarKeys() { await carregarKeys(); atualizarStats(); renderizarKeysList(); showToast(`✅ Dados recarregados!`); }
     
-    // ==================== CONFIGURAÇÃO DAS TABS DO ADMIN ====================
     function configurarAdminTabs() {
         const btnKeys = document.getElementById('adminBtnKeys');
         const btnPuxar = document.getElementById('adminBtnPuxar');
@@ -1979,34 +1931,25 @@
         const tabPuxar = document.getElementById('admin-tab-puxar');
         
         if (btnKeys && btnPuxar && tabKeys && tabPuxar) {
-            // Função para ativar aba Keys
-            const ativarAbaKeys = () => {
+            tabKeys.style.display = 'block';
+            tabPuxar.style.display = 'none';
+            
+            btnKeys.onclick = function() {
+                tabKeys.style.display = 'block';
+                tabPuxar.style.display = 'none';
                 btnKeys.classList.add('active');
                 btnPuxar.classList.remove('active');
-                tabKeys.classList.add('active');
-                tabPuxar.classList.remove('active');
             };
             
-            // Função para ativar aba Puxar Dados
-            const ativarAbaPuxar = () => {
+            btnPuxar.onclick = function() {
+                tabKeys.style.display = 'none';
+                tabPuxar.style.display = 'block';
                 btnPuxar.classList.add('active');
                 btnKeys.classList.remove('active');
-                tabPuxar.classList.add('active');
-                tabKeys.classList.remove('active');
             };
-            
-            // Remover event listeners antigos e adicionar novos
-            btnKeys.onclick = ativarAbaKeys;
-            btnPuxar.onclick = ativarAbaPuxar;
-            
-            // Garantir que a aba Keys está ativa inicialmente
-            ativarAbaKeys();
-        } else {
-            console.error('Elementos das abas não encontrados');
         }
     }
 
-    // ==================== CONFIGURAÇÕES ====================
     function abrirConfiguracoes() {
         document.getElementById('currentNome').textContent = nomeUsuario || 'Não definido';
         document.getElementById('modalConfig').style.display = 'flex';
@@ -2026,11 +1969,9 @@
                     await salvarKeys();
                 }
             }
-            
-            showToast('✅ Nome alterado com sucesso!');
+            showToast('✅ Nome alterado!');
             atualizarInfoKey();
         }
-        
         fecharConfiguracoes();
     }
 
@@ -2039,7 +1980,6 @@
         document.getElementById('novoNome').value = '';
     }
 
-    // ==================== FUNÇÕES AUXILIARES ====================
     function showToast(msg, isError = false) {
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -2057,7 +1997,6 @@
         return '💻 Desktop';
     }
 
-    // ==================== CONFIGURAÇÃO DOS BOTÕES DE TEMPO ====================
     function configurarBotoesTempo() {
         const botoes = document.querySelectorAll('.tempo-btn');
         const valorInputDiv = document.getElementById('valorTempoInput');
@@ -2096,7 +2035,6 @@
         }
     }
 
-    // ==================== FUNÇÕES ORIGINAIS ====================
     function puxarArma() { const arma = document.getElementById('weaponName').value; if (arma) showToast(`🔫 Puxando arma: ${arma.toUpperCase()}`); else showToast('Digite o nome da arma!', true); }
     
     function iniciarProcessoBypass() {
@@ -2155,7 +2093,6 @@
         }, 1000);
     }
 
-    // ==================== SENSI ====================
     function carregarMarcas() {
         const grid = document.getElementById('brandsGrid'); if (!grid) return; grid.innerHTML = '';
         marcas.sort().forEach(marca => {
@@ -2164,8 +2101,11 @@
             grid.appendChild(div);
         });
     }
+    
     function filtrarMarcas() { const search = document.getElementById('searchBrand').value.toLowerCase(); document.querySelectorAll('.brand-item').forEach(item => { item.style.display = item.textContent.toLowerCase().includes(search) ? 'block' : 'none'; }); }
+    
     function resetarTimer() { tempoRestante = 10; document.getElementById('timerDisplay').textContent = tempoRestante.toFixed(1); document.getElementById('btnGenerateSensi').disabled = false; document.getElementById('btnGenerateSensi').textContent = 'GERAR SENSI'; document.getElementById('sensiValues').style.display = 'none'; }
+    
     function iniciarTimerGeracao() {
         if (!marcaSelecionada) { showToast('Selecione uma marca!', true); return; }
         const btn = document.getElementById('btnGenerateSensi'); btn.disabled = true;
@@ -2186,10 +2126,10 @@
             }
         }, 100);
     }
+    
     function aplicarSensi() { if (!marcaSelecionada) { showToast('Selecione uma marca!', true); return; } showToast(`✅ Configurações aplicadas para ${marcaSelecionada}!`); }
 
-    // ==================== CONTROLE DE ABAS ====================
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    document.querySelectorAll('.tab-btn:not(.admin-tab)').forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.classList.contains('admin-tab')) return;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -2201,7 +2141,6 @@
         });
     });
 
-    // ==================== INICIALIZAÇÃO ====================
     (async function init() {
         await carregarKeys();
         await carregarManutencao();
