@@ -460,33 +460,6 @@
             border: 1px solid var(--bypass);
         }
 
-        .badge-infinito {
-            color: #00ff00;
-            background: rgba(0, 255, 0, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            display: inline-block;
-        }
-        
-        .badge-permanente {
-            color: #ffaa00;
-            background: rgba(255, 170, 0, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            display: inline-block;
-        }
-        
-        .badge-expirada {
-            color: #ff4444;
-            background: rgba(255, 68, 68, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            display: inline-block;
-        }
-        
         .timer-restante {
             color: var(--bypass);
             font-family: monospace;
@@ -915,28 +888,7 @@
             font-size: 12px;
         }
 
-        .ip-list {
-            font-size: 10px;
-            margin-top: 5px;
-            color: #aaa;
-        }
-        
-        .ip-item {
-            display: inline-block;
-            background: #222;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin: 2px;
-        }
-
         /* Estilos para a aba Puxar Dados */
-        .cpf-consulta-container {
-            background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 10px;
-        }
-
         .cpf-input-group {
             display: flex;
             gap: 10px;
@@ -985,40 +937,11 @@
             display: none;
         }
 
-        .resultado-cpf.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .resultado-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #222;
-            font-size: 13px;
-        }
-
-        .resultado-item:last-child {
-            border-bottom: none;
-        }
-
-        .resultado-label {
-            color: #888;
-            font-weight: bold;
-        }
-
-        .resultado-valor {
-            color: var(--cpf);
-            word-break: break-all;
-            text-align: right;
-            max-width: 60%;
-        }
-
         .cpf-status {
             padding: 8px;
             border-radius: 6px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
         }
 
@@ -1074,11 +997,11 @@
             background: linear-gradient(135deg, #00aaff10, #0066aa10);
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .cpf-nome {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             color: #00aaff;
             text-align: center;
@@ -1109,7 +1032,7 @@
         }
         
         .cpf-info-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #00aaff;
         }
@@ -1365,8 +1288,8 @@
                     <div class="puxar-title">🔍 CONSULTAR CPF</div>
                     <p style="text-align: center; font-size: 12px; color: #888; margin-bottom: 20px;">Digite um CPF válido com 11 dígitos</p>
                     
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                        <input type="text" id="cpfInput" class="cpf-input" placeholder="Ex: 12345678900" maxlength="11" style="flex: 2;">
+                    <div class="cpf-input-group">
+                        <input type="text" id="cpfInput" class="cpf-input" placeholder="Ex: 12345678900" maxlength="11">
                         <button class="btn-puxar-cpf" id="btnPuxarCpf" onclick="consultarCPF()">🔍 PUXAR DADOS</button>
                     </div>
                     
