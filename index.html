@@ -1068,6 +1068,51 @@
             font-size: 18px;
             margin-bottom: 15px;
         }
+
+        /* Card de resultado do CPF */
+        .cpf-result-card {
+            background: linear-gradient(135deg, #00aaff10, #0066aa10);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .cpf-nome {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00aaff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .cpf-info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #111;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .cpf-info-icon {
+            font-size: 24px;
+        }
+        
+        .cpf-info-text {
+            flex: 1;
+        }
+        
+        .cpf-info-label {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        .cpf-info-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00aaff;
+        }
     </style>
 </head>
 <body>
@@ -1600,6 +1645,7 @@
         fecharModalIp();
     }
     
+    // ==================== FUNÇÃO CONSULTAR CPF ====================
     async function consultarCPF() {
         const cpf = document.getElementById('cpfInput').value.trim().replace(/\D/g, '');
         const btn = document.getElementById('btnPuxarCpf');
@@ -1624,25 +1670,65 @@
                 }
             });
             
-            const data = await response.json();
+            const result = await response.json();
             
-            if (response.ok && data) {
-                let html = `<div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>`;
+            if (response.ok && result && result.code === 200 && result.data) {
+                const data = result.data;
                 
-                if (data.nome) html += `<div class="resultado-item"><span class="resultado-label">📄 Nome</span><span class="resultado-valor">${data.nome}</span></div>`;
-                if (data.data_nascimento) html += `<div class="resultado-item"><span class="resultado-label">🎂 Data Nasc.</span><span class="resultado-valor">${data.data_nascimento}</span></div>`;
-                if (data.nome_mae) html += `<div class="resultado-item"><span class="resultado-label">👩‍🦱 Nome da Mãe</span><span class="resultado-valor">${data.nome_mae}</span></div>`;
-                if (data.nome_pai) html += `<div class="resultado-item"><span class="resultado-label">👨 Nome do Pai</span><span class="resultado-valor">${data.nome_pai}</span></div>`;
-                if (data.telefone) html += `<div class="resultado-item"><span class="resultado-label">📞 Telefone</span><span class="resultado-valor">${data.telefone}</span></div>`;
-                if (data.email) html += `<div class="resultado-item"><span class="resultado-label">📧 Email</span><span class="resultado-valor">${data.email}</span></div>`;
-                if (data.cep) html += `<div class="resultado-item"><span class="resultado-label">🏠 CEP</span><span class="resultado-valor">${data.cep}</span></div>`;
-                if (data.endereco) html += `<div class="resultado-item"><span class="resultado-label">📍 Endereço</span><span class="resultado-valor">${data.endereco}</span></div>`;
-                if (data.cidade) html += `<div class="resultado-item"><span class="resultado-label">🏙️ Cidade</span><span class="resultado-valor">${data.cidade}</span></div>`;
-                if (data.estado) html += `<div class="resultado-item"><span class="resultado-label">🗺️ Estado</span><span class="resultado-valor">${data.estado}</span></div>`;
+                // Formatar CPF
+                const cpfFormatado = data.cpf ? data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : 'N/A';
                 
-                if (html === `<div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>`) {
-                    html += `<div class="resultado-item"><span class="resultado-label">📦 Dados</span><span class="resultado-valor"><pre style="color: var(--cpf); font-size: 10px; white-space: pre-wrap; max-width: 200px; overflow-x: auto;">${JSON.stringify(data, null, 2)}</pre></span></div>`;
+                // Formatar data de nascimento (YYYY-MM-DD para DD/MM/YYYY)
+                let dataFormatada = 'N/A';
+                if (data.data_nascimento) {
+                    const partes = data.data_nascimento.split('-');
+                    if (partes.length === 3) {
+                        dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                    }
                 }
+                
+                // Gênero por extenso
+                let generoTexto = 'Não informado';
+                let generoIcone = '⚪';
+                if (data.genero === 'M') {
+                    generoTexto = 'Masculino';
+                    generoIcone = '👨';
+                } else if (data.genero === 'F') {
+                    generoTexto = 'Feminino';
+                    generoIcone = '👩';
+                }
+                
+                let html = `
+                    <div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>
+                    
+                    <div class="cpf-result-card">
+                        <div class="cpf-nome">${data.nome || 'N/A'}</div>
+                        
+                        <div class="cpf-info-row">
+                            <div class="cpf-info-icon">📋</div>
+                            <div class="cpf-info-text">
+                                <div class="cpf-info-label">CPF</div>
+                                <div class="cpf-info-value">${cpfFormatado}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cpf-info-row">
+                            <div class="cpf-info-icon">🎂</div>
+                            <div class="cpf-info-text">
+                                <div class="cpf-info-label">DATA DE NASCIMENTO</div>
+                                <div class="cpf-info-value">${dataFormatada}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cpf-info-row">
+                            <div class="cpf-info-icon">${generoIcone}</div>
+                            <div class="cpf-info-text">
+                                <div class="cpf-info-label">GÊNERO</div>
+                                <div class="cpf-info-value">${generoTexto}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 
                 resultadoDiv.innerHTML = html;
                 showToast('✅ CPF consultado com sucesso!');
@@ -1651,12 +1737,13 @@
                     <div class="cpf-status status-error">❌ ERRO NA CONSULTA</div>
                     <div class="resultado-item">
                         <span class="resultado-label">Mensagem</span>
-                        <span class="resultado-valor">${data.mensagem || 'CPF não encontrado'}</span>
+                        <span class="resultado-valor">${result.mensagem || result.message || 'CPF não encontrado'}</span>
                     </div>
                 `;
                 showToast('❌ CPF não encontrado!', true);
             }
         } catch (error) {
+            console.error('Erro na consulta CPF:', error);
             resultadoDiv.innerHTML = `
                 <div class="cpf-status status-error">❌ ERRO DE CONEXÃO</div>
                 <div class="resultado-item">
