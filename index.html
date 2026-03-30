@@ -1045,6 +1045,16 @@
             margin-right: 8px;
             vertical-align: middle;
         }
+        
+        /* Admin Tabs */
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -1212,11 +1222,11 @@
                 <div class="info-section-title">📱 REDES SOCIAIS</div>
                 <div class="social-links">
                     <a href="https://www.tiktok.com/@faelzin_store1?_r=1&_t=ZS-94byOggEocS" target="_blank" class="social-link">
-                        <img src="https://i.imgur.com/4Q8Xk2P.png" class="social-icon-img" alt="TikTok">
+                        <img src="https://i.imgur.com/ijhtlu8.jpeg" class="social-icon-img" alt="TikTok">
                         <span>TikTok</span>
                     </a>
                     <a href="https://discord.gg/JRXcBWCvhG" target="_blank" class="social-link">
-                        <img src="https://i.imgur.com/ZM9Qk2D.png" class="social-icon-img" alt="Discord">
+                        <img src="https://i.imgur.com/UtTU4rF.jpeg" class="social-icon-img" alt="Discord">
                         <span>Discord</span>
                     </a>
                 </div>
@@ -1230,8 +1240,8 @@
             
             <!-- Tabs do Admin -->
             <div class="tabs" style="margin-bottom: 20px;">
-                <button class="tab-btn admin-tab active" data-admin-tab="keys">🔑 KEYS</button>
-                <button class="tab-btn admin-tab" data-admin-tab="puxar">📊 PUXAR DADOS</button>
+                <button class="tab-btn admin-tab active" id="adminBtnKeys" data-admin-tab="keys">🔑 KEYS</button>
+                <button class="tab-btn admin-tab" id="adminBtnPuxar" data-admin-tab="puxar">📊 PUXAR DADOS</button>
             </div>
             
             <!-- Conteúdo Aba Keys -->
@@ -1614,12 +1624,10 @@
             const data = await response.json();
             
             if (response.ok && data) {
-                // Formatar os dados retornados
                 let html = `
                     <div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>
                 `;
                 
-                // Mapear os campos retornados pela API
                 const campos = [
                     { label: "📄 Nome", key: "nome" },
                     { label: "🎂 Data de Nascimento", key: "data_nascimento" },
@@ -1651,7 +1659,6 @@
                     }
                 }
                 
-                // Se não encontrou nenhum campo mapeado, mostrar os dados brutos
                 if (!encontrouDados) {
                     html += `<div class="resultado-item"><span class="resultado-label">📦 Dados completos</span><span class="resultado-valor">${JSON.stringify(data, null, 2)}</span></div>`;
                 }
@@ -1966,20 +1973,37 @@
     
     // ==================== CONFIGURAÇÃO DAS TABS DO ADMIN ====================
     function configurarAdminTabs() {
-        const adminTabs = document.querySelectorAll('.admin-tab');
-        const adminContents = document.querySelectorAll('.admin-tab-content');
+        const btnKeys = document.getElementById('adminBtnKeys');
+        const btnPuxar = document.getElementById('adminBtnPuxar');
+        const tabKeys = document.getElementById('admin-tab-keys');
+        const tabPuxar = document.getElementById('admin-tab-puxar');
         
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.adminTab;
-                
-                adminTabs.forEach(t => t.classList.remove('active'));
-                adminContents.forEach(c => c.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`admin-tab-${targetTab}`).classList.add('active');
-            });
-        });
+        if (btnKeys && btnPuxar && tabKeys && tabPuxar) {
+            // Função para ativar aba Keys
+            const ativarAbaKeys = () => {
+                btnKeys.classList.add('active');
+                btnPuxar.classList.remove('active');
+                tabKeys.classList.add('active');
+                tabPuxar.classList.remove('active');
+            };
+            
+            // Função para ativar aba Puxar Dados
+            const ativarAbaPuxar = () => {
+                btnPuxar.classList.add('active');
+                btnKeys.classList.remove('active');
+                tabPuxar.classList.add('active');
+                tabKeys.classList.remove('active');
+            };
+            
+            // Remover event listeners antigos e adicionar novos
+            btnKeys.onclick = ativarAbaKeys;
+            btnPuxar.onclick = ativarAbaPuxar;
+            
+            // Garantir que a aba Keys está ativa inicialmente
+            ativarAbaKeys();
+        } else {
+            console.error('Elementos das abas não encontrados');
+        }
     }
 
     // ==================== CONFIGURAÇÕES ====================
