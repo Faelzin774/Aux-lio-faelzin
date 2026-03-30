@@ -15,6 +15,7 @@
             --bypass: #ffaa00;
             --inject: #0066ff;
             --admin: #ffaa00;
+            --cpf: #00aaff;
         }
 
         * {
@@ -777,7 +778,6 @@
             outline: none;
         }
 
-        /* Modal IP */
         .modal-ip {
             display: none;
             position: fixed;
@@ -811,7 +811,6 @@
             border-radius: 8px;
         }
 
-        /* Tela de Manutenção */
         .maintenance-screen {
             display: none;
             position: fixed;
@@ -857,7 +856,6 @@
             margin: 0 auto 20px auto;
         }
 
-        /* Seleção de tempo */
         .tempo-section {
             background: #111;
             padding: 15px;
@@ -930,6 +928,123 @@
             border-radius: 10px;
             margin: 2px;
         }
+
+        /* Estilos para a aba Puxar Dados */
+        .cpf-consulta-container {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .cpf-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cpf-input {
+            flex: 2;
+            background: #000;
+            border: 1px solid var(--cpf);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .btn-puxar-cpf {
+            background: var(--cpf);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-puxar-cpf:hover {
+            background: #00ccff;
+            transform: scale(1.02);
+        }
+
+        .btn-puxar-cpf:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .resultado-cpf {
+            background: #0a0a0a;
+            border: 1px solid var(--cpf);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .resultado-cpf.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .resultado-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #222;
+            font-size: 13px;
+        }
+
+        .resultado-item:last-child {
+            border-bottom: none;
+        }
+
+        .resultado-label {
+            color: #888;
+            font-weight: bold;
+        }
+
+        .resultado-valor {
+            color: var(--cpf);
+            word-break: break-all;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .cpf-status {
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .status-ok {
+            background: rgba(0, 255, 0, 0.2);
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+
+        .status-error {
+            background: rgba(255, 0, 0, 0.2);
+            color: #f00;
+            border: 1px solid #f00;
+        }
+
+        .cpf-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: var(--cpf);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -950,7 +1065,6 @@
         </div>
     </div>
 
-    <!-- Modal para adicionar IP -->
     <div id="modalAddIp" class="modal-ip">
         <div class="modal-ip-content">
             <h3>➕ ADICIONAR IP</h3>
@@ -960,7 +1074,6 @@
         </div>
     </div>
 
-    <!-- Modal para remover IP -->
     <div id="modalRemoveIp" class="modal-ip">
         <div class="modal-ip-content">
             <h3>🗑️ REMOVER IP</h3>
@@ -1099,11 +1212,11 @@
                 <div class="info-section-title">📱 REDES SOCIAIS</div>
                 <div class="social-links">
                     <a href="https://www.tiktok.com/@faelzin_store1?_r=1&_t=ZS-94byOggEocS" target="_blank" class="social-link">
-                        <img src="https://imgur.com/a/ijhtlu8" class="social-icon-img" alt="TikTok">
+                        <img src="https://i.imgur.com/4Q8Xk2P.png" class="social-icon-img" alt="TikTok">
                         <span>TikTok</span>
                     </a>
                     <a href="https://discord.gg/JRXcBWCvhG" target="_blank" class="social-link">
-                        <img src="https://imgur.com/a/UtTU4rF" class="social-icon-img" alt="Discord">
+                        <img src="https://i.imgur.com/ZM9Qk2D.png" class="social-icon-img" alt="Discord">
                         <span>Discord</span>
                     </a>
                 </div>
@@ -1114,65 +1227,85 @@
     <div id="admin-container" style="display: none; width: 90%; max-width: 500px; margin: 0 auto;">
         <div class="admin-container">
             <div class="admin-title">👑 PAINEL ADMIN 👑</div>
-            <div class="stats-grid">
-                <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL KEYS</div></div>
-                <div class="stat-card"><div class="stat-number" id="activeKeys">0</div><div class="stat-label">ATIVAS</div></div>
-                <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
-                <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
+            
+            <!-- Tabs do Admin -->
+            <div class="tabs" style="margin-bottom: 20px;">
+                <button class="tab-btn admin-tab active" data-admin-tab="keys">🔑 KEYS</button>
+                <button class="tab-btn admin-tab" data-admin-tab="puxar">📊 PUXAR DADOS</button>
             </div>
             
-            <!-- Modo Manutenção -->
-            <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--bypass);">
-                <h3 style="color: var(--bypass); font-size: 14px; margin-bottom: 10px;">🔧 MODO MANUTENÇÃO</h3>
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 12px;">Ativar/Desativar modo de atualização</span>
-                    <label class="switch">
-                        <input type="checkbox" id="maintenanceToggle" onchange="toggleManutencao(this.checked)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas o administrador terá acesso. Outros verão tela de atualização.</p>
-            </div>
-            
-            <!-- GERAR KEY COM TEMPO -->
-            <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
-                <div class="custom-key-input">
-                    <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)" style="flex: 2;">
-                    <select id="keyTypeSelect" style="flex: 1;">
-                        <option value="VIP">VIP</option>
-                        <option value="RAGE">RAGE</option>
-                    </select>
+            <!-- Conteúdo Aba Keys -->
+            <div id="admin-tab-keys" class="admin-tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number" id="totalKeys">0</div><div class="stat-label">TOTAL KEYS</div></div>
+                    <div class="stat-card"><div class="stat-number" id="activeKeys">0</div><div class="stat-label">ATIVAS</div></div>
+                    <div class="stat-card"><div class="stat-number" id="usedKeys">0</div><div class="stat-label">USADAS</div></div>
+                    <div class="stat-card"><div class="stat-number" id="availableKeys">0</div><div class="stat-label">DISPONÍVEIS</div></div>
                 </div>
                 
-                <!-- Seleção de Tempo -->
-                <div class="tempo-section">
-                    <h3>⏰ TEMPO DE DURAÇÃO</h3>
-                    <div class="tempo-opcoes">
-                        <button class="tempo-btn" data-tipo="permanente">♾️ PERMANENTE</button>
-                        <button class="tempo-btn" data-tipo="hora">⏱️ HORA(S)</button>
-                        <button class="tempo-btn" data-tipo="minuto">⏲️ MINUTO(S)</button>
-                        <button class="tempo-btn" data-tipo="dia">📅 DIA(S)</button>
-                        <button class="tempo-btn" data-tipo="semana">📆 SEMANA(S)</button>
-                        <button class="tempo-btn" data-tipo="mes">📅 MÊS(ES)</button>
+                <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--bypass);">
+                    <h3 style="color: var(--bypass); font-size: 14px; margin-bottom: 10px;">🔧 MODO MANUTENÇÃO</h3>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 12px;">Ativar/Desativar modo de atualização</span>
+                        <label class="switch">
+                            <input type="checkbox" id="maintenanceToggle" onchange="toggleManutencao(this.checked)">
+                            <span class="slider"></span>
+                        </label>
                     </div>
-                    <div class="valor-input" id="valorTempoInput" style="display: none;">
-                        <input type="number" id="tempoValor" min="1" max="999" value="1">
-                        <span id="tempoUnidade">hora(s)</span>
-                    </div>
+                    <p style="font-size: 10px; color: #888; margin-top: 10px;">⚠️ Quando ativado, apenas o administrador terá acesso. Outros verão tela de atualização.</p>
                 </div>
                 
-                <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%; margin-top: 10px;">✨ GERAR KEY</button>
+                <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: var(--admin); font-size: 14px; margin-bottom: 10px;">🎨 GERAR KEY</h3>
+                    <div class="custom-key-input">
+                        <input type="text" id="customKeySuffix" placeholder="SUFIXO (opcional)" style="flex: 2;">
+                        <select id="keyTypeSelect" style="flex: 1;">
+                            <option value="VIP">VIP</option>
+                            <option value="RAGE">RAGE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="tempo-section">
+                        <h3>⏰ TEMPO DE DURAÇÃO</h3>
+                        <div class="tempo-opcoes">
+                            <button class="tempo-btn" data-tipo="permanente">♾️ PERMANENTE</button>
+                            <button class="tempo-btn" data-tipo="hora">⏱️ HORA(S)</button>
+                            <button class="tempo-btn" data-tipo="minuto">⏲️ MINUTO(S)</button>
+                            <button class="tempo-btn" data-tipo="dia">📅 DIA(S)</button>
+                            <button class="tempo-btn" data-tipo="semana">📆 SEMANA(S)</button>
+                            <button class="tempo-btn" data-tipo="mes">📅 MÊS(ES)</button>
+                        </div>
+                        <div class="valor-input" id="valorTempoInput" style="display: none;">
+                            <input type="number" id="tempoValor" min="1" max="999" value="1">
+                            <span id="tempoUnidade">hora(s)</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="gerarKeyPersonalizada()" class="btn-admin-action btn-generate" style="width: 100%; margin-top: 10px;">✨ GERAR KEY</button>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ VIP Auto</button>
+                    <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 RAGE Auto</button>
+                    <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
+                </div>
+                
+                <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
+                <div id="keysList" class="keys-list"></div>
             </div>
             
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button onclick="gerarNovaKey('VIP')" class="btn-admin-action btn-generate" style="flex:1;">➕ VIP Auto</button>
-                <button onclick="gerarNovaKey('RAGE')" class="btn-admin-action btn-generate" style="flex:1;">🔥 RAGE Auto</button>
-                <button onclick="recarregarKeys()" class="btn-admin-action btn-refresh" style="flex:1;">🔄 RECARREGAR</button>
+            <!-- Conteúdo Aba Puxar Dados (CPF) -->
+            <div id="admin-tab-puxar" class="admin-tab-content" style="display: none;">
+                <div class="cpf-consulta-container">
+                    <div class="category-title" style="color: var(--cpf);">🔍 CONSULTAR CPF</div>
+                    <div class="cpf-input-group">
+                        <input type="text" id="cpfInput" class="cpf-input" placeholder="Digite o CPF (ex: 12345678900)" maxlength="11">
+                        <button class="btn-puxar-cpf" id="btnPuxarCpf" onclick="consultarCPF()">🔍 PUXAR DADOS</button>
+                    </div>
+                    <div id="resultadoCpf" class="resultado-cpf"></div>
+                </div>
             </div>
             
-            <input type="text" class="search-box" id="searchKey" placeholder="🔍 Buscar key..." onkeyup="filtrarKeys()" style="border-color: var(--admin);">
-            <div id="keysList" class="keys-list"></div>
             <button class="btn-back" onclick="voltarParaLogin()">← SAIR</button>
         </div>
     </div>
@@ -1194,8 +1327,12 @@
     <script>
     // ==================== CONFIGURAÇÕES ====================
     const BIN_ID = "69c46b0caa77b81da91cf54d";
-    const API_KEY = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
+    const API_KEY_JSON = "$2a$10$deWLypQlTxDkZ8F8CoO86.adjPF5nZ3eKh/fjt57J4ZPgfwnsKR.O";
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    
+    // API CPF
+    const CPF_API_KEY = "66cb3375ecce852ac09dd145a22232116c9ce6f657f15910076b16ad92d5a489";
+    const CPF_API_URL = "https://apicpf.com/api/consulta";
     
     const ADMIN_IP = "177.11.105.186";
     
@@ -1273,7 +1410,7 @@
     // ==================== FUNÇÕES DE MANUTENÇÃO ====================
     async function carregarManutencao() {
         try {
-            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
             if (!response.ok) throw new Error();
             const data = await response.json();
             const config = data.record.config || {};
@@ -1287,7 +1424,7 @@
     
     async function salvarManutencao(ativado) {
         try {
-            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
             if (!response.ok) throw new Error();
             const data = await response.json();
             const record = data.record;
@@ -1295,7 +1432,7 @@
             record.config.manutencao = ativado;
             await fetch(JSONBIN_URL, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_JSON },
                 body: JSON.stringify(record)
             });
             modoManutencao = ativado;
@@ -1333,7 +1470,7 @@
     // ==================== FUNÇÕES JSONBIN ====================
     async function carregarKeys() {
         try {
-            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
             if (!response.ok) throw new Error();
             const data = await response.json();
             keysDatabase = data.record.keys || {};
@@ -1357,7 +1494,7 @@
 
     async function salvarKeys() {
         try {
-            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY } });
+            const response = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': API_KEY_JSON } });
             let record = {};
             if (response.ok) {
                 const data = await response.json();
@@ -1366,7 +1503,7 @@
             record.keys = keysDatabase;
             await fetch(JSONBIN_URL, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY_JSON },
                 body: JSON.stringify(record)
             });
             localStorage.setItem('fael_keys_backup', JSON.stringify(keysDatabase));
@@ -1449,6 +1586,104 @@
         fecharModalIp();
     }
     
+    // ==================== FUNÇÃO CONSULTAR CPF ====================
+    async function consultarCPF() {
+        const cpf = document.getElementById('cpfInput').value.trim().replace(/\D/g, '');
+        const btn = document.getElementById('btnPuxarCpf');
+        const resultadoDiv = document.getElementById('resultadoCpf');
+        
+        if (!cpf || cpf.length !== 11) {
+            showToast('❌ Digite um CPF válido com 11 dígitos!', true);
+            return;
+        }
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="cpf-loader"></span> CONSULTANDO...';
+        resultadoDiv.innerHTML = '<div style="text-align:center; padding:20px;"><span class="cpf-loader"></span> Buscando dados...</div>';
+        resultadoDiv.classList.add('show');
+        
+        try {
+            const response = await fetch(`${CPF_API_URL}?cpf=${cpf}`, {
+                method: 'GET',
+                headers: {
+                    'X-API-KEY': CPF_API_KEY,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data) {
+                // Formatar os dados retornados
+                let html = `
+                    <div class="cpf-status status-ok">✅ CONSULTA REALIZADA COM SUCESSO</div>
+                `;
+                
+                // Mapear os campos retornados pela API
+                const campos = [
+                    { label: "📄 Nome", key: "nome" },
+                    { label: "🎂 Data de Nascimento", key: "data_nascimento" },
+                    { label: "👩‍🦱 Nome da Mãe", key: "nome_mae" },
+                    { label: "👨 Nome do Pai", key: "nome_pai" },
+                    { label: "📞 Telefone", key: "telefone" },
+                    { label: "📧 Email", key: "email" },
+                    { label: "📋 CPF", key: "cpf" },
+                    { label: "🏠 CEP", key: "cep" },
+                    { label: "📍 Endereço", key: "endereco" },
+                    { label: "🏙️ Cidade", key: "cidade" },
+                    { label: "🗺️ Estado", key: "estado" },
+                    { label: "📅 Situação Cadastral", key: "situacao_cadastral" },
+                    { label: "🔑 Score", key: "score" }
+                ];
+                
+                let encontrouDados = false;
+                
+                for (const campo of campos) {
+                    const valor = data[campo.key] || data[campo.key.toLowerCase()] || null;
+                    if (valor && valor !== "" && valor !== "null") {
+                        html += `
+                            <div class="resultado-item">
+                                <span class="resultado-label">${campo.label}</span>
+                                <span class="resultado-valor">${valor}</span>
+                            </div>
+                        `;
+                        encontrouDados = true;
+                    }
+                }
+                
+                // Se não encontrou nenhum campo mapeado, mostrar os dados brutos
+                if (!encontrouDados) {
+                    html += `<div class="resultado-item"><span class="resultado-label">📦 Dados completos</span><span class="resultado-valor">${JSON.stringify(data, null, 2)}</span></div>`;
+                }
+                
+                resultadoDiv.innerHTML = html;
+                showToast('✅ CPF consultado com sucesso!');
+            } else {
+                resultadoDiv.innerHTML = `
+                    <div class="cpf-status status-error">❌ ERRO NA CONSULTA</div>
+                    <div class="resultado-item">
+                        <span class="resultado-label">Mensagem</span>
+                        <span class="resultado-valor">${data.mensagem || 'CPF não encontrado ou API indisponível'}</span>
+                    </div>
+                `;
+                showToast('❌ CPF não encontrado ou erro na consulta!', true);
+            }
+        } catch (error) {
+            console.error('Erro na consulta CPF:', error);
+            resultadoDiv.innerHTML = `
+                <div class="cpf-status status-error">❌ ERRO DE CONEXÃO</div>
+                <div class="resultado-item">
+                    <span class="resultado-label">Erro</span>
+                    <span class="resultado-valor">Não foi possível conectar à API. Verifique sua conexão.</span>
+                </div>
+            `;
+            showToast('❌ Erro ao consultar CPF!', true);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '🔍 PUXAR DADOS';
+        }
+    }
+    
     // ==================== VERIFICAR KEY ====================
     async function validarKey() {
         const key = document.getElementById('keyInput').value.trim();
@@ -1491,7 +1726,6 @@
             return;
         }
         
-        // Verificar IPs permitidos
         if (keyData.ipsPermitidos && keyData.ipsPermitidos.length > 0) {
             if (!keyData.ipsPermitidos.includes(userIP)) {
                 msgDiv.textContent = '❌ KEY JÁ ESTÁ SENDO UTILIZADA!';
@@ -1529,7 +1763,6 @@
         localStorage.setItem('fael_nome', nome);
         document.getElementById('modalNome').style.display = 'none';
         
-        // Adicionar IP na primeira ativação
         if (keyAtual && keyDataAtual && keyAtual !== "dono456") {
             if (!keyDataAtual.ipsPermitidos) {
                 keyDataAtual.ipsPermitidos = [];
@@ -1559,6 +1792,7 @@
             const toggle = document.getElementById('maintenanceToggle');
             if (toggle) toggle.checked = modoManutencao;
             configurarBotoesTempo();
+            configurarAdminTabs();
             return;
         }
         
@@ -1729,6 +1963,24 @@
     function copiarKey(codigo) { navigator.clipboard.writeText(codigo); showToast(`📋 Key copiada!`); }
     function filtrarKeys() { filtroAtual = document.getElementById('searchKey').value; renderizarKeysList(); }
     async function recarregarKeys() { await carregarKeys(); atualizarStats(); renderizarKeysList(); showToast(`✅ Dados recarregados!`); }
+    
+    // ==================== CONFIGURAÇÃO DAS TABS DO ADMIN ====================
+    function configurarAdminTabs() {
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const adminContents = document.querySelectorAll('.admin-tab-content');
+        
+        adminTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.adminTab;
+                
+                adminTabs.forEach(t => t.classList.remove('active'));
+                adminContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`admin-tab-${targetTab}`).classList.add('active');
+            });
+        });
+    }
 
     // ==================== CONFIGURAÇÕES ====================
     function abrirConfiguracoes() {
@@ -1942,7 +2194,6 @@
             nomeUsuario = savedNome;
             userIP = await getIP();
             
-            // Verificar IPs permitidos na sessão salva
             if (keyDataAtual.ipsPermitidos && keyDataAtual.ipsPermitidos.length > 0 && !keyDataAtual.ipsPermitidos.includes(userIP) && keyAtual !== "dono456") {
                 localStorage.removeItem('fael_key');
                 localStorage.removeItem('fael_nome');
@@ -1960,6 +2211,7 @@
                 const toggle = document.getElementById('maintenanceToggle');
                 if (toggle) toggle.checked = modoManutencao;
                 configurarBotoesTempo();
+                configurarAdminTabs();
                 return;
             }
             
